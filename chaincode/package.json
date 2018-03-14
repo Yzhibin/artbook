@@ -1,0 +1,21 @@
+{
+  "name": "artbook",
+  "version": "0.0.1",
+  "description": "Artbook, the ultimate blockchain solution for artwork trade industry",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "author": "Fan Shimeng, Shi Tianyuan, Xiong Zhe, Yu Zhibin",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "composer-admin": "latest",
+    "composer-client": "latest",
+    "composer-common": "latest",
+    "composer-connector-embedded": "latest",
+    "chai": "latest",
+    "eslint": "latest",
+    "istanbul": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest"
+  }
+}
