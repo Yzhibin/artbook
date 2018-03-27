@@ -1,0 +1,82 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace org.acme.artbook
+
+participant User identified by email {
+  o String email
+  o String name
+  --> Artwork[] artworks optional
+}
+
+abstract participant Authority identified by authorityId {
+  o String authorityId
+  o String name
+}
+
+participant Branch extends Authority {
+  o String address
+}
+
+participant Police extends Authority {
+  o String jurisdiction
+}
+
+participant Agency identified by email {
+  o String email
+  o String name
+  --> Artwork[] artworks
+}
+
+asset Artwork identified by artworkId {
+  o String artworkId
+  o String title
+  o String artist
+  --> SupportingDocument[] documents optional
+  --> User owner 
+  --> Agency handler optional
+}
+
+asset SupportingDocument identified by documentId {
+  o String documentId
+  o String hash
+  o String title
+  o DateTime issueDate
+  o String author
+}
+
+transaction registerNewArtwork {
+  o String artworkId
+  o String title
+  o String artist
+  --> User owner 
+}
+
+transaction addSupportingDocument {
+
+}
+
+transaction getSupportingDocument {
+
+}
+
+transaction getArtworkHistory {
+
+}
+
+transaction consentArtworkForSale {
+
+}
+
+transaction transferOwnership {
+
+}
+
+transaction markMissingArtwork {
+
+}
+
+transaction recoverMissingArtwork {
+
+}
