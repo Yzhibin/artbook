@@ -1,23 +1,19 @@
 'use strict';
-/**
- * Write your transction processor functions here
- */
 
 /**
- * Sample transaction
- * @param {org.acme.artbook.ChangeAssetValue} changeAssetValue
+ * Register a new artwork to the system
+ * @param {org.acme.artbook.registerNewArtwork} artwork:the registerNewArtwork transaction instance
  * @transaction
  */
-function onChangeAssetValue(changeAssetValue) {
-    var assetRegistry;
-    var id = changeAssetValue.relatedAsset.assetId;
-    return getAssetRegistry('org.acme.artbook.SampleAsset')
-        .then(function(ar) {
-            assetRegistry = ar;
-            return assetRegistry.get(id);
-        })
-        .then(function(asset) {
-            asset.value = changeAssetValue.newValue;
-            return assetRegistry.update(asset);
-        });
+function registerNewArtwork (artwork){
+    var factory = this.businessNetworkDefinition.getFactory();
+    newArt = factory.newResource('org.acme.artbook','Artwork', artwork.artworkId);
+    newArt.title = artwork.title;
+    newArt.artist = artwork.artist;
+    newArt.owner = artwork.owner;
+
+    return getAssetRegistry('org.acme.artbook.Artwork')
+    .then (function (artworkRegistry){
+        return artworkRegistry.update(newArt);
+    })
 }
