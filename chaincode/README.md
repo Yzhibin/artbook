@@ -20,25 +20,30 @@ The ultimate blockchain solution for artwork trade industry
  ```
 
 ### Run Chaincode
-1. Create archive file (.bna) from all source code files. The archive name will be artbook@{version number}.bna by defualt. Append `--archiveName {filename}` to specify a filename for the archive file.
+1. Go to chaincode directory. Here assumes the repository is at home direcotry.
+ ```
+ cd ~/artwork/chaincode
+ ```
+
+2. Create archive file (.bna) from all source code files. The archive name will be artbook@{version number}.bna by defualt. Append `--archiveName {filename}` to specify a filename for the archive file.
 
  ```
  composer archive create --sourceType dir --sourceName .
  ```
 
-2. Start runtime enviornment. The PeerAdmin Card is issued at the last step of Pre-requisite section.
+3. Start runtime enviornment. The PeerAdmin Card is issued at the last step of Pre-requisite section.
  
  ```
  composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName artbook
  ```
  
-3. Issue Network Admin card for the artbook network. Change the --archiveFile parameter accordingly
+4. Issue Network Admin card for the artbook network. Change name of archive file (`--archiveFile {fileName}`) based on step 2.
 
  ```
  composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile artbook@0.0.1.bna --file networkadmin.card
  ```
 
-4. Import network admin card to card wallet
+5. Import network admin card to card wallet
 
  ```
 composer card import --file networkadmin.card
