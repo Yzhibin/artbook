@@ -1,6 +1,5 @@
 'use strict';
 
-
 /**
  * Store a new supporting document to the system and link it to an artwork
  * @param {org.acme.artbook.addSupportingDocument} doc: the addSupportingDoc transaction instance
