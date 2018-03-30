@@ -43,6 +43,7 @@ class artworkHandler {
             await this.artworkRegistry.add(artwork)
             await this.userRegistry.update(owner)
             console.log('New artwork added')
+            return conn.bizNetworkConnection.disconnect()
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:createArtwork', error)
@@ -59,6 +60,9 @@ class artworkHandler {
             // Get Registry
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
             return this.artworkRegistry.get(artworkId)
+            .then(function() {
+                return conn.bizNetworkConnection.disconnect()
+            })
 
         } catch (error) {
             console.log(error)
