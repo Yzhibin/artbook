@@ -33,6 +33,7 @@ asset Artwork identified by artworkId {
   o String artworkId
   o String title
   o String artist
+  o Boolean lost
   --> SupportingDocument[] documents optional
   --> User owner 
   --> Agency handler optional
@@ -44,39 +45,49 @@ asset SupportingDocument identified by documentId {
   o String title
   o DateTime issueDate
   o String author
+  --> Artwork art
 }
 
-transaction registerNewArtwork {
-  o String artworkId
-  o String title
-  o String artist
-  --> User owner 
+
+//ACL: only branch can perform
+transaction registerArtwork {
+
 }
 
+//ACL: only branch can perform
 transaction addSupportingDocument {
 
 }
 
-transaction getSupportingDocument {
+//should query local database?
+//artwork side relationship need to be handled!
+transaction getSupportingDocuments {
 
 }
 
+//should query local database?
 transaction getArtworkHistory {
 
 }
 
+//performed by agency
+//with consent from owner
 transaction consentArtworkForSale {
-
+  -->  Artwork art
+  -->  Agency agency
 }
 
+//only the authorzied agency can perform
 transaction transferOwnership {
-
+  --> Artwork art  
+  --> Agency agency  
+  --> User newOwner
 }
 
 transaction markMissingArtwork {
-
+  --> Artwork art
 }
 
 transaction recoverMissingArtwork {
-
+  --> Artwork art
 }

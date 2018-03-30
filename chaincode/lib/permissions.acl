@@ -1,0 +1,8 @@
+rule RegisterArtwork {
+  description: "Only an branch can register artwork" 
+  participant(p): "org.acme.artbook.Branch"
+  operation: CREATE
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (true)
+  action: ALLOW
+}
