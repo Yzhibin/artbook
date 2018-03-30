@@ -1,35 +1,15 @@
 'use strict';
-
-/**
- * Store a new supporting document to the system and link it to an artwork
- * @param {org.acme.artbook.addSupportingDocument} doc: the addSupportingDoc transaction instance
- * @transaction
- */
-function addSupportingDocument(doc){
-    var factory = this.businessNetworkDefinition.getFactory();
-    newDoc = factory.newResource('org.acme.artbook','SupportingDocument', doc.documentId);
-    newDoc.title = doc.title;
-    newDoc.hash = doc.hash;
-    newDoc.author = doc.author;
-    newDoc.issueDate = doc.issueDate;
-    newDoc.art = doc.art;
-
-    return getAssetRegistry('org.acme.artbook.SupportingDocument')
-    .then (function (SupportingDocRegistry){
-        return SupportingDocRegistry.update(newDoc);
-    })
-}
-
 /**
  * Link an artwork to an agency to show it as for_sale
  * @param {org.acme.artbook.consentArtworkForSale} consent: the consentArtworkForSale transaction instance
  * @transaction
  */
 function consentArtworkForSale(consent){
-    consent.agency.artworks.push(consent.agency.art);
+    consent.agency.artworks.push(consent.art);
     consent.art.handler = consent.agency;
+    consent.art.onSale = true;
     
-    return getAssetRegistry('org.acme.artbook.Agency')
+    return getParticipantRegistry('org.acme.artbook.Agency')
     .then (function (AgencyRegistry){
         return AgencyRegistry.update(consent.agency);
     }).then(function (){
@@ -47,7 +27,7 @@ function consentArtworkForSale(consent){
 function transferOwnership(transfer){
     //change the owner of the artwork
     transfer.art.owner = transfer.newOwner;
-    
+    transfer.art.handler = {};    
 
     //remove this sold art from the artList of the agency
     var artList = transfer.agency.artworks;
@@ -55,11 +35,12 @@ function transferOwnership(transfer){
     if(i != -1){
         artList.splice(i,1);
     }
+    //toggle on_sale status
+    transfer.art.onSale = false; 
     
     //update the agency 
     //update the artwork
-    transfer.art.agency.artworks = artList;
-    return getAssetRegistry('org.acme.artbook.Agency')
+    return getParticipantRegistry('org.acme.artbook.Agency')
     .then (function (AgencyRegistry){
         return AgencyRegistry.update(transfer.agency);
     }).then(function (){

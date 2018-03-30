@@ -34,6 +34,7 @@ asset Artwork identified by artworkId {
   o String title
   o String artist
   o Boolean lost
+  o Boolean onSale
   --> SupportingDocument[] documents optional
   --> User owner 
   --> Agency handler optional
@@ -48,28 +49,6 @@ asset SupportingDocument identified by documentId {
   --> Artwork art
 }
 
-
-//ACL: only branch can perform
-transaction registerArtwork {
-
-}
-
-//ACL: only branch can perform
-transaction addSupportingDocument {
-
-}
-
-//should query local database?
-//artwork side relationship need to be handled!
-transaction getSupportingDocuments {
-
-}
-
-//should query local database?
-transaction getArtworkHistory {
-
-}
-
 //performed by agency
 //with consent from owner
 transaction consentArtworkForSale {
@@ -79,6 +58,7 @@ transaction consentArtworkForSale {
 
 //only the authorzied agency can perform
 transaction transferOwnership {
+  o Double amount
   --> Artwork art  
   --> Agency agency  
   --> User newOwner
