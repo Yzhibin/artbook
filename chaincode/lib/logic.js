@@ -32,12 +32,11 @@ function consentArtworkForSale(consent){
     return getAssetRegistry('org.acme.artbook.Agency')
     .then (function (AgencyRegistry){
         return AgencyRegistry.update(consent.agency);
-    })
-    return getAssetRegistry('org.acme.artbook.Artwork')
+    }).then(function (){
+    return getAssetRegistry('org.acme.artbook.Artwork')})
     .then (function (ArtworkRegistry){
         return ArtworkRegistry.update(consent.art);
     })
-
 }
 
 /**
@@ -48,22 +47,25 @@ function consentArtworkForSale(consent){
 function transferOwnership(transfer){
     //change the owner of the artwork
     transfer.art.owner = transfer.newOwner;
-    //update the artwork
-    return getAssetRegistry('org.acme.artbook.Artwork')
-    .then (function (ArtworkRegistry){
-        return ArtworkRegistry.update(transfer.art);
-    })
+    
+
     //remove this sold art from the artList of the agency
     var artList = transfer.agency.artworks;
     var i = artList.indexOf(transfer.art);
     if(i != -1){
         artList.splice(i,1);
     }
+    
     //update the agency 
+    //update the artwork
     transfer.art.agency.artworks = artList;
     return getAssetRegistry('org.acme.artbook.Agency')
     .then (function (AgencyRegistry){
         return AgencyRegistry.update(transfer.agency);
+    }).then(function (){
+    return getAssetRegistry('org.acme.artbook.Artwork')})
+    .then (function (ArtworkRegistry){
+        return ArtworkRegistry.update(transfer.art);
     })
 }
 
