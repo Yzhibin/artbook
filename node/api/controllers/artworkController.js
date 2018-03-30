@@ -1,9 +1,11 @@
 'use strict';
 
+//TODO
 
 var mongoose = require('mongoose'),
-  Task = mongoose.model('Tasks');
+  Artwork = mongoose.model('Artwork');
 
+  /*
 exports.list_all_tasks = function(req, res) {
   Task.find({}, function(err, task) {
     if (err)
@@ -54,3 +56,5 @@ exports.delete_a_task = function(req, res) {
     res.json({ message: 'Task successfully deleted' });
   });
 };
+
+*/
