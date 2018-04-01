@@ -1,6 +1,6 @@
 const networkConnection = require('./networkConnection')
 
-module.exports = class artworkHandler {
+class userHandler {
 
     constructor(cardname) {
         this.cardname = cardname
@@ -8,49 +8,40 @@ module.exports = class artworkHandler {
     }
 
     /**
-     * Artworkinfo:
-     * String artworkId
-     * String title
-     * String artist
-     * Boolean lost
-     * String ownerId
+     * userInfo:
+     * userId
+     * name
      */
-    async createArtwork(artworkInfo) {
+    async createUser(userInfo) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
+        console.log('LOG 1')
+        console.log(this.cardname)
         await conn.init(this.cardname)
+        console.log('LOG 2')
 
         try {
             // Get Registry
-            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
             this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
 
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
 
-            // Create Artwork
-            let artwork = factory.newResource('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
-
-            // Get User
-            let owner = this.userRegistry.get(artworkInfo.ownerId)
-            let ownerRelation = factory.newRelationship('org.acme.artbook', 'User', artworkInfo.ownerId)
-            artwork.owner = ownerRelation
-
-            let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
-            owner.artworks.push(artworkRelation)
-
+            // Create User
+            let user = factory.newResource('org.acme.artbook', 'User', userInfo.userId)
+            user.name = userInfo.name
+           
             // Update Registry
-            await this.artworkRegistry.add(artwork)
-            await this.userRegistry.update(owner)
-            console.log('New artwork added')
-            return conn.bizNetworkConnection.disconnect()
+            await this.userRegistry.add(user)
+            console.log('New user added')
+            // return conn.bizNetworkConnection.disconnect()
         } catch (error) {
             console.log(error)
-            console.log('artworkHandler:createArtwork', error)
+            console.log('userHandler:createUser', error)
             throw error
         }
     }
-
+/*
     async viewArtwork(artworkId) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
@@ -71,5 +62,6 @@ module.exports = class artworkHandler {
         }
 
     }
-
+*/
 }
+module.exports = userHandler
