@@ -1,15 +1,40 @@
 # Artbook
 The ultimate blockchain solution for artwork trade industry
 
->***Version***
+> ***Version***
 >
 > Last Rlease:`0.0.1`
 > 
 > Release Date: 14 Mar 18
 
 ## Developer Guide
+> ### Important Notice
+> 
+> Users who use composer-cli version 0.16.0 and below, please go through development environment setup process again.
+>
+> **Major changes:**
+> 
+> - Lastest version of composer-cli is v0.19.0 (as of 1 April 2018). Use `composer -v` command to check composer-cli version. 
+> - In composer-cli v0.19.0, `composer runtime` command has been removed.
+> - Lastest version of fabric image is 1.1.0 (as of 1 April 2018). Use `docker images` command to check fabric image version.
+> - Fabric-tools kit is updated. Download the lastest version from Prerequisite section;
+> 
+> **Troubleshooting**
+> 
+> If any error occurs after this update process, a few actions may solve certain problems.
+> - Use `npm uninstall -g composer-cli` command to competely uninstall composer-cli module before re-install it.
+> - Use `npm unintall -g` command to uninstall `composer-playground` and/or `composer-rest-server` before re-install, if "connection error" occours when using Composer Playground or Composer REST Server.
+> - After download the lastest version of fabric-tools kit, run following command to clean up all environment from previous version:
+> ```
+> rm -rf ~/.composer   
+> cd ~/composer-tools
+> ./teardownFabric.sh
+> ./teardownAllDocker.sh
+> 2
+> ```
+
 ### Prerequisite
-1. Setup devlopment environment: follow the instructions in the [Hyperledger Composer Tutorial](https://hyperledger.github.io/composer/latest/installing/development-tools.html) 
+1. Setup development environment: follow the instructions in the [Hyperledger Composer Tutorial](https://hyperledger.github.io/composer/latest/installing/development-tools.html) 
 
 2. Start the Fabric Environment using the following commands. Here assumes the fabric-tools folder is at root directory
 
@@ -19,7 +44,7 @@ The ultimate blockchain solution for artwork trade industry
  ./createPeerAdminCard.sh
  ```
 
-### Run Chaincode
+### Run Chaincode (composer-cli v0.19.0)
 1. Go to chaincode directory. Here assumes the repository is at home direcotry.
  ```
  cd ~/artwork/chaincode
@@ -31,16 +56,16 @@ The ultimate blockchain solution for artwork trade industry
  composer archive create --sourceType dir --sourceName .
  ```
 
-3. Start runtime enviornment. The PeerAdmin Card is issued at the last step of Pre-requisite section.
+3. Install artbook business network The PeerAdmin Card is issued at the last step of Pre-requisite section. The arbook archive is generated from step 2. Change name of archive file (`-a {archiveFileName}`) accordingly.
  
  ```
- composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName artbook
+ composer network install -c PeerAdmin@hlfv1 -a artbook@0.0.1.bna
  ```
  
-4. Issue Network Admin card for the artbook network. Change name of archive file (`--archiveFile {fileName}`) based on step 2.
+4. Issue Network Admin card for the artbook network.Change network version (`--networkVersion {versionNumver}`) accordingly.
 
  ```
- composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile artbook@0.0.1.bna --file networkadmin.card
+ composer network start --networkName artbook --networkVersion 0.0.1 -A admin -S adminpw -c PeerAdmin@hlfv1
  ```
 
 5. Import network admin card to card wallet
