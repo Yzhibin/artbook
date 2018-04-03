@@ -7,6 +7,8 @@ namespace org.acme.artbook
 participant User identified by email {
   o String email
   o String name
+  o String passport
+  o String mobile
   --> Artwork[] artworks optional
 }
 

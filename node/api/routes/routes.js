@@ -24,4 +24,8 @@ module.exports = function (app) {
   //   .get(user.getUser)
   //   .put(user.updateUser)
     // .delete(user.deleteUser);
+
+  // Artwork Routes
+  app.route('/artwork')
+    .post(artwork.createArtwork);
 };
