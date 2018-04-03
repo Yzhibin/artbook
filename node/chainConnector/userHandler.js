@@ -8,9 +8,10 @@ class userHandler {
     }
 
     /**
-     * userInfo:
-     * userId
-     * name
+     * 
+     * @param userInfo
+     * userId: String
+     * name: String
      */
     async createUser(userInfo) {
         // Establish connection with blockchain network

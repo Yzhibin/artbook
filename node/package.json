@@ -11,10 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "composer-client": "^0.19.0",
-    "express": "^4.16.3",
-    "mongoose": "^5.0.12"
+    "express": "latest",
+    "ejs": "latest",
+    "uid2": "latest",
+    "mime": "latest",
+    "mongoose": "latest"
   },
   "devDependencies": {
-    "nodemon": "^1.17.2"
+    "nodemon": "latest"
   }
 }

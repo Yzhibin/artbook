@@ -10,7 +10,6 @@ class networkConnection {
      */
      constructor() {
          this.bizNetworkConnection = new BusinessNetworkConnection()
-         console.log('LOG 3')
      }
 
     /** 
@@ -20,9 +19,7 @@ class networkConnection {
      async init(cardname) {
         //  For testing
         cardname = 'admin@artbook'
-        console.log('LOG 4')
-         this.businessNetworkDefinition = await this.bizNetworkConnection.connect(cardname)
-         console.log('LOG 5')
+        this.businessNetworkDefinition = await this.bizNetworkConnection.connect(cardname)
      	console.log('networkConnection:<init>', 'businessNetworkDefinition obtained', this.businessNetworkDefinition.getIdentifier())
      }
 

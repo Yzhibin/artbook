@@ -8,12 +8,13 @@ module.exports = class artworkHandler {
     }
 
     /**
-     * Artworkinfo:
-     * String artworkId
-     * String title
-     * String artist
-     * Boolean lost
-     * String ownerId
+     * 
+     * @param artworkInfo
+     * artworkId: String
+     * title: String
+     * artist: String
+     * lost: Boolean
+     * ownerId: String
      */
     async createArtwork(artworkInfo) {
         // Establish connection with blockchain network
@@ -51,6 +52,10 @@ module.exports = class artworkHandler {
         }
     }
 
+    /**
+     * 
+     * @param artworkId: String
+     */
     async viewArtwork(artworkId) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
