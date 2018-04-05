@@ -30,7 +30,9 @@ exports.createUser = function (req, res) {
   var userInfo = req.body
   var userOnChain = {
     userId: userInfo.email,
-    name: userInfo.name
+    name: userInfo.name,
+    passport: userInfo.passport,
+    mobile: userInfo.mobile
   }
   var userOffChain = {
     id: userInfo.email,

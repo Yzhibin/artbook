@@ -31,6 +31,9 @@ class userHandler {
             // Create User
             let user = factory.newResource('org.acme.artbook', 'User', userInfo.userId)
             user.name = userInfo.name
+            user.passport = userInfo.passport
+            user.mobile = userInfo.mobile
+            user.artworks = []
            
             // Update Registry
             await this.userRegistry.add(user)

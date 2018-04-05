@@ -21,14 +21,18 @@ exports.list_all_tasks = function(req, res) {
 exports.createArtwork = function (req, res) {
   var artworkInfo = req.body
   var artworkOnChain = {
-    artworkId: artworkInfo.id,
+    artworkId: artworkInfo.artworkId,
     ownerId: artworkInfo.ownerId,
+    title: artworkInfo.title,
+    artist: artworkInfo.artist, 
+    createTime : artworkInfo.createTime,
+    location: artworkInfo.location,
+    description: artworkInfo.description,
+
     // what else?
   }
   var artworkOffChain = {
-    artworkId: artworkInfo.id,
-    title: artworkInfo.title,
-    artist: artworkInfo.artist, 
+    artworkId: artworkInfo.d,
     
   }
 
@@ -43,21 +47,21 @@ exports.createArtwork = function (req, res) {
   })
 };
 
-exports.addDocument = function (req, res) {
-  //TYPE!
-};
+// exports.addDocument = function (req, res) {
+//   //TYPE!
+// };
 
-exports.getDocuments = function (req, res) {
+// exports.getDocuments = function (req, res) {
 
-};
+// };
 
-exports.getOwnArtworks = function (req, res) {
+// exports.getOwnArtworks = function (req, res) {
 
-};
+// };
 
-exports.getAgencyArtworks = function (req, res) {
+// exports.getAgencyArtworks = function (req, res) {
 
-};
+// };
 
 
 /*

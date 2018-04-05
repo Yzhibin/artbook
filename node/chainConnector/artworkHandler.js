@@ -1,6 +1,6 @@
 const networkConnection = require('./networkConnection')
 
-module.exports = class artworkHandler {
+class artworkHandler {
 
     constructor(cardname) {
         this.cardname = cardname
@@ -31,19 +31,31 @@ module.exports = class artworkHandler {
 
             // Create Artwork
             let artwork = factory.newResource('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
+            artwork.title = artworkInfo.title
+            artwork.artist = artworkInfo.artist
+            artwork.createTime = artworkInfo.createTime
+            artwork.location = artworkInfo.location
+            artwork.description = artworkInfo.description
+            artwork.lost = false
+            artwork.onSale = false
 
             // Get User
             let owner = this.userRegistry.get(artworkInfo.ownerId)
+
+            console.log('Artwork Log2: user get!')
             let ownerRelation = factory.newRelationship('org.acme.artbook', 'User', artworkInfo.ownerId)
             artwork.owner = ownerRelation
-
-            let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
-            owner.artworks.push(artworkRelation)
-
-            // Update Registry
+            console.log('Artwork owner set!')
             await this.artworkRegistry.add(artwork)
-            await this.userRegistry.update(owner)
             console.log('New artwork added')
+
+            // let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
+            // owner.artworks.push(artworkRelation)
+
+            // // Update Registry
+            // await this.userRegistry.update(owner)
+
+            // console.log('Owner artwork list updated')
             return conn.bizNetworkConnection.disconnect()
         } catch (error) {
             console.log(error)
@@ -78,3 +90,5 @@ module.exports = class artworkHandler {
     }
 
 }
+
+module.exports = artworkHandler

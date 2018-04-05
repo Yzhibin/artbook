@@ -35,6 +35,9 @@ asset Artwork identified by artworkId {
   o String artworkId
   o String title
   o String artist
+  o String createTime
+  o String location
+  o String description
   o Boolean lost
   o Boolean onSale
   --> SupportingDocument[] documents optional
