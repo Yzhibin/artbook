@@ -1,4 +1,5 @@
 'use strict';
+var bcrypt = require('bcrypt')
 
 //TODO
 var mongoose = require('mongoose'),
@@ -24,7 +25,7 @@ Task.find({}, function(err, task) {
  * email
  * name
  * avatar
- * 
+ * password
  */
 exports.createUser = function (req, res) {
   var userInfo = req.body
@@ -36,17 +37,36 @@ exports.createUser = function (req, res) {
   }
   var userOffChain = {
     id: userInfo.email,
-    avatar: userInfo.avatar
+    avatar: userInfo.avatar,
   }
 
-  var adminHandlesNewUser = new userHandler('admin@artbook')
-  adminHandlesNewUser.createUser(userOnChain)
+  bcrypt.genSalt(function (err, salt) {
+    if (err) {
+      console.log('bcrypt.genSalt ERR')
+    }
+    console.log(`Salt: ${salt}`)
+    userOffChain.salt = salt
+    console.log(`userInfo.pwd: ${userInfo.password}`)
+    userInfo.password = userInfo.password + salt
+    
+    bcrypt.hash(userInfo.password, 10, function (err, hashed) {
+      if (err) {
+        console.log('bcrypt.hash ERR')
+      }
+      console.log(`Hash: ${hashed} `)
+      userOffChain.password = hashed
 
-  var new_user = new User(userOffChain)
-  new_user.save(function (err, user) {
-    if (err)
-      res.send(err);
-    res.json(user);
+      var adminHandlesNewUser = new userHandler('admin@artbook')
+      // adminHandlesNewUser.createUser(userOnChain)
+
+      var new_user = new User(userOffChain)
+      console.log(new_user)
+      new_user.save(function (err, user) {
+        if (err)
+          res.send(err);
+        res.json(user);
+      })
+    })
   })
 };
 
