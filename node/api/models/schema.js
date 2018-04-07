@@ -31,7 +31,16 @@ var UserSchema = mongoose.model('User', new Schema({
   }
 }))
 
+var FileSchema = mongoose.model('File', new Schema({
+  img: { 
+    data: Buffer, 
+    contentType: String
+   }
+}))
+
+
 module.exports = {
   Artwork: ArtworkSchema,
-  User: UserSchema
+  User: UserSchema,
+  File: FileSchema
 }

@@ -3,6 +3,7 @@ module.exports = function (app) {
 
   var artwork = require('../controllers/artworkController')
   var user = require('../controllers/userController')
+  var file = require('../controllers/fileController')
 
   // Artwork Routes
   // app.route('/artwork')
@@ -28,4 +29,7 @@ module.exports = function (app) {
   // Artwork Routes
   app.route('/artwork')
     .post(artwork.createArtwork);
+
+  app.route('/upload')
+    .post(file.upload);
 };
