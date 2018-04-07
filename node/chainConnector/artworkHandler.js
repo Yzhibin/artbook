@@ -41,12 +41,10 @@ class artworkHandler {
 
             // Get User
             let owner = await this.userRegistry.get(artworkInfo.ownerId)
-            console.log(owner)
 
-            console.log('Artwork Log2: user get!')
             let ownerRelation = factory.newRelationship('org.acme.artbook', 'User', artworkInfo.ownerId)
             artwork.owner = ownerRelation
-            console.log('Artwork owner set!')
+            //console.log('Artwork owner set!')
             await this.artworkRegistry.add(artwork)
             console.log('New artwork added')
 
