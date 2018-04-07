@@ -44,23 +44,18 @@ exports.createUser = function (req, res) {
     if (err) {
       console.log('bcrypt.genSalt ERR')
     }
-    console.log(`Salt: ${salt}`)
     userOffChain.salt = salt
-    console.log(`userInfo.pwd: ${userInfo.password}`)
-    userInfo.password = userInfo.password + salt
-    
-    bcrypt.hash(userInfo.password, 10, function (err, hashed) {
+    bcrypt.hash(userInfo.password + salt, 10, function (err, hashed) {
       if (err) {
         console.log('bcrypt.hash ERR')
       }
-      console.log(`Hash: ${hashed} `)
       userOffChain.password = hashed
 
+      // Chain
       var adminHandlesNewUser = new userHandler('admin@artbook')
-      // adminHandlesNewUser.createUser(userOnChain)
+      adminHandlesNewUser.createUser(userOnChain)
 
       var new_user = new User(userOffChain)
-      console.log(new_user)
       new_user.save(function (err, user) {
         if (err)
           res.send(err);

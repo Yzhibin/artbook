@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/artbookDB');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Auth
+// Authentication
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   bcrypt = require('bcrypt')
@@ -30,7 +30,6 @@ passport.use(new LocalStrategy({
   usernameField: 'email'
 },
   function (username, password, done) {
-    console.log('LOG2')
     User.findOne({ id: username }, function (err, user) {
       console.log(user)
       if (err) { return done(err) }
@@ -58,10 +57,10 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
-
+// End of Authentication
 
 var routes = require('./api/routes/routes'); //importing route
-routes(app, passport); //register the route
+routes(app, passport); //register the route and passport module
 
 
 app.listen(port);
