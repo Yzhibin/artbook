@@ -3,7 +3,6 @@
 //TODO
 var Grid = require('gridfs-stream');
 var fs = require('fs');
-var busboy = require('connect-busboy');
 
 var mongoose = require('mongoose'),
 File = mongoose.model('File');

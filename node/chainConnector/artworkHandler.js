@@ -40,7 +40,8 @@ class artworkHandler {
             artwork.onSale = false
 
             // Get User
-            let owner = this.userRegistry.get(artworkInfo.ownerId)
+            let owner = await this.userRegistry.get(artworkInfo.ownerId)
+            console.log(owner)
 
             console.log('Artwork Log2: user get!')
             let ownerRelation = factory.newRelationship('org.acme.artbook', 'User', artworkInfo.ownerId)
@@ -49,11 +50,11 @@ class artworkHandler {
             await this.artworkRegistry.add(artwork)
             console.log('New artwork added')
 
-            // let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
-            // owner.artworks.push(artworkRelation)
+            let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
+            owner.artworks.push(artworkRelation)
 
-            // // Update Registry
-            // await this.userRegistry.update(owner)
+            // Update Registry
+            await this.userRegistry.update(owner)
 
             // console.log('Owner artwork list updated')
             return conn.bizNetworkConnection.disconnect()
