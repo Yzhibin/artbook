@@ -1,9 +1,12 @@
 'use strict';
 module.exports = function (app, passport) {
 
-  var artwork = require('../controllers/artworkController')
-  var user = require('../controllers/userController')
-  var file = require('../controllers/fileController')
+  var artwork = require('../controllers/artworkController'),
+    user = require('../controllers/userController'),
+    agency = require('../controllers/agencyController'),
+    authority = require('../controllers/authorityController'),
+    file = require('../controllers/fileController'),
+    consent = require('../controllers/consentController')
 
   // Artwork Routes
   // app.route('/artwork')
@@ -33,15 +36,17 @@ module.exports = function (app, passport) {
   app.route('/upload')
     .post(file.upload);
 
+  app.post('/user/login', passport.authenticate('user'), user.login)
 
-  app.route('/login')
-  .post(passport.authenticate('local'), function (req, res) {
-    res.json({status: 'Authenticated'});
-  });
+  app.post('/agency/login', passport.authenticate('agency'), agency.login)
+
+  app.post('/authority/login', passport.authenticate('authority'), authority.login)
 
   app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
   });
+
+  app.post('/agency/reqeustConsent', )
 
 };

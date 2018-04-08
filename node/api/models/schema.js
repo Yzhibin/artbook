@@ -2,12 +2,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId;
-  var passportLocalMongoose = require('passport-local-mongoose');
+
+// All id fields are id on chain. mongo default _id is not overwritten
 
 var ArtworkSchema = mongoose.model('Artwork', new Schema({
   id: {
     type: String,
-    require:true,
+    required:true,
     unique: true
   },
   Created_date: {
@@ -23,12 +24,28 @@ var ArtworkSchema = mongoose.model('Artwork', new Schema({
 var UserSchema = mongoose.model('User', new Schema({
   id: {
     type: String,
-    require: true,
+    required: true,
     unique: true
   },
-  avatar: {
-    data: Buffer,
-    contentType: String
+  password: String,
+  salt: String
+}))
+
+var AgencySchema = mongoose.model('Agency', new Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: String,
+  salt: String
+}))
+
+var AuthoritySchema = mongoose.model('Authority', new Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true
   },
   password: String,
   salt: String
@@ -45,5 +62,7 @@ var FileSchema = mongoose.model('File', new Schema({
 module.exports = {
   Artwork: ArtworkSchema,
   User: UserSchema,
+  Agency: AgencySchema,
+  Authority: AuthoritySchema,
   File: FileSchema
 }

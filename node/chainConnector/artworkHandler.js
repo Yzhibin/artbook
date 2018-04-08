@@ -79,12 +79,20 @@ class artworkHandler {
             .then(function() {
                 return conn.bizNetworkConnection.disconnect()
             })
-
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)
             throw error
         }
+
+    }
+
+    /** 
+     * 
+     * @argument req
+     * 
+    */
+    async consentForSale(req){
 
     }
 

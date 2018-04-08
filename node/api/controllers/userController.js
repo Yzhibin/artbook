@@ -36,8 +36,7 @@ exports.createUser = function (req, res) {
     mobile: userInfo.mobile
   }
   var userOffChain = {
-    id: userInfo.email,
-    avatar: userInfo.avatar,
+    id: userInfo.email
   }
 
   bcrypt.genSalt(function (err, salt) {
@@ -53,17 +52,27 @@ exports.createUser = function (req, res) {
 
       // Chain
       var adminHandlesNewUser = new userHandler('admin@artbook')
-      adminHandlesNewUser.createUser(userOnChain)
+      adminHandlesNewUser.createUser(userOnChain).then(
+        function (result) {
+          var new_user = new User(userOffChain)
+          new_user.save(function (err, user) {
+            if (err)
+              res.send(err);
+            res.json(result);
+          })
+        })
+        }
+      )
 
-      var new_user = new User(userOffChain)
-      new_user.save(function (err, user) {
-        if (err)
-          res.send(err);
-        res.json(user);
-      })
-    })
+
   })
 };
+
+exports.login = function (req, res) {
+  var handlerInstance = new userHandler(req.body.email.replace('@', '*') + '@artbook')
+  var user = handlerInstance.getUser(req.body.email)
+  res.json(user)
+}
 
 /*
 exports.read_a_task = function(req, res) {
