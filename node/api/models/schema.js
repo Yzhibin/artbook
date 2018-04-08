@@ -9,13 +9,12 @@ var ArtworkSchema = mongoose.model('Artwork', new Schema({
     require:true,
     unique: true
   },
+  name: {
+    type: String
+  },
   Created_date: {
     type: Date,
     default: Date.now
-  },
-  pic: {
-    data: Buffer,
-    contentType: String
   }
 }))
 

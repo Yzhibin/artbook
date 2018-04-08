@@ -40,22 +40,21 @@ asset Artwork identified by artworkId {
   o String description
   o Boolean lost
   o Boolean onSale
-  --> SupportingDocument[] documents optional
+  o String[] pictures //documentId in mongoDB 
   --> User owner 
   --> Agency handler optional
 }
 
 asset SupportingDocument identified by documentId {
   o String documentId
-  o String hash
+  o String fileId //in mongoDB
   o String title
-  o DateTime issueDate
+  o String issueDate
   o String author
   --> Artwork art
 }
 
-//performed by agency
-//with consent from owner
+//performed by owner!!
 transaction consentArtworkForSale {
   -->  Artwork art
   -->  Agency agency
