@@ -1,48 +1,37 @@
 'use strict';
 
-//TODO
-var Grid = require('gridfs-stream');
 var fs = require('fs');
 
 var mongoose = require('mongoose'),
-File = mongoose.model('File');
+  File = mongoose.model('File');
 
-  //var documentHandler = require('../../chainConnector/documentHandler')
+var documentHandler = require('../../chainConnector/documentHandler')
 
 
-// file system
-var conn = mongoose.connection;
-Grid.mongo = mongoose.mongo;
-var gfs;
-conn.once('open', function () {
-  console.log('open');
-  gfs = Grid(conn.db);
-});
-  
 
 exports.upload = function (req, res) {
-  var part = req.file;
-  console.log('file get!');
-  console.log(typeof(req.file));
-  var writeStream = gfs.createWriteStream({
-      filename: 'img_test',
-      mode: 'w',
-      content_type: part.mimetype
-  });
 
-  writeStream.on('close', (file) => {
-    // checking for file
-    if(!file) {
-      res.status(400).send('No file received');
-    }
-      return res.status(200).send({
-          message: 'Success',
-          file: file
-      });
-  });
-  // using callbacks is important !
-  // writeStream should end the operation once all data is written to the DB 
-  writeStream.write(part.data, () => {
-    writeStream.end();
+  var new_file = new File()
+  new_file.img.data = fs.readFileSync(req.file.path)
+  new_file.img.contentType = req.file.mimetype;
+  new_file.name = req.file.originalname
+
+  new_file.save(function (err, file) {
+    if (err)
+      res.send(err);
+    res.json(file.id);
   })
+};
+
+exports.retrieve = function (req, res) {
+
+  console.log(req.params.id);
+  File.findOne({ _id: req.params.id }, function (err, document) {
+    if (err)
+      res.send(err);
+    console.log(document.name + "  found");
+
+    res.setHeader('Content-Type', document.img.contentType);
+    res.send(document.img.data);
+  });
 };

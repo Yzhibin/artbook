@@ -53,18 +53,19 @@ exports.createUser = function (req, res) {
       // Chain
       var adminHandlesNewUser = new userHandler('admin@artbook')
       adminHandlesNewUser.createUser(userOnChain).then(
-        function (result) {
+        function(result){
           var new_user = new User(userOffChain)
           new_user.save(function (err, user) {
             if (err)
               res.send(err);
-            res.json(result);
+
+            res.json({
+              email: userInfo.email
+            });
           })
-        })
         }
       )
-
-
+    })
   })
 };
 

@@ -11,13 +11,12 @@ var ArtworkSchema = mongoose.model('Artwork', new Schema({
     required:true,
     unique: true
   },
+  name: {
+    type: String
+  },
   Created_date: {
     type: Date,
     default: Date.now
-  },
-  pic: {
-    data: Buffer,
-    contentType: String
   }
 }))
 
@@ -55,6 +54,10 @@ var FileSchema = mongoose.model('File', new Schema({
   img: { 
     data: Buffer, 
     contentType: String
+   },
+   name: {
+    type: String,
+    default: null
    }
 }))
 

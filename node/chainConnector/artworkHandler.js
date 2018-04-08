@@ -1,4 +1,6 @@
 const networkConnection = require('./networkConnection')
+const uuidv4 = require('uuid/v4')
+//const parser = require('./parser')
 
 class artworkHandler {
 
@@ -29,8 +31,10 @@ class artworkHandler {
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
 
+            var id = uuidv4()
+            console.log(id)
             // Create Artwork
-            let artwork = factory.newResource('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
+            let artwork = factory.newResource('org.acme.artbook', 'Artwork', id)
             artwork.title = artworkInfo.title
             artwork.artist = artworkInfo.artist
             artwork.createTime = artworkInfo.createTime
@@ -38,29 +42,54 @@ class artworkHandler {
             artwork.description = artworkInfo.description
             artwork.lost = false
             artwork.onSale = false
+            artwork.pictures = []
 
             // Get User
             let owner = await this.userRegistry.get(artworkInfo.ownerId)
 
             let ownerRelation = factory.newRelationship('org.acme.artbook', 'User', artworkInfo.ownerId)
             artwork.owner = ownerRelation
-            //console.log('Artwork owner set!')
             await this.artworkRegistry.add(artwork)
             console.log('New artwork added')
-
-            let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', artworkInfo.artworkId)
-            owner.artworks.push(artworkRelation)
-
-            // Update Registry
-            await this.userRegistry.update(owner)
-
-            // console.log('Owner artwork list updated')
-            return conn.bizNetworkConnection.disconnect()
+            
+            let result = await this.artworkRegistry.resolve(id)
+            conn.bizNetworkConnection.disconnect()
+            return result
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:createArtwork', error)
             throw error
         }
+    }
+
+
+    async addPicture(pictureInfo) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        console.log(this.cardname)
+        await conn.init(this.cardname)
+
+        try {
+            //get Artwork
+            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
+            let artwork = await this.artworkRegistry.get(pictureInfo.artworkId)
+
+            //add picture path (documentId in mongoDB) to artwork asset
+            artwork.pictures.push(pictureInfo.fileId);
+
+            //update Registry
+            await this.artworkRegistry.update(artwork)
+            let result = await this.artworkRegistry.resolve(pictureInfo.artworkId)
+            conn.bizNetworkConnection.disconnect()
+
+            return result
+
+        } catch (error) {
+            console.log(error)
+            console.log('artworkHandler:addPicture', error)
+            throw error
+        }
+
     }
 
     /**
@@ -75,10 +104,9 @@ class artworkHandler {
         try {
             // Get Registry
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            return this.artworkRegistry.get(artworkId)
-            .then(function() {
-                return conn.bizNetworkConnection.disconnect()
-            })
+            let result = await this.artworkRegistry.resolve(artworkId)
+            conn.bizNetworkConnection.disconnect()
+            return result
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)

@@ -1,10 +1,10 @@
 const networkConnection = require('./networkConnection')
+const uuidv4 = require('uuid/v4')
 
 class documentHandler {
 
     constructor(cardname) {
         this.cardname = cardname
-        this.cardname = 'admin@artbook' //For testing
     }
 
     /**
@@ -13,35 +13,42 @@ class documentHandler {
      * userId: String
      * name: String
      */
-    async createUser(userInfo) {
+    async addDocument(documentInfo) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
-        console.log('LOG 1')
         console.log(this.cardname)
         await conn.init(this.cardname)
-        console.log('LOG 2')
 
         try {
             // Get Registry
-            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
-
+            this.supportingDocumentRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.SupportingDocument')
+            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
+            
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
 
-            // Create User
-            let user = factory.newResource('org.acme.artbook', 'User', userInfo.userId)
-            user.name = userInfo.name
-            user.passport = userInfo.passport
-            user.mobile = userInfo.mobile
-            user.artworks = []
+            // Create Document
+            let newDocument = factory.newResource('org.acme.artbook', 'SupportingDocument', uuidv4())
+            newDocument.title = documentInfo.title
+            newDocument.fileId = documentInfo.fileId
+            newDocument.issueDate = documentInfo.issueDate
+            newDocument.author = documentInfo.author
            
+            //link to artwork
+            let artwork = await this.artworkRegistry.get(documentInfo.artworkId)
+
+            let artworkRelation = factory.newRelationship('org.acme.artbook', 'Artwork', documentInfo.artworkId)
+            newDocument.art = artworkRelation
+            console.log('Document linked to ' + documentInfo.artworkId)
+
             // Update Registry
-            await this.userRegistry.add(user)
-            console.log('New user added')
-            // return conn.bizNetworkConnection.disconnect()
+            await this.supportingDocumentRegistry.add(newDocument)
+            console.log('New document added')
+            return conn.bizNetworkConnection.disconnect()
+
         } catch (error) {
             console.log(error)
-            console.log('userHandler:createUser', error)
+            console.log('documentHandler:addDocument', error)
             throw error
         }
     }

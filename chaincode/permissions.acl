@@ -46,11 +46,11 @@ rule Agency {
 
 rule ConsentForSale {
   description: "Only agencies can consent artwork for sale" 
-  participant(p): "org.acme.artbook.Agency"
-  operation: ALL
+  participant(p): "org.acme.artbook.User"
+  operation: UPDATE
   resource(r): "org.acme.artbook.Artwork"
   transaction: "org.acme.artbook.consentArtworkForSale"
-  condition: (true)
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
   action: ALLOW
 }
 rule Transfer {

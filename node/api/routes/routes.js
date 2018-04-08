@@ -8,6 +8,9 @@ module.exports = function (app, passport) {
     file = require('../controllers/fileController'),
     consent = require('../controllers/consentController')
 
+  var multer  = require('multer')
+  var upload = multer({ dest: 'uploads/' })
+
   // Artwork Routes
   // app.route('/artwork')
   //   .get(artwork.getAllArtworks)
@@ -31,10 +34,25 @@ module.exports = function (app, passport) {
 
   // Artwork Routes
   app.route('/artwork')
-    .post(artwork.createArtwork);
+    .post(artwork.createArtwork)
+    .put(artwork.addArtworkPic);
+ 
+  app.route('/artwork/:artworkId')
+    .get(artwork.viewArtwork);
+
+  app.route('/document')
+  .post(artwork.addDocumentToArtwork);
+
+  // app.route('/getDocuments/:artworkId')
+  // .get(artwork.getDocuments);
+
 
   app.route('/upload')
-    .post(file.upload);
+    .post(upload.single('file'),file.upload);
+  
+  app.route('/retrieve/:id')
+    .get(file.retrieve);
+
 
   app.post('/user/login', passport.authenticate('user'), user.login)
 

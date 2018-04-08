@@ -1,4 +1,5 @@
 const networkConnection = require('./networkConnection')
+const parser = require('./parser')
 
 class userHandler {
 
@@ -33,12 +34,12 @@ class userHandler {
             user.name = userInfo.name
             user.passport = userInfo.passport
             user.mobile = userInfo.mobile
-            user.artworks = []
            
             // Update Registry
-            await this.userRegistry.add(user)
+            let result = await this.userRegistry.add(user)
             console.log('New user added')
-            // return conn.bizNetworkConnection.disconnect()
+            return conn.bizNetworkConnection.disconnect()
+
         } catch (error) {
             console.log(error)
             console.log('userHandler:createUser', error)
