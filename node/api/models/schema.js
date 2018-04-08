@@ -1,7 +1,8 @@
 'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId
+  ObjectId = Schema.ObjectId;
+  var passportLocalMongoose = require('passport-local-mongoose');
 
 var ArtworkSchema = mongoose.model('Artwork', new Schema({
   id: {
@@ -14,8 +15,8 @@ var ArtworkSchema = mongoose.model('Artwork', new Schema({
     default: Date.now
   },
   pic: {
-    type: Buffer,
-    default: null
+    data: Buffer,
+    contentType: String
   }
 }))
 
@@ -26,9 +27,11 @@ var UserSchema = mongoose.model('User', new Schema({
     unique: true
   },
   avatar: {
-    type: Buffer,
-    default: null
-  }
+    data: Buffer,
+    contentType: String
+  },
+  password: String,
+  salt: String
 }))
 
 var FileSchema = mongoose.model('File', new Schema({

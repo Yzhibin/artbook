@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function (app) {
+module.exports = function (app, passport) {
 
   var artwork = require('../controllers/artworkController')
   var user = require('../controllers/userController')
@@ -27,7 +27,7 @@ module.exports = function (app) {
   // app.route('/user/:userId')
   //   .get(user.getUser)
   //   .put(user.updateUser)
-    // .delete(user.deleteUser);
+  // .delete(user.deleteUser);
 
   // Artwork Routes
   app.route('/artwork')
@@ -35,4 +35,17 @@ module.exports = function (app) {
 
   app.route('/upload')
     .post(upload.single('file'),file.upload);
+
+
+
+  app.route('/login')
+  .post(passport.authenticate('local'), function (req, res) {
+    res.json({status: 'Authenticated'});
+  });
+
+  app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
 };
