@@ -2,7 +2,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId;
-  var passportLocalMongoose = require('passport-local-mongoose');
 
 var ArtworkSchema = mongoose.model('Artwork', new Schema({
   id: {

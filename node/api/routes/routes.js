@@ -35,6 +35,9 @@ module.exports = function (app, passport) {
 
   app.route('/upload')
     .post(upload.single('file'),file.upload);
+  
+  app.route('/retrieve/:id')
+    .get(file.retrieve);
 
 
 
