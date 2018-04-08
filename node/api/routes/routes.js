@@ -5,6 +5,9 @@ module.exports = function (app) {
   var user = require('../controllers/userController')
   var file = require('../controllers/fileController')
 
+  var multer  = require('multer')
+  var upload = multer({ dest: 'uploads/' })
+
   // Artwork Routes
   // app.route('/artwork')
   //   .get(artwork.getAllArtworks)
@@ -31,5 +34,5 @@ module.exports = function (app) {
     .post(artwork.createArtwork);
 
   app.route('/upload')
-    .post(file.upload);
+    .post(upload.single('file'),file.upload);
 };

@@ -35,6 +35,10 @@ var FileSchema = mongoose.model('File', new Schema({
   img: { 
     data: Buffer, 
     contentType: String
+   },
+   name: {
+    type: String,
+    default: null
    }
 }))
 
