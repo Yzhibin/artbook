@@ -16,7 +16,6 @@ Task.find({}, function(err, task) {
   res.json(task);
 });
 };
-
 */
 
 exports.createArtwork = function (req, res) {
@@ -96,14 +95,34 @@ exports.addDocumentToArtwork = function (req, res) {
     })
 };
 
-// //Get all supporting documents of an artwork (by artworkId)
-// exports.getDocuments = function (req, res) {
+//Get all supporting documents of an artwork (by artworkId)
+exports.getDocuments = function (req, res) {
+  var adminHandlesNewDocument = new documentHandler('admin@artbook')
+  adminHandlesNewDocument.getDocuments(req.params.artworkId).then(
+    function(documents){
+      res.json(documents);
+    })
+};
 
-// };
+exports.getOwnArtworks = function (req, res) {
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.getOwnArtworks(req.params.ownerId).then(
+    function (artworks) {
+      res.json(artworks);
+    })
+};
 
-// exports.getOwnArtworks = function (req, res) {
+// exports.markMissing = function(req, res){
 
-// };
+// }
+
+// exports.getAllMissing = function(req, res){
+
+// }
+
+// exports.recoverMissing = function(req, res){
+
+// }
 
 // exports.getAgencyArtworks = function (req, res) {
 

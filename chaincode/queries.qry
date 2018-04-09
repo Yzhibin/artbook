@@ -1,0 +1,7 @@
+
+query selectArtworkByOwner {
+  description: "Select all artworks owned by a user"
+  statement:
+      SELECT org.acme.artbook.Artwork
+          WHERE (owner == _$owner)
+}
