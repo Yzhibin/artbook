@@ -333,7 +333,7 @@ exports.sendMail = function (mailInfo) {
                 <table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td>
                   <!-- TEXT -->
                   <table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td align="center" class="padding-copy" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33; padding-top: 0px;">Request from ${mailInfo.agency}<br></td>
-                  </tr><tr><td align="left" class="padding-copy textlightStyle" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33;"><p>Dear ${mailInfo.receiverName}, ${mailInfo.agency} initialted the sale of <i>${mailInfo.artwork}</i> to you. Please click the button below to go to our payment partner's page to pay the earnest.</p></td>
+                  </tr><tr><td align="left" class="padding-copy textlightStyle" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33;"><p>Dear ${mailInfo.receiverName}, ${mailInfo.agency} initiated the sale of <i>${mailInfo.artwork}</i> to you. Please click the button below to go to our payment partner's page to pay the earnest.</p></td>
                   </tr></tbody></table></td>
                 </tr><tr><td>
                 </td>

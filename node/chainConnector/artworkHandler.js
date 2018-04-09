@@ -221,9 +221,9 @@ class artworkHandler {
 
             let transfer = await factory.newTransaction('org.acme.artbook', 'transferOwnership')
             transfer.agency = agencyRelation
-            consent.art = artworkRelation
-            consent.newOwner = userRelation
-            consent.amount = Number.parseFloat(transferInfo.price)
+            transfer.art = artworkRelation
+            transfer.newOwner = userRelation
+            transfer.amount = Number.parseFloat(transferInfo.price)
 
             let result = await conn.bizNetworkConnection.submitTransaction(transfer)
 

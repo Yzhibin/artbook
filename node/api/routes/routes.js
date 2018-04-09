@@ -85,8 +85,8 @@ module.exports = function (app, passport) {
   // Consent
   app.post('/agency/requestConsent', consent.requestForConsent)
   app.put('/user/consentForSale', consent.consentForSale)
-  app.post('agency/requestForPayment', consent.requestForPayment)
-  app.get('user/payment/:token', consent.pay)
+  app.post('/agency/requestForPayment', consent.requestForPayment)
+  app.get('/user/payment/:token', consent.pay)
   app.get('/user/transferOwnership/:token', consent.transferOwnership)
 
 };
