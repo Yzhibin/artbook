@@ -5,7 +5,6 @@
  * @transaction
  */
 function consentArtworkForSale(consent){
-    consent.agency.artworks.push(consent.art);
     consent.art.handler = consent.agency;
     consent.art.onSale = true;
     

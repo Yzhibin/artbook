@@ -8,11 +8,11 @@ class agencyHandler {
 
     /**
      * 
-     * @param userInfo
+     * @param agencyInfo
      * userId: String
      * name: String
      */
-    async createUser(userInfo) {
+    async createAgency(agencyInfo) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         console.log(this.cardname)
@@ -20,51 +20,47 @@ class agencyHandler {
 
         try {
             // Get Registry
-            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Agency')
+            this.agencyRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Agency')
 
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
 
-            // Create User
-            let user = factory.newResource('org.acme.artbook', 'Agency', userInfo.userId)
-            user.name = userInfo.name
+            // Create Agency
+            let agency = factory.newResource('org.acme.artbook', 'Agency', agencyInfo.userId)
+            agency.name = agencyInfo.name
 
             // Update Registry
-            await this.userRegistry.add(user)
+            await this.agencyRegistry.add(agency)
 
             // Issue an identity card for this Staff. The ID Card is exported to current direcotry
-            let result = await businessNetworkConnection
-                .issueIdentity(`org.acme.artbook.Agency#${userInfo.email.replace('@', '*')}@artbook`, userInfo.passport)
-            console.log('New user added')
+            let result = await conn.bizNetworkConnection
+                .issueIdentity(`org.acme.artbook.Agency#${agencyInfo.userId}`, agencyInfo.userId)
+            console.log('New agency added')
             await conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
             console.log(error)
-            console.log('userHandler:createUser', error)
+            console.log('agencyHandler:createAgency', error)
             throw error
         }
     }
-    /*
-        async viewArtwork(artworkId) {
-            // Establish connection with blockchain network
-            const conn = new networkConnection();
-            await conn.init(this.cardname)
-    
-            try {
-                // Get Registry
-                this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-                return this.artworkRegistry.get(artworkId)
-                .then(function() {
-                    return conn.bizNetworkConnection.disconnect()
-                })
-    
-            } catch (error) {
-                console.log(error)
-                console.log('artworkHandler:Artwork', error)
-                throw error
-            }
-    
+   
+    async getAgency(agencyEmail) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        console.log(`cardname: ${this.cardname}`)
+        await conn.init(this.cardname)
+        try {
+            // Get Registry
+            this.agencyRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Agency')
+            let result = await this.agencyRegistry.resolve(agencyEmail)
+            await conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log(error)
+            console.log('agencyHandler:getAgency', error)
+            throw error
         }
-    */
+    }
 }
 module.exports = agencyHandler

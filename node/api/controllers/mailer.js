@@ -3,8 +3,11 @@
  * receiverEmail: String
  * receiverName: String
  * mailType: String
+ * agency: String
+ * artwork:String
+ * otp: String
  */
-exports.mailer = function (mailInfo) {
+exports.sendMail = function (mailInfo) {
   var nodemailer = require("nodemailer");
 
   var transporter = nodemailer.createTransport({
@@ -19,32 +22,192 @@ exports.mailer = function (mailInfo) {
 
   switch (mailInfo.mailType) {
 
-    case ConsentForSale:
+    case 'ConsentForSale':
+      mailOptions = {
+        from: "Artbook Co.<merlionsharing@gmail.com>",
+        to: mailInfo.receiverEmail,
+        subject: `Request for Consent from ${mailInfo.agency}`,
+        html:
+         `<!DOCTYPE html>
+         <html lang="it"><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>Artbook Co.</title><!--
+         
+            --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><style type="text/css">
+         
+            #ko_onecolumnBlock_4 .textintenseStyle a, #ko_onecolumnBlock_4 .textintenseStyle a:link, #ko_onecolumnBlock_4 .textintenseStyle a:visited, #ko_onecolumnBlock_4 .textintenseStyle a:hover{
+             color: #ffffff;
+             text-decoration: none;
+             font-weight: bold;
+             text-decoration: none
+         }
+         
+         #ko_onecolumnBlock_4 .textlightStyle a, #ko_onecolumnBlock_4 .textlightStyle a:link, #ko_onecolumnBlock_4 .textlightStyle a:visited, #ko_onecolumnBlock_4 .textlightStyle a:hover{
+             color: #3F3D33;
+             text-decoration: none;
+             font-weight: bold;
+             text-decoration: 
+         }
+         </style><style type="text/css">
+         /* CLIENT-SPECIFIC STYLES */
+         #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" message */
+         .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
+         .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div{line-height: 100%;} /* Force Hotmail to display normal line spacing */
+         body, table, td, a{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
+         table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;} /* Remove spacing between tables in Outlook 2007 and up */
+         img{-ms-interpolation-mode:bicubic;} /* Allow smoother rendering of resized image in Internet Explorer */
+         
+         /* RESET STYLES */
+         body{margin:0; padding:0;}
+         img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
+         table{border-collapse:collapse !important;}
+         body{height:100% !important; margin:0; padding:0; width:100% !important;}
+         
+         /* iOS BLUE LINKS */
+         .appleBody a{color:#68440a; text-decoration: none;}
+         .appleFooter a{color:#999999; text-decoration: none;}
+         
+         /* MOBILE STYLES */
+         @media screen and (max-width: 525px) {
+         
+             /* ALLOWS FOR FLUID TABLES */
+             table[class="wrapper"]{
+               width:100% !important;
+               min-width:0px !important;
+           }
+         
+           /* USE THESE CLASSES TO HIDE CONTENT ON MOBILE */
+           td[class="mobile-hide"]{
+               display:none;}
+         
+               img[class="mobile-hide"]{
+                   display: none !important;
+               }
+         
+               img[class="img-max"]{
+                   width:100% !important;
+                   max-width: 100% !important;
+                   height:auto !important;
+               }
+         
+               /* FULL-WIDTH TABLES */
+               table[class="responsive-table"]{
+                   width:100%!important;
+               }
+         
+               /* UTILITY CLASSES FOR ADJUSTING PADDING ON MOBILE */
+               td[class="padding"]{
+                   padding: 10px 5% 15px 5% !important;
+               }
+         
+               td[class="padding-copy"]{
+                   padding: 10px 5% 10px 5% !important;
+                   text-align: center;
+               }
+         
+               td[class="padding-meta"]{
+                   padding: 30px 5% 0px 5% !important;
+                   text-align: center;
+               }
+         
+               td[class="no-pad"]{
+                   padding: 0 0 0px 0 !important;
+               }
+         
+               td[class="no-padding"]{
+                   padding: 0 !important;
+               }
+         
+               td[class="section-padding"]{
+                   padding: 10px 15px 10px 15px !important;
+               }
+         
+               td[class="section-padding-bottom-image"]{
+                   padding: 10px 15px 0 15px !important;
+               }
+         
+               /* ADJUST BUTTONS ON MOBILE */
+               td[class="mobile-wrapper"]{
+                 padding: 10px 5% 15px 5% !important;
+             }
+         
+             table[class="mobile-button-container"]{
+                 margin:0 auto;
+                 width:100% !important;
+             }
+         
+             a[class="mobile-button"]{
+                 width:80% !important;
+                 padding: 15px !important;
+                 border: 0 !important;
+                 font-size: 16px !important;
+             }
+         
+         }
+         </style></head><body style="margin: 0; padding: 0;" bgcolor="#ffffff" align="center">
+         
+             <!-- PREHEADER -->
+         
+             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 530px;" id="ko_preheaderBlock_1"><tbody><tr><td bgcolor="#3F3D33" class="mobile-hide">
+                 <div align="center" style="padding: 0px 15px 0px 15px;">
+                     <table border="0" cellpadding="0" cellspacing="0" width="500" style="min-width: 500px;" class="wrapper"><!--Preheade/view on web TEXT --><tbody><tr><td style="padding: 10px 0px 10px 0px;">
+                         <table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td bgcolor="#3F3D33" width="50%" align="left" class="mobile-hide">
+                             <table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td align="left" style="padding: 0 0 5px 0; font-size: 12px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none;"><span style="color: #ffffff; text-decoration: none;">Artwork Co.<br></span></td>
+                             </tr></tbody></table></td>
+         
+                             <td bgcolor="#3F3D33" width="50%" align="right" class="mobile-hide">
+                                 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td align="right" style="padding: 0 0 5px 0; font-size: 12px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none;"><a href="%5Bshow_link%5D" style="color: #ffffff;" target="_new"><span>View on web</span></a></td>
+                                 </tr></tbody></table></td>
+                             </tr></tbody></table></td>
+                         </tr></tbody></table></div>
+                     </td>
+                 </tr></tbody></table><table border="0" cellpadding="0" cellspacing="0" width="100%" id="ko_onecolumnBlock_4"><tbody><tr class="row-a"><td bgcolor="#EDE8DA" align="center" class="section-padding" style="padding-top: 30px; padding-left: 15px; padding-bottom: 30px; padding-right: 15px;">
+                     <table border="0" cellpadding="0" cellspacing="0" width="500" class="responsive-table"><tbody><tr><td>
+                         <table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td>
+                             <!-- TEXT -->
+                             <table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td align="center" class="padding-copy" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33; padding-top: 0px;">Request from ${mailInfo.agency}<br></td>
+                             </tr><tr><td align="left" class="padding-copy textlightStyle" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33;"><p>Dear ${mailInfo.receiverName}, ${mailInfo.agency} has reviewed the <i>${mailInfo.artwork}</i> you brought to them, and they are very willing to sell it on your behalf. If you agree with that, please go to your artwork management page and enter the code below</p></td>
+                             </tr></tbody></table></td>
+                         </tr><tr><td>
+                             <table border="0" cellpadding="0" cellspacing="0" width="100%" id="ko_titleBlock_5"><tbody><tr class="row-a"><td bgcolor="#9C010F" align="center" class="section-padding" style="padding: 30px 15px 0px 15px;">
+                                 <table border="0" cellpadding="0" cellspacing="0" width="500" style="padding: 0 0 20px 0;" class="responsive-table"><!-- CODE --><tbody><tr><td align="center" class="padding-copy" colspan="2" style="padding: 0 0 10px 0px; font-size: 35px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff;">${mailInfo.otp}</td>
+                                 </tr></tbody></table></td>
+                             </tr></tbody></table>
+                             <!--  BUTTON -->
+                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mobile-button-container"><tbody><tr><td align="center" style="padding: 25px 0 0 0;" class="padding-copy">
+                                 <table border="0" cellspacing="0" cellpadding="0" class="responsive-table"><tbody><tr><td align="center"><a target="_new" class="mobile-button" style="display: inline-block; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: #9C010F; padding-top: 15px; padding-bottom: 15px; padding-left: 25px; padding-right: 25px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom: 3px solid #5f0109;" href="*sample.com">Click Here to Artwork Management Page<br></a></td>
+                                 </tr></tbody></table></td>
+                             </tr></tbody></table></td>
+                         </tr></tbody></table></td>
+                     </tr></tbody></table></td>
+                 </tr></tbody></table>
+                 <!-- FOOTER -->
+                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 500px;" id="ko_footerBlock_2"><tbody><tr><td bgcolor="#ffffff" align="center">
+                     <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td style="padding: 20px 0px 20px 0px;">
+                         <!-- UNSUBSCRIBE -->
+                         <table width="500" border="0" cellspacing="0" cellpadding="0" align="center" class="responsive-table"><tbody><tr><td align="center" valign="middle" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color: #3F3D33;">
+                             <span class="appleFooter" style="color: #3F3D33;">Artbook Co. Singapore</span><br><a class="original-only" href="%5Bprofile_link%5D" style="color: #3F3D33; text-decoration: none;" target="_new">Unsubscribe</a><span class="original-only" style="font-family: Arial, sans-serif; font-size: 12px; color: #444444;">   |   </span><a href="%5Bshow_link%5D" style="color: #3F3D33; text-decoration: none;" target="_new">View on web browser</a>
+                         </td>
+                     </tr></tbody></table></td>
+                 </tr></tbody></table></td>
+             </tr></tbody></table></body></html>
+         `
+      }
+      break;
+    case 'BuyerPayment':
       mailOptions = {
         from: "NUS Chinese Drama <nuscfacd@gmail.com>",
         to: mailInfo.receiverEmail,
         subject: "恋爱的犀牛-电子票 |E-ticket for Rhinoceros in Love",
-        html:
-          '<body style=""><div class="disclaimer" style="text-align:center;font-size:11px;color:#6C7A89;margin-bottom:20px;">Please use a mobile device to view the ticket if the page looks distorted. Should you have any questions for us, pleasecontact SHI TIANYUAN@ Email: tianyuan.shi@u.nus.edu<br/>如果页面看起来十分杂乱，请使用移动设备打开。如有任何疑问，请联系 石添元@ Email: tianyuan.shi@u.nus.edu</div><div class="ticket" style=""><div class="ticket-header" style="text-align:center;font-size:30px;">Hi! ' + receiver.name + '</div><div class="ticket-body" style="background-color:#7e0e0e;"><div class="ticket-body__image" style="margin: auto;width: 80%;padding-top:30px;"><img src="http://preview.ibb.co/hdaC7c/Rhino.png" alt="RHINO_PIC" title="rhino" style="width:100%;"></div><div class="ticket-body__header-main" style="text-align:center;font-size:22px;font-weight:bold;color:white;padding-top:10px;">恋爱的犀牛 | Rhinoceros in Love</div><div class="ticket-body__header-sub" style="text-align:center;font-size:16px;color:white;">by NUS Chinese Drama, a member of NUS Centre For the Arts</div><div class="ticket-body__header-sub" style="text-align:center;font-size:10px;color:white;">*Advisory - Some Mature Content | 忠告级 - 含有部分成人内容</div><div class="ticket-body__text" style="width:100%;vertical-align:top;text-align:center;font-size:20px;color:white;padding-bottom:5%;padding-top:30px;"><div class="ticket-body__text-time" style="">您要观看的演出是：<br/>' + receiver.showTime + '</div><div class="ticket-body__text-time" style="">Reserved performance slot:<br/>' + englishDateTime + '</div><div class="ticket-body__text-time" style="font-size:16px;font-weight:bold;padding-top:20px;">演出开始前30分钟开始入场<br/>演出将准时开始，迟到者可能被拒绝入场!<br/></div><div class="ticket-body__text-time" style="font-size:14px;font-weight:bold;padding-top:5px;">Doors open 30mins before performance<br/>Please note that performance will start on time.<br/>Latecomers might be denied entry into the theatre.<br/></div><div class="ticket-body__text-time" style="padding-top:20px;">您注册的票数 (Number of Tickets Registered):&nbsp' + receiver.numberOfTix + ' </div><div class="ticket-body__text-venue" style="padding-top:20px;">地点 (Performance venue):<br/>Dance Atelier 2, Level 3,<br/>Stephen Riady Centre, University Town,<br/>2 College Ave West,<br/>Singapore 138607</div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:20px;">出示下图的二维码作为入场凭据<br/>多张票可重复扫描同个二维码<br/>如果二维码无法显示请<a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">点击此处</a></div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:5px;">Please flash QR code upon entry.<br/>Each QR code can be scanned repeatedly depending on number of tickets registered.<br/>Please <a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">click here</a> if you have difficulty viewing the QR code.</div></div><div class="ticket-body__QR" style="margin: auto;width: 200px;padding: 10px;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300" alt="QR_CODE"title="TICKET" width="200" align="middle" /></div></div></div></div></body>'
-      };
-
-    case BuyerPayment:
+        html:``
+     }
+      break;
+    case 'ConsentTransfer':
       mailOptions = {
         from: "NUS Chinese Drama <nuscfacd@gmail.com>",
         to: mailInfo.receiverEmail,
         subject: "恋爱的犀牛-电子票 |E-ticket for Rhinoceros in Love",
-        html:
-          '<body style=""><div class="disclaimer" style="text-align:center;font-size:11px;color:#6C7A89;margin-bottom:20px;">Please use a mobile device to view the ticket if the page looks distorted. Should you have any questions for us, pleasecontact SHI TIANYUAN@ Email: tianyuan.shi@u.nus.edu<br/>如果页面看起来十分杂乱，请使用移动设备打开。如有任何疑问，请联系 石添元@ Email: tianyuan.shi@u.nus.edu</div><div class="ticket" style=""><div class="ticket-header" style="text-align:center;font-size:30px;">Hi! ' + receiver.name + '</div><div class="ticket-body" style="background-color:#7e0e0e;"><div class="ticket-body__image" style="margin: auto;width: 80%;padding-top:30px;"><img src="http://preview.ibb.co/hdaC7c/Rhino.png" alt="RHINO_PIC" title="rhino" style="width:100%;"></div><div class="ticket-body__header-main" style="text-align:center;font-size:22px;font-weight:bold;color:white;padding-top:10px;">恋爱的犀牛 | Rhinoceros in Love</div><div class="ticket-body__header-sub" style="text-align:center;font-size:16px;color:white;">by NUS Chinese Drama, a member of NUS Centre For the Arts</div><div class="ticket-body__header-sub" style="text-align:center;font-size:10px;color:white;">*Advisory - Some Mature Content | 忠告级 - 含有部分成人内容</div><div class="ticket-body__text" style="width:100%;vertical-align:top;text-align:center;font-size:20px;color:white;padding-bottom:5%;padding-top:30px;"><div class="ticket-body__text-time" style="">您要观看的演出是：<br/>' + receiver.showTime + '</div><div class="ticket-body__text-time" style="">Reserved performance slot:<br/>' + englishDateTime + '</div><div class="ticket-body__text-time" style="font-size:16px;font-weight:bold;padding-top:20px;">演出开始前30分钟开始入场<br/>演出将准时开始，迟到者可能被拒绝入场!<br/></div><div class="ticket-body__text-time" style="font-size:14px;font-weight:bold;padding-top:5px;">Doors open 30mins before performance<br/>Please note that performance will start on time.<br/>Latecomers might be denied entry into the theatre.<br/></div><div class="ticket-body__text-time" style="padding-top:20px;">您注册的票数 (Number of Tickets Registered):&nbsp' + receiver.numberOfTix + ' </div><div class="ticket-body__text-venue" style="padding-top:20px;">地点 (Performance venue):<br/>Dance Atelier 2, Level 3,<br/>Stephen Riady Centre, University Town,<br/>2 College Ave West,<br/>Singapore 138607</div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:20px;">出示下图的二维码作为入场凭据<br/>多张票可重复扫描同个二维码<br/>如果二维码无法显示请<a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">点击此处</a></div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:5px;">Please flash QR code upon entry.<br/>Each QR code can be scanned repeatedly depending on number of tickets registered.<br/>Please <a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">click here</a> if you have difficulty viewing the QR code.</div></div><div class="ticket-body__QR" style="margin: auto;width: 200px;padding: 10px;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300" alt="QR_CODE"title="TICKET" width="200" align="middle" /></div></div></div></div></body>'
-      };
-    case ConsentTransfer:
-      mailOptions = {
-        from: "NUS Chinese Drama <nuscfacd@gmail.com>",
-        to: mailInfo.receiverEmail,
-        subject: "恋爱的犀牛-电子票 |E-ticket for Rhinoceros in Love",
-        html:
-          '<body style=""><div class="disclaimer" style="text-align:center;font-size:11px;color:#6C7A89;margin-bottom:20px;">Please use a mobile device to view the ticket if the page looks distorted. Should you have any questions for us, pleasecontact SHI TIANYUAN@ Email: tianyuan.shi@u.nus.edu<br/>如果页面看起来十分杂乱，请使用移动设备打开。如有任何疑问，请联系 石添元@ Email: tianyuan.shi@u.nus.edu</div><div class="ticket" style=""><div class="ticket-header" style="text-align:center;font-size:30px;">Hi! ' + receiver.name + '</div><div class="ticket-body" style="background-color:#7e0e0e;"><div class="ticket-body__image" style="margin: auto;width: 80%;padding-top:30px;"><img src="http://preview.ibb.co/hdaC7c/Rhino.png" alt="RHINO_PIC" title="rhino" style="width:100%;"></div><div class="ticket-body__header-main" style="text-align:center;font-size:22px;font-weight:bold;color:white;padding-top:10px;">恋爱的犀牛 | Rhinoceros in Love</div><div class="ticket-body__header-sub" style="text-align:center;font-size:16px;color:white;">by NUS Chinese Drama, a member of NUS Centre For the Arts</div><div class="ticket-body__header-sub" style="text-align:center;font-size:10px;color:white;">*Advisory - Some Mature Content | 忠告级 - 含有部分成人内容</div><div class="ticket-body__text" style="width:100%;vertical-align:top;text-align:center;font-size:20px;color:white;padding-bottom:5%;padding-top:30px;"><div class="ticket-body__text-time" style="">您要观看的演出是：<br/>' + receiver.showTime + '</div><div class="ticket-body__text-time" style="">Reserved performance slot:<br/>' + englishDateTime + '</div><div class="ticket-body__text-time" style="font-size:16px;font-weight:bold;padding-top:20px;">演出开始前30分钟开始入场<br/>演出将准时开始，迟到者可能被拒绝入场!<br/></div><div class="ticket-body__text-time" style="font-size:14px;font-weight:bold;padding-top:5px;">Doors open 30mins before performance<br/>Please note that performance will start on time.<br/>Latecomers might be denied entry into the theatre.<br/></div><div class="ticket-body__text-time" style="padding-top:20px;">您注册的票数 (Number of Tickets Registered):&nbsp' + receiver.numberOfTix + ' </div><div class="ticket-body__text-venue" style="padding-top:20px;">地点 (Performance venue):<br/>Dance Atelier 2, Level 3,<br/>Stephen Riady Centre, University Town,<br/>2 College Ave West,<br/>Singapore 138607</div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:20px;">出示下图的二维码作为入场凭据<br/>多张票可重复扫描同个二维码<br/>如果二维码无法显示请<a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">点击此处</a></div><div class="ticket-body__text-instruction" style="font-size:16px;padding-top:5px;">Please flash QR code upon entry.<br/>Each QR code can be scanned repeatedly depending on number of tickets registered.<br/>Please <a href="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300"style="background-color:#ffffff;color:#7e0e0e;text-decoration:none;font-weight:bold;">click here</a> if you have difficulty viewing the QR code.</div></div><div class="ticket-body__QR" style="margin: auto;width: 200px;padding: 10px;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + receiver.submissionId + '&amp;size=300x300" alt="QR_CODE"title="TICKET" width="200" align="middle" /></div></div></div></div></body>'
-      };
-
+        html:``
+         };
+      break;
     default:
       console.log(`Invalid Mail Type: ${mailInfo.mailType}`)
   }

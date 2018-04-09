@@ -9,7 +9,6 @@ participant User identified by email {
   o String name
   o String passport
   o String mobile
-  --> Artwork[] artworks optional
 }
 
 abstract participant Authority identified by authorityId {
@@ -28,7 +27,6 @@ participant Police extends Authority {
 participant Agency identified by email {
   o String email
   o String name
-  --> Artwork[] artworks
 }
 
 asset Artwork identified by artworkId {

@@ -1,23 +1,8 @@
 'use strict';
 var bcrypt = require('bcrypt')
-
-//TODO
 var mongoose = require('mongoose'),
   User = mongoose.model('User');
-
 var userHandler = require('../../chainConnector/userHandler')
-
-/*
-exports.list_all_tasks = function(req, res) {
-Task.find({}, function(err, task) {
-  if (err)
-    res.send(err);
-  res.json(task);
-});
-};
-
-
-*/
 
 /**
  * 
@@ -53,26 +38,25 @@ exports.createUser = function (req, res) {
       // Chain
       var adminHandlesNewUser = new userHandler('admin@artbook')
       adminHandlesNewUser.createUser(userOnChain).then(
-        function(result){
+        function (result) {
           var new_user = new User(userOffChain)
           new_user.save(function (err, user) {
             if (err)
               res.send(err);
-
-            res.json({
-              email: userInfo.email
-            });
+            else
+              res.json({ email: userInfo.email });
           })
-        }
-      )
+        })
     })
   })
 };
 
 exports.login = function (req, res) {
-  var handlerInstance = new userHandler(req.body.email.replace('@', '*') + '@artbook')
-  var user = handlerInstance.getUser(req.body.email)
-  res.json(user)
+  var handlerInstance = new userHandler(req.body.email + '@artbook')
+  handlerInstance.getUser(req.body.email).then(
+    function (user) {
+      res.json(user)
+    })
 }
 
 /*

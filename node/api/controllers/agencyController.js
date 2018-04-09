@@ -1,5 +1,8 @@
 'use strict'
+var bcrypt = require('bcrypt')
 var agencyHandler = require('../../chainConnector/agencyHandler')
+var mongoose = require('mongoose'),
+  Agency = mongoose.model('Agency');
 
 /**
  * 
@@ -9,42 +12,46 @@ var agencyHandler = require('../../chainConnector/agencyHandler')
  * password
  */
 exports.createUser = function (req, res) {
-    var userInfo = req.body
-    var userOnChain = {
-      userId: userInfo.email,
-      name: userInfo.name,
+  var userInfo = req.body
+  var userOnChain = {
+    userId: userInfo.email,
+    name: userInfo.name,
+  }
+  var userOffChain = {
+    id: userInfo.email
+  }
+
+  bcrypt.genSalt(function (err, salt) {
+    if (err) {
+      console.log('bcrypt.genSalt ERR')
     }
-    var userOffChain = {
-      id: userInfo.email
-    }
-  
-    bcrypt.genSalt(function (err, salt) {
+    userOffChain.salt = salt
+    bcrypt.hash(userInfo.password + salt, 10, function (err, hashed) {
       if (err) {
-        console.log('bcrypt.genSalt ERR')
+        console.log('bcrypt.hash ERR')
       }
-      userOffChain.salt = salt
-      bcrypt.hash(userInfo.password + salt, 10, function (err, hashed) {
-        if (err) {
-          console.log('bcrypt.hash ERR')
-        }
-        userOffChain.password = hashed
-  
-        // Chain
-        // var adminHandlesNewUser = new userHandler('admin@artbook')
-        // adminHandlesNewUser.createUser(userOnChain)
-  
-        var new_user = new User(userOffChain)
-        new_user.save(function (err, user) {
-          if (err)
-            res.send(err);
-          res.json(user);
+      userOffChain.password = hashed
+      // Chain
+      var adminHandlesNewUser = new agencyHandler('admin@artbook')
+      adminHandlesNewUser.createAgency(userOnChain).then(
+        function (result) {
+          var new_user = new Agency(userOffChain)
+          new_user.save(function (err, agency) {
+            if (err)
+              res.send(err);
+            else
+              res.json({ email: userInfo.email });
+          })
         })
-      })
     })
-  };
+  })
+};
 
 exports.login = function (req, res) {
-    var handlerInstance = new userHandler(req.body.email.replace('@', '*') + '@artbook')
-    var agency = handlerInstance.getUser(req.body.email)
-    res.json(agency)
+  var handlerInstance = new agencyHandler(req.body.email + '@artbook')
+  handlerInstance.getAgency(req.body.email).then(
+    function (agency) {
+      res.json(agency)
+    }
+  )
 }

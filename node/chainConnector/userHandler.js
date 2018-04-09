@@ -5,7 +5,6 @@ class userHandler {
 
     constructor(cardname) {
         this.cardname = cardname
-        this.cardname = 'admin@artbook' //For testing
     }
 
     /**
@@ -17,11 +16,8 @@ class userHandler {
     async createUser(userInfo) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
-        console.log('LOG 1')
-        console.log(this.cardname)
+        console.log(`cardname: ${this.cardname}`)
         await conn.init(this.cardname)
-        console.log('LOG 2')
-
         try {
             // Get Registry
             this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
@@ -34,39 +30,37 @@ class userHandler {
             user.name = userInfo.name
             user.passport = userInfo.passport
             user.mobile = userInfo.mobile
-           
+
             // Update Registry
-            let result = await this.userRegistry.add(user)
+            await this.userRegistry.add(user)
+            // Issue an identity card for this User. The ID Card is exported to current direcotry
+            let result = await conn.bizNetworkConnection
+                .issueIdentity(`org.acme.artbook.User#${userInfo.userId}`, userInfo.userId)
             console.log('New user added')
             return conn.bizNetworkConnection.disconnect()
-
         } catch (error) {
             console.log(error)
             console.log('userHandler:createUser', error)
             throw error
         }
     }
-/*
-    async viewArtwork(artworkId) {
+
+    async getUser(userEmail) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
+        console.log(`cardname: ${this.cardname}`)
         await conn.init(this.cardname)
-
         try {
             // Get Registry
-            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            return this.artworkRegistry.get(artworkId)
-            .then(function() {
-                return conn.bizNetworkConnection.disconnect()
-            })
-
+            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
+            let result = await this.userRegistry.resolve(userEmail)
+            await conn.bizNetworkConnection.disconnect()
+            return result
         } catch (error) {
             console.log(error)
-            console.log('artworkHandler:Artwork', error)
+            console.log('userHandler:getUser', error)
             throw error
         }
-
     }
-*/
 }
 module.exports = userHandler

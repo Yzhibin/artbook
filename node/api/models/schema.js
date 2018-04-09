@@ -8,7 +8,7 @@ var Schema = mongoose.Schema,
 var ArtworkSchema = mongoose.model('Artwork', new Schema({
   id: {
     type: String,
-    required:true,
+    required: true,
     unique: true
   },
   name: {
@@ -51,21 +51,37 @@ var AuthoritySchema = mongoose.model('Authority', new Schema({
 }))
 
 var FileSchema = mongoose.model('File', new Schema({
-  img: { 
-    data: Buffer, 
+  img: {
+    data: Buffer,
     contentType: String
-   },
-   name: {
+  },
+  name: {
     type: String,
     default: null
-   }
+  }
 }))
 
+var TokenSchema = mongoose.model('Token', new Schema({
+  token: String,
+  type: {
+    type: String,
+    enum: ['Request', 'Pay', 'Transfer']
+  },
+  expired: {
+    type: Boolean,
+    default: false
+  },
+  agency: String,
+  artwork: String,
+  owner: String,
+  buyer: String
+}))
 
 module.exports = {
   Artwork: ArtworkSchema,
   User: UserSchema,
   Agency: AgencySchema,
   Authority: AuthoritySchema,
-  File: FileSchema
+  File: FileSchema,
+  Token: TokenSchema
 }

@@ -8,7 +8,7 @@ module.exports = function (app, passport) {
     file = require('../controllers/fileController'),
     consent = require('../controllers/consentController')
 
-  var multer  = require('multer')
+  var multer = require('multer')
   var upload = multer({ dest: 'uploads/' })
 
   // Artwork Routes
@@ -22,10 +22,14 @@ module.exports = function (app, passport) {
   //   .put(artwork.updateArtwork)
   //   .delete(artwork.deleteArtwork);
 
-  // User Routes
-  app.route('/user')
-    // .get(user.getAllUsers)
-    .post(user.createUser);
+  // Sign-up
+  app.post('/user', user.createUser)
+  app.post('/agency', agency.createUser)
+  app.post('authority', authority.createUser)
+  // Login
+  app.post('/user/login', passport.authenticate('user'), user.login)
+  app.post('/agency/login', passport.authenticate('agency'), agency.login)
+  app.post('/authority/login', passport.authenticate('authority'), authority.login)
 
   // app.route('/user/:userId')
   //   .get(user.getUser)
@@ -36,35 +40,30 @@ module.exports = function (app, passport) {
   app.route('/artwork')
     .post(artwork.createArtwork)
     .put(artwork.addArtworkPic);
- 
+
   app.route('/artwork/:artworkId')
     .get(artwork.viewArtwork);
 
   app.route('/document')
-  .post(artwork.addDocumentToArtwork);
+    .post(artwork.addDocumentToArtwork);
 
   // app.route('/getDocuments/:artworkId')
   // .get(artwork.getDocuments);
 
 
   app.route('/upload')
-    .post(upload.single('file'),file.upload);
-  
+    .post(upload.single('file'), file.upload);
+
   app.route('/retrieve/:id')
     .get(file.retrieve);
 
-
-  app.post('/user/login', passport.authenticate('user'), user.login)
-
-  app.post('/agency/login', passport.authenticate('agency'), agency.login)
-
-  app.post('/authority/login', passport.authenticate('authority'), authority.login)
 
   app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
   });
 
-  app.post('/agency/reqeustConsent', )
+  app.post('/agency/requestConsent', consent.requestForConsent)
+  app.put('/user/consentForSale', consent.consentForSale)
 
 };

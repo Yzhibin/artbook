@@ -6,7 +6,6 @@ class artworkHandler {
 
     constructor(cardname) {
         this.cardname = cardname
-        this.cardname = 'admin@artbook' //For testing
     }
 
     /**
@@ -51,7 +50,7 @@ class artworkHandler {
             artwork.owner = ownerRelation
             await this.artworkRegistry.add(artwork)
             console.log('New artwork added')
-            
+
             let result = await this.artworkRegistry.resolve(id)
             conn.bizNetworkConnection.disconnect()
             return result
@@ -118,10 +117,40 @@ class artworkHandler {
     /** 
      * 
      * @argument req
-     * 
+     * agencyId
+     * artworkId
     */
-    async consentForSale(req){
+    async consentForSale(req) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
 
+        try {
+            // Get Registry
+            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
+            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
+            this.consentRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.consentArtworkForSale')
+
+            // Get Factory
+            let factory = await conn.businessNetworkDefinition.getFactory()
+
+            let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', req.agencyId)
+            let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', req.artworkId)
+
+            console.log('1')
+            let consent = await factory.newTransaction('org.acme.artbook', 'consentArtworkForSale')
+            consent.agency = agencyRelation
+            consent.art = artworkRelation
+            console.log('2')
+            let result = await conn.bizNetworkConnection.submitTransaction(consent)
+            console.log('3')
+            conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log(error)
+            console.log('artworkHandler:consentForSale', error)
+            throw error
+        }
     }
 
 }
