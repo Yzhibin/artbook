@@ -5,8 +5,35 @@ rule historianAccess{
   resource(r): "org.hyperledger.composer.system.HistorianRecord"
   condition: (true)
   action: ALLOW
-
 }
+
+rule userAllAccess{
+  description: "All participants have the permission to create HistorianRecord assets."
+  participant(p): "org.acme.artbook.User"
+  operation: ALL
+  resource(r): "org.acme.artbook.*"
+  condition: (true)
+  action: ALLOW
+}
+
+rule agencyAllAccess{
+  description: "All participants have the permission to create HistorianRecord assets."
+  participant(p): "org.acme.artbook.Agency"
+  operation: ALL
+  resource(r): "org.acme.artbook.*"
+  condition: (true)
+  action: ALLOW
+}
+
+rule authorityAllAccess{
+  description: "All participants have the permission to create HistorianRecord assets."
+  participant(p): "org.acme.artbook.Authority"
+  operation: ALL
+  resource(r): "org.acme.artbook.*"
+  condition: (true)
+  action: ALLOW
+}
+
 
 // System Access
 rule SystemACL {
