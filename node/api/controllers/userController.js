@@ -57,15 +57,22 @@ exports.login = function (req, res) {
     function (user) {
       res.json(user)
     })
-}
+};
 
 exports.getUser = function (req, res) {
+  User.findOne({ id: req.params.userId }, function (err, user) {
+    if (err) { res.send(err) }
+    if (!user) {
+      console.log('User not found')
+      res.status(404).send({ error: 'Invalid user email!' })
+    }
   var handlerInstance = new userHandler(req.header('Id')+'@artbook')
   handlerInstance.getUser(req.params.userId).then(
     function (user) {
       res.json(user)
     })
-}
+  })
+};
 
 /*
 exports.read_a_task = function(req, res) {
