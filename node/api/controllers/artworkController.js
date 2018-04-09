@@ -68,11 +68,20 @@ exports.addArtworkPic = function (req, res) {
 };
 
 exports.viewArtwork = function (req, res) {
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.viewArtwork(req.params.artworkId).then(
-    function (updatedArtwork) {
-      res.json(updatedArtwork);
-    })
+  Artwork.findOne({ id: req.params.artworkId }, function (err, artwork) {
+    if (err) { res.send(err) }
+    if (!artwork) {
+      console.log('Artwork not found')
+      res.status(404).send({ error: 'Invalid ArtworkId!' })
+    }
+    //retrieve from chain
+    var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+    adminHandlesNewArtwork.viewArtwork(req.params.artworkId).then(
+      function (updatedArtwork) {
+        res.json(updatedArtwork);
+      })
+  })
+
 };
 
 exports.addDocumentToArtwork = function (req, res) {
@@ -110,9 +119,9 @@ exports.getOwnArtworks = function (req, res) {
     })
 };
 
-exports.markMissing = function(req, res){
+exports.markMissing = function (req, res) {
   var missingInfo = {
-    artworkId : req.body.artworkId,
+    artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
   var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
@@ -122,7 +131,7 @@ exports.markMissing = function(req, res){
     })
 }
 
-exports.getAllMissing = function(req, res){
+exports.getAllMissing = function (req, res) {
   var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
   adminHandlesNewArtwork.getAllMissing().then(
     function (artworks) {
@@ -130,9 +139,9 @@ exports.getAllMissing = function(req, res){
     })
 }
 
-exports.recoverMissing = function(req, res){
+exports.recoverMissing = function (req, res) {
   var recoverInfo = {
-    artworkId : req.body.artworkId,
+    artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
   var adminHandlesNewArtwork = new artworkHandler('admin@artbook')

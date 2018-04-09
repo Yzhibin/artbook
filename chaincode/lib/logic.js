@@ -28,12 +28,6 @@ function transferOwnership(transfer){
     transfer.art.owner = transfer.newOwner;
     transfer.art.handler = {};    
 
-    //remove this sold art from the artList of the agency
-    var artList = transfer.agency.artworks;
-    var i = artList.indexOf(transfer.art);
-    if(i != -1){
-        artList.splice(i,1);
-    }
     //toggle on_sale status
     transfer.art.onSale = false; 
     

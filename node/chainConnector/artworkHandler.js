@@ -103,13 +103,13 @@ class artworkHandler {
         try {
             // Get Registry
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            let result = await this.artworkRegistry.resolve(artworkId)
+            return this.artworkRegistry.resolve(artworkId)
 
             conn.bizNetworkConnection.disconnect()
 
             return result
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             console.log('artworkHandler:Artwork', error)
             throw error
         }
