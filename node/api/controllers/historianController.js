@@ -17,7 +17,7 @@ exports.viewConsentHistory = function (req, res) {
   exports.viewTransferHistory = function (req, res) {
   
     var handler = new historianHandler('admin@artbook')
-    handler.viewTransferHistory().then(
+    handler.viewTransferHistory(req.params.artworkId).then(
       function (records) {
         //console.log(artwork)
         //const json = JSON.stringify(artwork);

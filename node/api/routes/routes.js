@@ -82,7 +82,7 @@ module.exports = function (app, passport) {
 
   app.route('/consentHistory')
     .get(historian.viewConsentHistory);
-  app.route('/transferHistory')
+  app.route('/transferHistory/:artworkId')
     .get(historian.viewTransferHistory);
 
 
