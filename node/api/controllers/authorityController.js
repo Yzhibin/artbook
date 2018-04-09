@@ -89,7 +89,6 @@ exports.createPolice = function (req, res) {
 
 exports.login = function (req, res) {
 
-    console.log("1")
     var handlerInstance = new authorityHandler(req.body.account + '@artbook')
     var account = req.body.account
     console.log(account)

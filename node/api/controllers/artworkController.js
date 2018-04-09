@@ -2,8 +2,6 @@
 
 var mongoose = require('mongoose'),
   Artwork = mongoose.model('Artwork');
-var dateTime = require('node-datetime');
-
 
 var artworkHandler = require('../../chainConnector/artworkHandler')
 var documentHandler = require('../../chainConnector/documentHandler')
@@ -32,8 +30,8 @@ exports.createArtwork = function (req, res) {
   }
 
   //create new artwork asset on chain
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.createArtwork(artworkOnChain).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.createArtwork(artworkOnChain).then(
     function (artwork) {
       //create new artwork in mongoDB
       var artworkOffChain = {
@@ -57,8 +55,8 @@ exports.addArtworkPic = function (req, res) {
     fileId: req.body.fileId // documentId in mongoDB of the picture file
   }
 
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.addPicture(pictureInfo).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.addPicture(pictureInfo).then(
     function (artwork) {
       console.log(artwork)
       //const json = JSON.stringify(artwork);
@@ -75,8 +73,8 @@ exports.viewArtwork = function (req, res) {
       res.status(404).send({ error: 'Invalid ArtworkId!' })
     }
     //retrieve from chain
-    var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-    adminHandlesNewArtwork.viewArtwork(req.params.artworkId).then(
+    var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+    artworkHandlerInstance.viewArtwork(req.params.artworkId).then(
       function (updatedArtwork) {
         res.json(updatedArtwork);
       })
@@ -105,8 +103,8 @@ exports.addDocumentToArtwork = function (req, res) {
     summary: req.body.summary
   }
 
-  var adminHandlesNewDocument = new documentHandler('admin@artbook')
-  adminHandlesNewDocument.addDocument(documentInfo).then(
+  var documentHandlerInstance = new documentHandler(req.header('Id')+'@artbook')
+  documentHandlerInstance.addDocument(documentInfo).then(
     function (document) {
       //return updated artwork
       res.json(document);
@@ -115,16 +113,16 @@ exports.addDocumentToArtwork = function (req, res) {
 
 //Get all supporting documents of an artwork (by artworkId)
 exports.getArtworkDocuments = function (req, res) {
-  var adminHandlesNewDocument = new documentHandler('admin@artbook')
-  adminHandlesNewDocument.getDocuments(req.params.artworkId).then(
+  var documentHandlerInstance = new documentHandler(req.header('Id')+'@artbook')
+  documentHandlerInstance.getDocuments(req.params.artworkId).then(
     function (documents) {
       res.json(documents);
     })
 };
 
 exports.getOwnArtworks = function (req, res) {
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.getOwnArtworks(req.params.ownerId).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.getOwnArtworks(req.params.ownerId).then(
     function (artworks) {
       res.json(artworks);
     })
@@ -135,16 +133,16 @@ exports.markMissing = function (req, res) {
     artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.markMissing(missingInfo).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.markMissing(missingInfo).then(
     function (artworks) {
       res.json(artworks);
     })
 }
 
 exports.getAllMissing = function (req, res) {
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.getAllMissing().then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.getAllMissing().then(
     function (artworks) {
       res.json(artworks);
     })
@@ -155,16 +153,16 @@ exports.recoverMissing = function (req, res) {
     artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.recoverMissing(recoverInfo).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.recoverMissing(recoverInfo).then(
     function (artworks) {
       res.json(artworks);
     })
 }
 
 exports.getAgencyArtworks = function (req, res) {
-  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-  adminHandlesNewArtwork.getAgencyArtworks(req.params.agencyId).then(
+  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  artworkHandlerInstance.getAgencyArtworks(req.params.agencyId).then(
     function (artworks) {
       res.json(artworks);
     })

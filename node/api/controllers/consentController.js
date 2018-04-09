@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 var artworkHandler = require('../../chainConnector/artworkHandler')
 var agencyHandler = require('../../chainConnector/agencyHandler')
 var userHandler = require('../../chainConnector/userHandler')
-var bcrypt = require('bcrypt')
+var randomGen = require('random-number').generator({ min: 100000, max: 999999, integer: true })
 var mailer = require('./mailer')
 const host = 'localhost'
 
@@ -16,46 +16,44 @@ const host = 'localhost'
  * artworkId
  */
 exports.requestForConsent = function (req, res) {
-    bcrypt.genSalt(function (err, salt) {
-        const artworkId = req.body.artworkId
-        const agencyId = req.header('Id')
-        console.log(agencyId)
-        const artworkHandlerInstance = new artworkHandler(`${agencyId}@artbook`)
-        artworkHandlerInstance.viewArtwork(artworkId).then(
-            function (artwork) {
-                if (artwork.onSale)
-                    res.status(404).send({ error: 'Artwork is on sale' })
-                else {
-                    const agencyHandlerInstance = new agencyHandler(`${agencyId}@artbook`)
-                    agencyHandlerInstance.getAgency(agencyId)
-                        .then(function (agency) {
-                            var new_token = new Token({
-                                token: salt,
-                                type: 'Request',
-                                agency: agency.email,
-                                owner: artwork.owner.email,
-                                artwork: artwork.artworkId
-                            })
-                            new_token.save(function (err, token) {
-                                if (err)
-                                    res.send(err)
-                                else {
-                                    mailer.sendMail({
-                                        receiverEmail: artwork.owner.email,
-                                        receiverName: artwork.owner.name,
-                                        mailType: 'ConsentForSale',
-                                        agency: agency.name,
-                                        artwork: artwork.title,
-                                        otp: salt,
-                                        link: ``
-                                    })
-                                    res.json('Email sent')
-                                }
-                            })
+    const salt = randomGen()
+    const artworkId = req.body.artworkId
+    const agencyId = req.header('Id')
+    const artworkHandlerInstance = new artworkHandler(`${agencyId}@artbook`)
+    artworkHandlerInstance.viewArtwork(artworkId).then(
+        function (artwork) {
+            if (artwork.onSale)
+                res.status(404).send({ error: 'Artwork is on sale' })
+            else {
+                const agencyHandlerInstance = new agencyHandler(`${agencyId}@artbook`)
+                agencyHandlerInstance.getAgency(agencyId)
+                    .then(function (agency) {
+                        var new_token = new Token({
+                            token: salt,
+                            type: 'Request',
+                            agency: agency.email,
+                            owner: artwork.owner.email,
+                            artwork: artwork.artworkId
                         })
-                }
-            })
-    })
+                        new_token.save(function (err, token) {
+                            if (err)
+                                res.send(err)
+                            else {
+                                mailer.sendMail({
+                                    receiverEmail: artwork.owner.email,
+                                    receiverName: artwork.owner.name,
+                                    mailType: 'ConsentForSale',
+                                    agency: agency.name,
+                                    artwork: artwork.title,
+                                    otp: salt,
+                                    link: `localhost:8080/#/auth`
+                                })
+                                res.json('Email sent')
+                            }
+                        })
+                    })
+            }
+        })
 }
 /**
  * 
@@ -109,41 +107,40 @@ exports.requestForPayment = function (req, res) {
                     else {
                         userHandlerInstance.getUser(buyerEmail)
                             .then(function (buyer) {
-                                bcrypt.genSalt(function (err, salt) {
-                                    if (err)
-                                        res.send(err)
-                                    else {
-                                        var token = new Token({
-                                            token: salt,
-                                            type: 'Pay',
-                                            artwork: artwork.artworkId,
-                                            agency: agencyEmail,
-                                            buyer: buyer.email,
-                                            owner: artwork.owner.email,
-                                            price: price
-                                        })
-                                        token.save(function (err, result) {
-                                            if (err)
-                                                res.send(err)
-                                            else {
-                                                mailer.sendMail({
-                                                    receiverEmail: buyerEmail,
-                                                    receiverName: buyer.name,
-                                                    mailType: 'BuyerPayment',
-                                                    agency: agency.name,
-                                                    artwork: artwork.title,
-                                                    artist: artwork.artist,
-                                                    createTime: artwork.createTime,
-                                                    description: artwork.description,
-                                                    price: price,
-                                                    link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
-                                                    // backend api: ${host}:3000/user/payment/${salt}
-                                                })
-                                                res.json('Successful')
-                                            }
-                                        })
-                                    }
-                                })
+                                const salt = randomGen()
+                                if (err)
+                                    res.send(err)
+                                else {
+                                    var token = new Token({
+                                        token: salt,
+                                        type: 'Pay',
+                                        artwork: artwork.artworkId,
+                                        agency: agencyEmail,
+                                        buyer: buyer.email,
+                                        owner: artwork.owner.email,
+                                        price: price
+                                    })
+                                    token.save(function (err, result) {
+                                        if (err)
+                                            res.send(err)
+                                        else {
+                                            mailer.sendMail({
+                                                receiverEmail: buyerEmail,
+                                                receiverName: buyer.name,
+                                                mailType: 'BuyerPayment',
+                                                agency: agency.name,
+                                                artwork: artwork.title,
+                                                artist: artwork.artist,
+                                                createTime: artwork.createTime,
+                                                description: artwork.description,
+                                                price: price,
+                                                link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
+                                                // backend api: ${host}:3000/user/payment/${salt}
+                                            })
+                                            res.json('Successful')
+                                        }
+                                    })
+                                }
                             })
                     }
                 })
@@ -174,43 +171,42 @@ exports.pay = function (req, res) {
                                         if (artwork.handler.email !== agency.email)
                                             res.status(404).send({ error: 'Agency not found' })
                                         else {
-                                            bcrypt.genSalt(function (err, salt) {
-                                                if (err)
-                                                    res.send(err)
-                                                else {
-                                                    var new_token = new Token({
-                                                        token: salt,
-                                                        type: 'Transfer',
-                                                        artwork: result.artwork,
-                                                        agency: result.agency,
-                                                        buyer: result.buyer,
-                                                        owner: result.owner,
-                                                        price: result.price
-                                                    })
-                                                    new_token.save(function (err, saved) {
-                                                        if (err)
-                                                            res.send(err)
-                                                        else {
-                                                            result.update({ expired: true }, function (err, updated) {
-                                                                if (err)
-                                                                    res.send(err)
-                                                                else {
-                                                                    mailer.sendMail({
-                                                                        receiverEmail: result.owner,
-                                                                        receiverName: owner.name,
-                                                                        mailType: 'ConsentTransfer',
-                                                                        agency: agency.name,
-                                                                        artwork: artwork.title,
-                                                                        price: result.price,
-                                                                        link: `${host}:3000/user/transferOwnership/${salt}`
-                                                                    })
-                                                                    res.json('Successful')
-                                                                }
-                                                            })
-                                                        }
-                                                    })
-                                                }
-                                            })
+                                            const salt = randomGen()
+                                            if (err)
+                                                res.send(err)
+                                            else {
+                                                var new_token = new Token({
+                                                    token: salt,
+                                                    type: 'Transfer',
+                                                    artwork: result.artwork,
+                                                    agency: result.agency,
+                                                    buyer: result.buyer,
+                                                    owner: result.owner,
+                                                    price: result.price
+                                                })
+                                                new_token.save(function (err, saved) {
+                                                    if (err)
+                                                        res.send(err)
+                                                    else {
+                                                        result.update({ expired: true }, function (err, updated) {
+                                                            if (err)
+                                                                res.send(err)
+                                                            else {
+                                                                mailer.sendMail({
+                                                                    receiverEmail: result.owner,
+                                                                    receiverName: owner.name,
+                                                                    mailType: 'ConsentTransfer',
+                                                                    agency: agency.name,
+                                                                    artwork: artwork.title,
+                                                                    price: result.price,
+                                                                    link: `${host}:3000/user/transferOwnership/${salt}`
+                                                                })
+                                                                res.json('Successful')
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
                                         }
                                     })
                             }

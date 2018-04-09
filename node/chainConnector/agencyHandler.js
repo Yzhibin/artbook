@@ -1,4 +1,5 @@
 const networkConnection = require('./networkConnection')
+const cardHandler = require('./cardHandler')
 
 class agencyHandler {
 
@@ -35,6 +36,9 @@ class agencyHandler {
             // Issue an identity card for this Staff. The ID Card is exported to current direcotry
             let result = await conn.bizNetworkConnection
                 .issueIdentity(`org.acme.artbook.Agency#${agencyInfo.userId}`, agencyInfo.userId)
+            const cardHandlerInstance = new cardHandler()
+            await cardHandlerInstance.getBusinessInfoByImportedCard(result.userID, result.userSecret, 'user', 'artbook')
+
             console.log('New agency added')
             await conn.bizNetworkConnection.disconnect()
             return result
@@ -44,7 +48,7 @@ class agencyHandler {
             throw error
         }
     }
-   
+
     async getAgency(agencyEmail) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
