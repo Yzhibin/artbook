@@ -107,7 +107,26 @@ class artworkHandler {
 
             conn.bizNetworkConnection.disconnect()
 
-            return result
+        } catch (error) {
+            //console.log(error)
+            console.log('artworkHandler:Artwork', error)
+            throw error
+        }
+
+    }
+
+    async getAllArtworks() {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
+
+        try {
+            // Get Registry
+            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
+            return this.artworkRegistry.resolveAll()
+
+            conn.bizNetworkConnection.disconnect()
+
         } catch (error) {
             //console.log(error)
             console.log('artworkHandler:Artwork', error)

@@ -82,6 +82,17 @@ exports.viewArtwork = function (req, res) {
 
 };
 
+exports.getAllArtworks = function (req, res) {
+
+    //retrieve from chain
+    var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+    adminHandlesNewArtwork.getAllArtworks().then(
+      function (artworks) {
+        res.json(artworks);
+      })
+
+};
+
 exports.addDocumentToArtwork = function (req, res) {
   var documentInfo = { //on chain
     fileId: req.body.fileId,
