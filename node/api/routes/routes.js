@@ -54,6 +54,9 @@ module.exports = function (app, passport) {
 
   app.route('/ownArtworks/:ownerId')
     .get(artwork.getOwnArtworks);
+  
+  app.route('/agencyArtworks/:agencyId')
+    .get(artwork.getAgencyArtworks);
 
   app.route('/document')
     .post(artwork.addDocumentToArtwork);
