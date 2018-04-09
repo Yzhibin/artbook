@@ -6,7 +6,8 @@ module.exports = function (app, passport) {
     agency = require('../controllers/agencyController'),
     authority = require('../controllers/authorityController'),
     file = require('../controllers/fileController'),
-    consent = require('../controllers/consentController')
+    consent = require('../controllers/consentController'),
+    historian = require('../controllers/historianController')
 
   var multer = require('multer')
   var upload = multer({ dest: 'uploads/' })
@@ -79,6 +80,8 @@ module.exports = function (app, passport) {
   app.route('/retrieve/:id')
     .get(file.retrieve);
 
+  app.route('/history')
+    .get(historian.viewAllHistory);
 
 
 

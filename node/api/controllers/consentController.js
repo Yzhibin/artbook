@@ -19,6 +19,7 @@ exports.requestForConsent = function (req, res) {
     bcrypt.genSalt(function (err, salt) {
         const artworkId = req.body.artworkId
         const agencyId = req.header('Id')
+        console.log(agencyId)
         const artworkHandlerInstance = new artworkHandler(`${agencyId}@artbook`)
         artworkHandlerInstance.viewArtwork(artworkId).then(
             function (artwork) {
