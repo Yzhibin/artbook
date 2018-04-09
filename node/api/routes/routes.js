@@ -91,5 +91,4 @@ module.exports = function (app, passport) {
   app.post('/agency/requestForPayment', consent.requestForPayment)
   app.get('/user/payment/:token', consent.pay)
   app.get('/user/transferOwnership/:token', consent.transferOwnership)
-
 };
