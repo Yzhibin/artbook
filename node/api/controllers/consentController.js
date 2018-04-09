@@ -23,7 +23,7 @@ exports.requestForConsent = function (req, res) {
         artworkHandlerInstance.viewArtwork(artworkId).then(
             function (artwork) {
                 if (artwork.onSale)
-                res.status(404).send({error: 'Artwork is on sale'})
+                    res.status(404).send({ error: 'Artwork is on sale' })
                 else {
                     const agencyHandlerInstance = new agencyHandler(`${agencyId}@artbook`)
                     agencyHandlerInstance.getAgency(agencyId)
@@ -67,7 +67,7 @@ exports.consentForSale = function (req, res) {
 
     Token.findOne({ token: otp }, function (err, token) {
         if (err || token.expired || token.owner !== owner)
-        res.status(404).send({error: 'Invalid Token'})
+            res.status(404).send({ error: 'Invalid Token' })
         else {
             const handlerInstance = new artworkHandler(`${token.owner}@artbook`)
             handlerInstance.consentForSale({
@@ -101,7 +101,7 @@ exports.requestForPayment = function (req, res) {
             artworkHandlerInstance.viewArtwork(artworkId)
                 .then(function (artwork) {
                     if (!artwork.onSale || artwork.handler.email !== agencyEmail)
-                    res.status(404).send({error: 'Artwork not found'})
+                        res.status(404).send({ error: 'Artwork not found' })
                     else {
                         userHandlerInstance.getUser(buyerEmail)
                             .then(function (buyer) {
@@ -132,7 +132,7 @@ exports.requestForPayment = function (req, res) {
                                                     createTime: artwork.createTime,
                                                     description: artwork.description,
                                                     price: price,
-                                                    link: `localhost:8080/${salt}`
+                                                    link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
                                                     // backend api: ${host}:3000/user/payment/${salt}
                                                 })
                                                 res.json('Successful')
@@ -152,7 +152,7 @@ exports.pay = function (req, res) {
         if (err)
             res.send(err)
         else if (result.expired)
-        res.status(404).send({error: 'Invalid token'})
+            res.status(404).send({ error: 'Invalid token' })
         else {
             const ownerEmail = result.owner
             const userHandlerInstance = new userHandler(ownerEmail + '@artbook')
@@ -163,12 +163,12 @@ exports.pay = function (req, res) {
                     artworkHandlerInstance.viewArtwork(result.artwork)
                         .then(function (artwork) {
                             if (artwork.owner.email !== owner.email)
-                                res.status(404).send({error: 'Artwork not found'})
+                                res.status(404).send({ error: 'Artwork not found' })
                             else {
                                 agencyHandlerInstance.getAgency(result.agency)
                                     .then(function (agency) {
                                         if (artwork.handler.email !== agency.email)
-                                        res.status(404).send({error: 'Agency not found'})
+                                            res.status(404).send({ error: 'Agency not found' })
                                         else {
                                             bcrypt.genSalt(function (err, salt) {
                                                 if (err)
@@ -222,7 +222,7 @@ exports.transferOwnership = function (req, res) {
         if (err)
             res.send(err)
         else if (result.expired)
-        res.status(404).send({error: 'Invalid token'})
+            res.status(404).send({ error: 'Invalid token' })
         else {
             const artworkHandlerInstance = new artworkHandler(result.agency + '@artbook')
             artworkHandlerInstance.transferOwnership({
