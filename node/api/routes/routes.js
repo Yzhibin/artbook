@@ -47,6 +47,7 @@ module.exports = function (app, passport) {
   // Artwork Routes
   app.route('/artwork')
     .post(artwork.createArtwork)
+    .get(artwork.getAllArtworks)
     .put(artwork.addArtworkPic);
 
   app.route('/artwork/:artworkId')
