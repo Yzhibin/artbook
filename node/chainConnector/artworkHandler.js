@@ -154,7 +154,7 @@ class artworkHandler {
 
         }
     }
-    async getOwnArtworks(req) {
+    async getOwnArtworks(ownerId) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         await conn.init(this.cardname)
@@ -294,7 +294,7 @@ class artworkHandler {
 
             /********Query******/
             let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (handler == _$agency)');
-            let results = await conn.bizNetworkConnection.query(query,{agency: agency.URI()});
+            let results = await conn.bizNetworkConnection.query(query,{agency: agency.toURI()});
             console.log("Agency OnSale Artworks: " + results.length + " results")
             let artworks = []
 
