@@ -47,6 +47,7 @@ asset SupportingDocument identified by documentId {
   o String documentId
   o String fileId //in mongoDB
   o String title
+  o String summary
   o String issueDate
   o String author
   --> Artwork art
@@ -68,8 +69,10 @@ transaction transferOwnership {
 
 transaction markMissingArtwork {
   --> Artwork art
+  --> SupportingDocument missingDocument
 }
 
 transaction recoverMissingArtwork {
   --> Artwork art
+   --> SupportingDocument recoveryDocument
 }

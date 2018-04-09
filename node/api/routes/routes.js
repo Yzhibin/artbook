@@ -25,7 +25,8 @@ module.exports = function (app, passport) {
   // Sign-up
   app.post('/user', user.createUser)
   app.post('/agency', agency.createUser)
-  app.post('authority', authority.createUser)
+  app.post('/branch', authority.createBranch)
+  app.post('/police', authority.createPolice)
   // Login
   app.post('/user/login', passport.authenticate('user'), user.login)
   app.post('/agency/login', passport.authenticate('agency'), agency.login)
@@ -44,6 +45,13 @@ module.exports = function (app, passport) {
   app.route('/artwork/:artworkId')
     .get(artwork.viewArtwork);
 
+  app.route('/missing')
+    .put(artwork.markMissing)
+    .get(artwork.getAllMissing);
+  
+  app.route('/recover')
+    .put(artwork.recoverMissing);
+
   app.route('/ownArtworks/:ownerId')
     .get(artwork.getOwnArtworks);
 
@@ -51,7 +59,7 @@ module.exports = function (app, passport) {
     .post(artwork.addDocumentToArtwork);
 
   app.route('/getDocuments/:artworkId')
-  .get(artwork.getDocuments);
+  .get(artwork.getArtworkDocuments);
 
 
   app.route('/upload')

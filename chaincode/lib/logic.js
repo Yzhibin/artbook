@@ -69,7 +69,7 @@ function markMissingArtwork(mark){
  * @param {org.acme.artbook.recoverMissingArtwork} recover: the markMissingArtwork transaction instance
  * @transaction
  */
-function markMissingArtwork(recover){
+function recoverMissingArtwork(recover){
     recover.art.lost = false;
     //update the artwork
     return getAssetRegistry('org.acme.artbook.Artwork')

@@ -84,19 +84,20 @@ exports.addDocumentToArtwork = function (req, res) {
     title: req.body.fileName,
     issueDate: req.body.issueDate,
     author: req.body.author,
-    artworkId: req.body.artworkId
+    artworkId: req.body.artworkId,
+    summary: req.body.summary
   }
 
   var adminHandlesNewDocument = new documentHandler('admin@artbook')
   adminHandlesNewDocument.addDocument(documentInfo).then(
-    function () {
+    function (document) {
       //return updated artwork
-      res.json("success");
+      res.json(document);
     })
 };
 
 //Get all supporting documents of an artwork (by artworkId)
-exports.getDocuments = function (req, res) {
+exports.getArtworkDocuments = function (req, res) {
   var adminHandlesNewDocument = new documentHandler('admin@artbook')
   adminHandlesNewDocument.getDocuments(req.params.artworkId).then(
     function(documents){
@@ -112,18 +113,42 @@ exports.getOwnArtworks = function (req, res) {
     })
 };
 
-// exports.markMissing = function(req, res){
+exports.markMissing = function(req, res){
+  var missingInfo = {
+    artworkId : req.body.artworkId,
+    documentId: req.body.documentId
+  }
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.markMissing(missingInfo).then(
+    function (artworks) {
+      res.json(artworks);
+    })
+}
 
-// }
+exports.getAllMissing = function(req, res){
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.getAllMissing().then(
+    function (artworks) {
+      res.json(artworks);
+    })
+}
 
-// exports.getAllMissing = function(req, res){
+exports.recoverMissing = function(req, res){
+  var recoverInfo = {
+    artworkId : req.body.artworkId,
+    documentId: req.body.documentId
+  }
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.recoverMissing(recoverInfo).then(
+    function (artworks) {
+      res.json(artworks);
+    })
+}
 
-// }
-
-// exports.recoverMissing = function(req, res){
-
-// }
-
-// exports.getAgencyArtworks = function (req, res) {
-
-// };
+exports.getAgencyArtworks = function (req, res) {
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.getAgencyArtworks(req.params.agencyId).then(
+    function (artworks) {
+      res.json(artworks);
+    })
+};

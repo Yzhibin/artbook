@@ -11,11 +11,12 @@ var mongoose = require('mongoose'),
  * name
  * password
  */
-exports.createUser = function (req, res) {
+exports.createBranch = function (req, res) {
     var userInfo = req.body
     var userOnChain = {
         userId: userInfo.account,
         name: userInfo.name,
+        address: userInfo.address
     }
     var userOffChain = {
         id: userInfo.account
@@ -34,7 +35,45 @@ exports.createUser = function (req, res) {
 
             // Chain
             var adminHandlesNewUser = new authorityHandler('admin@artbook')
-            adminHandlesNewUser.createAuthority(userOnChain).then(
+            adminHandlesNewUser.createBranch(userOnChain).then(
+                function (result) {
+                    var new_user = new Authority(userOffChain)
+                    new_user.save(function (err, user) {
+                        if (err)
+                            res.send(err);
+                        else
+                            res.json({ account: userInfo.account });
+                    })
+                })
+        })
+    })
+};
+
+exports.createPolice = function (req, res) {
+    var userInfo = req.body
+    var userOnChain = {
+        userId: userInfo.account,
+        name: userInfo.name,
+        jurisdiction: userInfo.jurisdiction
+    }
+    var userOffChain = {
+        id: userInfo.account
+    }
+
+    bcrypt.genSalt(function (err, salt) {
+        if (err) {
+            console.log('bcrypt.genSalt ERR')
+        }
+        userOffChain.salt = salt
+        bcrypt.hash(userInfo.password + salt, 10, function (err, hashed) {
+            if (err) {
+                console.log('bcrypt.hash ERR')
+            }
+            userOffChain.password = hashed
+
+            // Chain
+            var adminHandlesNewUser = new authorityHandler('admin@artbook')
+            adminHandlesNewUser.createPolice(userOnChain).then(
                 function (result) {
                     var new_user = new Authority(userOffChain)
                     new_user.save(function (err, user) {
@@ -49,10 +88,23 @@ exports.createUser = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    var handlerInstance = new agencyHandler(req.body.account + '@artbook')
-    handlerInstance.getAuthority(req.body.account).then(
-        function (user) {
-            res.json(user)
-        }
-    )
-}
+
+    console.log("1")
+    var handlerInstance = new authorityHandler(req.body.account + '@artbook')
+    var account = req.body.account
+    console.log(account)
+
+    if (account.charAt(0) == "0") {
+        handlerInstance.getBranch(account).then(
+            function (user) {
+                res.json(user)
+            }
+        )
+    } else {
+        handlerInstance.getPolice(account).then(
+            function (user) {
+                res.json(user)
+            }
+        )
+    }
+};

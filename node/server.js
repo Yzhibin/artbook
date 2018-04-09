@@ -74,10 +74,10 @@ passport.use('agency', new LocalStrategy({
   }))
 
 passport.use('authority', new LocalStrategy({
-  usernameField: 'id'
+  usernameField: 'account'
 },
   function (username, password, done) {
-    Agency.findOne({ id: username }, function (err, user) {
+    Authority.findOne({ id: username }, function (err, user) {
       console.log(user)
       if (err) { return done(err) }
       if (!user) {
