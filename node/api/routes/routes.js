@@ -31,10 +31,17 @@ module.exports = function (app, passport) {
   app.post('/agency/login', passport.authenticate('agency'), agency.login)
   app.post('/authority/login', passport.authenticate('authority'), authority.login)
 
+  app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
   // app.route('/user/:userId')
   //   .get(user.getUser)
   //   .put(user.updateUser)
   // .delete(user.deleteUser);
+
+  app.get('/agency/getUser/:userId', user.getUser)
 
   // Artwork Routes
   app.route('/artwork')
@@ -61,12 +68,13 @@ module.exports = function (app, passport) {
     .get(file.retrieve);
 
 
-  app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-  });
 
+
+  // Consent
   app.post('/agency/requestConsent', consent.requestForConsent)
   app.put('/user/consentForSale', consent.consentForSale)
+  app.post('agency/requestForPayment', consent.requestForPayment)
+  app.get('user/payment/:token', consent.pay)
+  app.get('/user/transferOwnership/:token', consent.transferOwnership)
 
 };

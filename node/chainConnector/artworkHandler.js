@@ -128,24 +128,18 @@ class artworkHandler {
         await conn.init(this.cardname)
 
         try {
-            // Get Registry
-            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
-            this.consentRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.consentArtworkForSale')
-
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
             let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', req.agencyId)
             let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', req.artworkId)
 
-            console.log('1')
             let consent = await factory.newTransaction('org.acme.artbook', 'consentArtworkForSale')
             consent.agency = agencyRelation
             consent.art = artworkRelation
-            console.log('2')
+
             let result = await conn.bizNetworkConnection.submitTransaction(consent)
-            console.log('3')
+
             conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
@@ -185,7 +179,43 @@ class artworkHandler {
             throw error
         }
     }
+    /**
+     * 
+     * @param transferInfo 
+     * artworkId
+     * agencyId
+     * buyerId
+     * price
+     */
+    async transferOwnership(transferInfo){
+// Establish connection with blockchain network
+const conn = new networkConnection();
+await conn.init(this.cardname)
 
+try {
+    // Get Factory
+    let factory = await conn.businessNetworkDefinition.getFactory()
+
+    let userRelation = await factory.newRelationship('org.acme.artbook', 'User', transferInfo.buyerId)
+    let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', transferInfo.agencyId)
+    let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', transferInfo.artworkId)
+
+    let transfer = await factory.newTransaction('org.acme.artbook', 'transferOwnership')
+    transfer.agency = agencyRelation
+    consent.art = artworkRelation
+    consent.newOwner = userRelation
+    consent.amount = Number.parseFloat(transferInfo.price)
+
+    let result = await conn.bizNetworkConnection.submitTransaction(transfer)
+
+    conn.bizNetworkConnection.disconnect()
+    return result
+} catch (error) {
+    console.log(error)
+    console.log('artworkHandler:transferOwnership', error)
+
+}
+    }
     
 }
 

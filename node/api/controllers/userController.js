@@ -59,6 +59,14 @@ exports.login = function (req, res) {
     })
 }
 
+exports.getUser = function (req, res) {
+  var handlerInstance = new userHandler(req.header('Id')+'@artbook')
+  handlerInstance.getUser(req.params.userId).then(
+    function (user) {
+      res.json(user)
+    })
+}
+
 /*
 exports.read_a_task = function(req, res) {
   Task.findById(req.params.taskId, function(err, task) {
