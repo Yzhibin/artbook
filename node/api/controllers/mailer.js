@@ -196,7 +196,7 @@ exports.sendMail = function (mailInfo) {
             mailOptions = {
                 from: "Artbook Co. <merlionsharing@gmail.com>",
                 to: mailInfo.receiverEmail,
-                subject: "",
+                subject: "Request for Payment from ${mailInfo.agency}",
                 html: `<!DOCTYPE html>
         <html lang="it"><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>Artbook Co.</title><!--
         
@@ -520,7 +520,7 @@ exports.sendMail = function (mailInfo) {
                       </tr></tbody></table>
                       <!--  BUTTON -->
                       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mobile-button-container"><tbody><tr><td align="center" style="padding: 25px 0 0 0;" class="padding-copy">
-                        <table border="0" cellspacing="0" cellpadding="0" class="responsive-table"><tbody><tr><td align="center"><a target="_new" class="mobile-button" style="display: inline-block; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: #9C010F; padding-top: 15px; padding-bottom: 15px; padding-left: 25px; padding-right: 25px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom: 3px solid #5f0109;" href="${mailInfo.link}">Confirm the Payment<br></a></td>
+                        <table border="0" cellspacing="0" cellpadding="0" class="responsive-table"><tbody><tr><td align="center"><a target="_new" class="mobile-button" style="display: inline-block; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: #9C010F; padding-top: 15px; padding-bottom: 15px; padding-left: 25px; padding-right: 25px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom: 3px solid #5f0109;" href="${mailInfo.link}">Confirm the Transfer<br></a></td>
                         </tr></tbody></table></td>
                       </tr></tbody></table></td>
                     </tr></tbody></table></td>
