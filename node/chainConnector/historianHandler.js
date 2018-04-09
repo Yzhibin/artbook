@@ -7,7 +7,7 @@ class historianHandler {
         this.cardname = cardname
     }
 
-    async viewAllHistory() {
+    async viewConsentHistory() {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         console.log(this.cardname)
@@ -19,21 +19,61 @@ class historianHandler {
             //let historianRecords = await historian.getAll();
             //console.log(prettyoutput(historianRecords));
             
-            let q1 = conn.bizNetworkConnection.buildQuery(
-                `SELECT org.hyperledger.composer.system.HistorianRecord
-                    WHERE (transactionType == 'markMissingArtwork')`
-            );   
+            // let q1 = conn.bizNetworkConnection.buildQuery(
+            //     `SELECT org.hyperledger.composer.system.HistorianRecord
+            //         WHERE (transactionType == 'markMissingArtwork')`
+            // );   
             
-            let historianRecords = await conn.bizNetworkConnection.query(q1);  
+            // let historianRecords = await conn.bizNetworkConnection.query(q1);  
 
-            console.log(prettyoutput(historianRecords));
+            // console.log(prettyoutput(historianRecords));
 
-            this.missingRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.markMissingArtwork')
+            this.consentRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.consentArtworkForSale')
 
-            let missingRecords = await this.missingRegistry.resolveAll();
-            console.log(prettyoutput(missingRecords));
+            let consentRecords = await this.consentRegistry.resolveAll();
+            console.log(prettyoutput(consentRecords));
             //let results = await historian.resolveAll();
-            return conn.bizNetworkConnection.disconnect()
+            await conn.bizNetworkConnection.disconnect()
+            return consentRecords
+
+            
+
+        } catch (error) {
+            console.log(error)
+            console.log('historianHandler:viewAllHistory', error)
+            throw error
+        }
+
+    };
+
+    async viewTransferHistory() {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        console.log(this.cardname)
+        await conn.init(this.cardname)
+
+        try {
+            //get history
+            //let historian = await conn.bizNetworkConnection.getHistorian();
+            //let historianRecords = await historian.getAll();
+            //console.log(prettyoutput(historianRecords));
+            
+            // let q1 = conn.bizNetworkConnection.buildQuery(
+            //     `SELECT org.hyperledger.composer.system.HistorianRecord
+            //         WHERE (transactionType == 'markMissingArtwork')`
+            // );   
+            
+            // let historianRecords = await conn.bizNetworkConnection.query(q1);  
+
+            // console.log(prettyoutput(historianRecords));
+
+            this.transferRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.transferOwnership')
+
+            let transferRecords = await this.transferRegistry.resolveAll();
+            console.log(prettyoutput(transferRecords));
+            //let results = await historian.resolveAll();
+            await conn.bizNetworkConnection.disconnect()
+            return transferRecords
 
             
 

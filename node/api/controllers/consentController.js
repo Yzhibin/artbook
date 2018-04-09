@@ -63,6 +63,7 @@ exports.requestForConsent = function (req, res) {
 exports.consentForSale = function (req, res) {
     const otp = req.body.otp
     const owner = req.header('Id')
+    //console.log("Controller " + owner)
 
     Token.findOne({ token: otp }, function (err, token) {
         if (err || token.expired || token.owner !== owner)
@@ -76,8 +77,10 @@ exports.consentForSale = function (req, res) {
                 token.update({ expired: true }, function (err, done) {
                     if (err)
                         res.send(err)
-                    else
+                    else{
+                        console.log("Consent For Sale Successfully!")
                         res.json('Successful')
+                    }
                 })
             }
             )

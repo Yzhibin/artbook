@@ -2,14 +2,26 @@
 
 var historianHandler = require('../../chainConnector/historianHandler')
 
-exports.viewAllHistory = function (req, res) {
+exports.viewConsentHistory = function (req, res) {
   
     var handler = new historianHandler('admin@artbook')
-    handler.viewAllHistory().then(
-      function () {
+    handler.viewConsentHistory().then(
+      function (records) {
         //console.log(artwork)
         //const json = JSON.stringify(artwork);
-        res.send("success");
+        res.send(records);
+      })
+  
+  };
+
+  exports.viewTransferHistory = function (req, res) {
+  
+    var handler = new historianHandler('admin@artbook')
+    handler.viewTransferHistory().then(
+      function (records) {
+        //console.log(artwork)
+        //const json = JSON.stringify(artwork);
+        res.send(records);
       })
   
   };
