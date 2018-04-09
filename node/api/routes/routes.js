@@ -80,8 +80,10 @@ module.exports = function (app, passport) {
   app.route('/retrieve/:id')
     .get(file.retrieve);
 
-  app.route('/history')
-    .get(historian.viewAllHistory);
+  app.route('/consentHistory')
+    .get(historian.viewConsentHistory);
+  app.route('/transferHistory')
+    .get(historian.viewTransferHistory);
 
 
 
