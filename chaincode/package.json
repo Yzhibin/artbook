@@ -1,6 +1,10 @@
 {
   "name": "artbook",
+<<<<<<< HEAD
   "version": "0.0.4",
+=======
+  "version": "0.0.3",
+>>>>>>> dbb6d62715ed5c9de59842716cd0e7c6550a43ae
   "description": "Artbook, the ultimate blockchain solution for artwork trade industry",
   "scripts": {
     "test": "mocha --recursive"

@@ -12,7 +12,7 @@ class authorityHandler {
      * userId: String
      * name: String
      */
-    async createAuthority(authorityInfo) {
+    async createBranch(userInfo) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         console.log(this.cardname)
@@ -20,45 +20,98 @@ class authorityHandler {
 
         try {
             // Get Registry
-            this.authorityRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Authority')
-
+            this.branchRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Branch')
+        
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
-
+            
             // Create Authority
-            let authority = factory.newResource('org.acme.artbook', 'Authority', authorityInfo.userId)
-            authority.name = authorityInfo.name
-
+            let branch = factory.newResource('org.acme.artbook', 'Branch', userInfo.userId)
+            branch.name = userInfo.name
+            branch.address = userInfo.address
+            
             // Update Registry
-            await this.authorityRegistry.add(authority)
+            await this.branchRegistry.add(branch)
 
             // Issue an identity card for this Staff. The ID Card is exported to current direcotry
-            let result = await bizNetworkConnection
-                .issueIdentity(`org.acme.artbook.Authority#${authorityInfo.userId}`, authorityInfo.userId)
-            console.log('New authority added')
+            let result = await conn.bizNetworkConnection
+                .issueIdentity(`org.acme.artbook.Branch#${userInfo.userId}`, userInfo.userId)
+            console.log('New authority - branch added')
             await conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
             console.log(error)
-            console.log('authorityHandler:createAuthority', error)
+            console.log('authorityHandler:createBranch', error)
             throw error
         }
     }
     
-    async getAuthority(account) {
+    async getBranch(account) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         console.log(`cardname: ${this.cardname}`)
         await conn.init(this.cardname)
         try {
             // Get Registry
-            this.authorityRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Authority')
-            let result = await this.authorityRegistry.resolve(account)
+            this.branchRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Branch')
+            let result = await this.branchRegistry.resolve(account)
             await conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
             console.log(error)
-            console.log('authorityHandler:getAuthority', error)
+            console.log('authorityHandler:getBranch', error)
+            throw error
+        }
+    }
+
+    async createPolice(userInfo) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        console.log(this.cardname)
+        await conn.init(this.cardname)
+
+        try {
+            // Get Registry
+            this.policeRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Police')
+            
+            // Get Factory
+            let factory = conn.businessNetworkDefinition.getFactory()
+            
+            // Create Authority
+            let police = factory.newResource('org.acme.artbook', 'Police', userInfo.userId)
+            police.name = userInfo.name
+            police.jurisdiction = userInfo.jurisdiction
+            
+            // Update Registry
+            await this.policeRegistry.add(police)
+
+            // Issue an identity card for this Staff. The ID Card is exported to current direcotry
+            let result = await conn.bizNetworkConnection
+                .issueIdentity(`org.acme.artbook.Police#${userInfo.userId}`, userInfo.userId)
+            console.log('New authority - police added')
+            await conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log(error)
+            console.log('authorityHandler:createPolice', error)
+            throw error
+        }
+    }
+    
+    async getPolice(account) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        console.log(`cardname: ${this.cardname}`)
+        await conn.init(this.cardname)
+        try {
+            // Get Registry
+            this.policeRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Police')
+            let result = await this.policeRegistry.resolve(account)
+            await conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log(error)
+            console.log('authorityHandler:getPolice', error)
             throw error
         }
     }

@@ -33,6 +33,7 @@ class documentHandler {
             newDocument.fileId = documentInfo.fileId
             newDocument.issueDate = documentInfo.issueDate
             newDocument.author = documentInfo.author
+            newDocument.summary = documentInfo.summary
            
             //link to artwork
             let artwork = await this.artworkRegistry.get(documentInfo.artworkId)
@@ -44,7 +45,10 @@ class documentHandler {
             // Update Registry
             await this.supportingDocumentRegistry.add(newDocument)
             console.log('New document added')
-            return conn.bizNetworkConnection.disconnect()
+            let result = await this.supportingDocumentRegistry.resolve(newDocument.documentId)
+            conn.bizNetworkConnection.disconnect()
+
+            return result
 
         } catch (error) {
             console.log(error)
