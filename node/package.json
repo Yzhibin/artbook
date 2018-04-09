@@ -24,11 +24,8 @@
     "nodemailer": "^4.6.4",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
-<<<<<<< HEAD
     "random-number": "0.0.9",
-=======
     "prettyoutput": "^1.1.1",
->>>>>>> dd87b8ff0fb5c8a785748475ee67c3e16036fc67
     "uuid": "^3.2.1"
   },
   "devDependencies": {
