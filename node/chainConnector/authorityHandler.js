@@ -1,4 +1,5 @@
 const networkConnection = require('./networkConnection')
+const cardHandler = require('./cardHandler')
 
 class authorityHandler {
 
@@ -21,21 +22,24 @@ class authorityHandler {
         try {
             // Get Registry
             this.branchRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Branch')
-        
+
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
-            
+
             // Create Authority
             let branch = factory.newResource('org.acme.artbook', 'Branch', userInfo.userId)
             branch.name = userInfo.name
             branch.address = userInfo.address
-            
+
             // Update Registry
             await this.branchRegistry.add(branch)
 
             // Issue an identity card for this Staff. The ID Card is exported to current direcotry
             let result = await conn.bizNetworkConnection
                 .issueIdentity(`org.acme.artbook.Branch#${userInfo.userId}`, userInfo.userId)
+            const cardHandlerInstance = new cardHandler()
+            await cardHandlerInstance.getBusinessInfoByImportedCard(result.userID, result.userSecret, 'user', 'artbook')
+
             console.log('New authority - branch added')
             await conn.bizNetworkConnection.disconnect()
             return result
@@ -45,7 +49,7 @@ class authorityHandler {
             throw error
         }
     }
-    
+
     async getBranch(account) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
@@ -73,15 +77,15 @@ class authorityHandler {
         try {
             // Get Registry
             this.policeRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.Police')
-            
+
             // Get Factory
             let factory = conn.businessNetworkDefinition.getFactory()
-            
+
             // Create Authority
             let police = factory.newResource('org.acme.artbook', 'Police', userInfo.userId)
             police.name = userInfo.name
             police.jurisdiction = userInfo.jurisdiction
-            
+
             // Update Registry
             await this.policeRegistry.add(police)
 
@@ -97,7 +101,7 @@ class authorityHandler {
             throw error
         }
     }
-    
+
     async getPolice(account) {
         // Establish connection with blockchain network
         const conn = new networkConnection();

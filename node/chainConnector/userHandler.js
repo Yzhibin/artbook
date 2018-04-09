@@ -1,5 +1,5 @@
 const networkConnection = require('./networkConnection')
-const parser = require('./parser')
+const cardHandler = require('./cardHandler')
 
 class userHandler {
 
@@ -36,7 +36,10 @@ class userHandler {
             // Issue an identity card for this User. The ID Card is exported to current direcotry
             let result = await conn.bizNetworkConnection
                 .issueIdentity(`org.acme.artbook.User#${userInfo.userId}`, userInfo.userId)
+            const cardHandlerInstance = new cardHandler()
+            await cardHandlerInstance.getBusinessInfoByImportedCard(result.userID, result.userSecret, 'user', 'artbook')
             console.log('New user added')
+            console.log(result)
             return conn.bizNetworkConnection.disconnect()
         } catch (error) {
             console.log(error)

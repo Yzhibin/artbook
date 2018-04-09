@@ -18,7 +18,7 @@ class networkConnection {
      */
      async init(cardname) {
         //  For testing
-        cardname = 'admin@artbook'
+        // cardname = 'admin@artbook'
         this.businessNetworkDefinition = await this.bizNetworkConnection.connect(cardname)
      	console.log('networkConnection:<init>', 'businessNetworkDefinition obtained', this.businessNetworkDefinition.getIdentifier())
      }
