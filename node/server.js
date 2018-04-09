@@ -25,13 +25,16 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 
-var User = require('./api/models/schema').User;
-passport.use(new LocalStrategy({
+var Schema = require('./api/models/schema'),
+  User = Schema.User,
+  Agency = Schema.Agency,
+  Authority = Schema.Authority;
+
+passport.use('user', new LocalStrategy({
   usernameField: 'email'
 },
   function (username, password, done) {
     User.findOne({ id: username }, function (err, user) {
-      console.log(user)
       if (err) { return done(err) }
       if (!user) {
         console.log('No such user')
@@ -48,12 +51,76 @@ passport.use(new LocalStrategy({
     })
   }))
 
+passport.use('agency', new LocalStrategy({
+  usernameField: 'email'
+},
+  function (username, password, done) {
+    Agency.findOne({ id: username }, function (err, user) {
+      console.log(user)
+      if (err) { return done(err) }
+      if (!user) {
+        console.log('No such agency')
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+
+      bcrypt.compare(password + user.salt, user.password, function (err, res) {
+        if (!res) {
+          console.log('Incorrect pwd')
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      })
+    })
+  }))
+
+passport.use('authority', new LocalStrategy({
+  usernameField: 'id'
+},
+  function (username, password, done) {
+    Agency.findOne({ id: username }, function (err, user) {
+      console.log(user)
+      if (err) { return done(err) }
+      if (!user) {
+        console.log('No such authority')
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+
+      bcrypt.compare(password + user.salt, user.password, function (err, res) {
+        if (!res) {
+          console.log('Incorrect pwd')
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      })
+    })
+  }))
+
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  var key = {
+    id: user.id
+  }
+  if (user instanceof User)
+    key.type = 'User'
+  else if (user instanceof Agency)
+    key.type = 'Agency'
+  else if (user instanceof Authority)
+    key.type = 'Authority'
+  else console.log('serializeUser ERR: no match type')
+
+  done(null, key);
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findOne({ id: id }, function (err, user) {
+passport.deserializeUser(function (key, done) {
+  var Model
+  if (key.type === 'User')
+    Model = User
+  if (key.type === 'Agency')
+    Model = Agency
+  else if (key.type === 'Authority')
+    Model = Authority
+  else console.log('deserializeUser ERR: no match type')
+
+  Model.findOne({ id: key.id }, function (err, user) {
     done(err, user);
   });
 });

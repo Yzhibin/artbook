@@ -109,7 +109,6 @@ class artworkHandler {
             conn.bizNetworkConnection.disconnect()
 
             return result
-
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)
