@@ -92,6 +92,8 @@ class authorityHandler {
             // Issue an identity card for this Staff. The ID Card is exported to current direcotry
             let result = await conn.bizNetworkConnection
                 .issueIdentity(`org.acme.artbook.Police#${userInfo.userId}`, userInfo.userId)
+            const cardHandlerInstance = new cardHandler()
+            await cardHandlerInstance.getBusinessInfoByImportedCard(result.userID, result.userSecret, 'user', 'artbook')
             console.log('New authority - police added')
             await conn.bizNetworkConnection.disconnect()
             return result
