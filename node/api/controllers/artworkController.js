@@ -97,9 +97,9 @@ exports.addDocumentToArtwork = function (req, res) {
 //Get all supporting documents of an artwork (by artworkId)
 exports.getDocuments = function (req, res) {
   var adminHandlesNewDocument = new documentHandler('admin@artbook')
-  adminHandlesNewDocument.addDocument(documentInfo).then(
-    function(){
-
+  adminHandlesNewDocument.getDocuments(req.params.artworkId).then(
+    function(documents){
+      res.json(documents);
     })
 };
 

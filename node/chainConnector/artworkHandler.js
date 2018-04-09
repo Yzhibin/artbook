@@ -129,12 +129,12 @@ class artworkHandler {
             let owner = await this.userRegistry.get(ownerId)
             let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (owner == _$owner)');
             let results = await conn.bizNetworkConnection.query(query, { owner: owner.toURI()});
-            console.log("Query done: " + results.length + " results")
+            console.log("Own Artworks: " + results.length + " results")
             let artworks = []
 
             for (let n = 0; n < results.length; n++) {
                 let art = results[n];
-                console.log(art)
+                //console.log(art)
                 await artworks.push(await this.artworkRegistry.resolve(art.artworkId))
             }
 
@@ -149,38 +149,7 @@ class artworkHandler {
         }
     }
 
-    async getDocuments(ownerId) {
-        // Establish connection with blockchain network
-        const conn = new networkConnection();
-        await conn.init(this.cardname)
-        try {
-            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
-
-            /********Queries******/
-            let owner = await this.userRegistry.get(ownerId)
-            let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (owner == _$owner)');
-            let results = await conn.bizNetworkConnection.query(query, { owner: owner.toURI()});
-            console.log("Query done: " + results.length + " results")
-            let artworks = []
-
-            for (let n = 0; n < results.length; n++) {
-                let art = results[n];
-                console.log(art)
-                await artworks.push(await this.artworkRegistry.resolve(art.artworkId))
-            }
-
-            conn.bizNetworkConnection.disconnect()
-
-            return artworks
-
-        } catch (error) {
-            console.log(error)
-            console.log('artworkHandler:Artwork', error)
-            throw error
-        }
-    }
-
+    
 }
 
 

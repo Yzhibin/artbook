@@ -53,5 +53,38 @@ class documentHandler {
         }
     }
 
+    async getDocuments(artworkId) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
+        try {
+            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
+            this.documentRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.SupportingDocument')
+
+            /********Queries******/
+            let artwork = await this.artworkRegistry.get(artworkId)
+            let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.SupportingDocument WHERE (art == _$art)');
+            let results = await conn.bizNetworkConnection.query(query, { art: artwork.toURI()});
+            console.log("Documents: " + results.length + " results")
+            let documents = []
+
+            for (let n = 0; n < results.length; n++) {
+                let doc = results[n];
+                //console.log(doc)
+                await documents.push(await this.documentRegistry.resolve(doc.documentId))
+            }
+
+            conn.bizNetworkConnection.disconnect()
+
+            return documents
+
+        } catch (error) {
+            console.log(error)
+            console.log('artworkHandler:Artwork', error)
+            throw error
+        }
+    }
+
+
 }
 module.exports = documentHandler
