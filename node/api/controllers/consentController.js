@@ -108,9 +108,6 @@ exports.requestForPayment = function (req, res) {
                         userHandlerInstance.getUser(buyerEmail)
                             .then(function (buyer) {
                                 const salt = randomGen()
-                                if (err)
-                                    res.send(err)
-                                else {
                                     var token = new Token({
                                         token: salt,
                                         type: 'Pay',
@@ -140,7 +137,6 @@ exports.requestForPayment = function (req, res) {
                                             res.json('Successful')
                                         }
                                     })
-                                }
                             })
                     }
                 })
@@ -172,9 +168,7 @@ exports.pay = function (req, res) {
                                             res.status(404).send({ error: 'Agency not found' })
                                         else {
                                             const salt = randomGen()
-                                            if (err)
-                                                res.send(err)
-                                            else {
+                                           
                                                 var new_token = new Token({
                                                     token: salt,
                                                     type: 'Transfer',
@@ -207,7 +201,6 @@ exports.pay = function (req, res) {
                                                     }
                                                 })
                                             }
-                                        }
                                     })
                             }
                         })
@@ -227,7 +220,7 @@ exports.transferOwnership = function (req, res) {
             const artworkHandlerInstance = new artworkHandler(result.agency + '@artbook')
             artworkHandlerInstance.transferOwnership({
                 artworkId: result.artwork,
-                agencyId: result.artwork,
+                agencyId: result.agency,
                 buyerId: result.buyer,
                 price: result.price
             }).then(function (done) {

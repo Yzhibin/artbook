@@ -58,6 +58,7 @@ class userHandler {
             this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
             let result = await this.userRegistry.resolve(userEmail)
             await conn.bizNetworkConnection.disconnect()
+            console.log("getUser: " + result)
             return result
         } catch (error) {
             console.log(error)

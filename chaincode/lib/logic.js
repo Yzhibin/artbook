@@ -26,18 +26,15 @@ function consentArtworkForSale(consent){
 function transferOwnership(transfer){
     //change the owner of the artwork
     transfer.art.owner = transfer.newOwner;
-    transfer.art.handler = {};    
+    transfer.art.handler = null;    
 
     //toggle on_sale status
     transfer.art.onSale = false; 
     
     //update the agency 
     //update the artwork
-    return getParticipantRegistry('org.acme.artbook.Agency')
-    .then (function (AgencyRegistry){
-        return AgencyRegistry.update(transfer.agency);
-    }).then(function (){
-    return getAssetRegistry('org.acme.artbook.Artwork')})
+    
+    return getAssetRegistry('org.acme.artbook.Artwork')
     .then (function (ArtworkRegistry){
         return ArtworkRegistry.update(transfer.art);
     })
