@@ -44,7 +44,7 @@ exports.createArtwork = function (req, res) {
       new_artwork.save(function (err, result) {
         if (err)
           res.send(err);
-          //return artworkOnChain
+        //return artworkOnChain
         res.json(artwork);
       })
     }
@@ -68,14 +68,11 @@ exports.addArtworkPic = function (req, res) {
 };
 
 exports.viewArtwork = function (req, res) {
-  console.log('req.session')
-  console.log(req.header)
   var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
   adminHandlesNewArtwork.viewArtwork(req.params.artworkId).then(
     function (updatedArtwork) {
       res.json(updatedArtwork);
     })
-
 };
 
 exports.addDocumentToArtwork = function (req, res) {
@@ -100,7 +97,7 @@ exports.addDocumentToArtwork = function (req, res) {
 exports.getArtworkDocuments = function (req, res) {
   var adminHandlesNewDocument = new documentHandler('admin@artbook')
   adminHandlesNewDocument.getDocuments(req.params.artworkId).then(
-    function(documents){
+    function (documents) {
       res.json(documents);
     })
 };

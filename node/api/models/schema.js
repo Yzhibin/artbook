@@ -74,7 +74,8 @@ var TokenSchema = mongoose.model('Token', new Schema({
   agency: String,
   artwork: String,
   owner: String,
-  buyer: String
+  buyer: String,
+  price: String
 }))
 
 module.exports = {

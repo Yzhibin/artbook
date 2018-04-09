@@ -128,24 +128,18 @@ class artworkHandler {
         await conn.init(this.cardname)
 
         try {
-            // Get Registry
-            this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            this.userRegistry = await conn.bizNetworkConnection.getParticipantRegistry('org.acme.artbook.User')
-            this.consentRegistry = await conn.bizNetworkConnection.getTransactionRegistry('org.acme.artbook.consentArtworkForSale')
-
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
             let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', req.agencyId)
             let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', req.artworkId)
 
-            console.log('1')
             let consent = await factory.newTransaction('org.acme.artbook', 'consentArtworkForSale')
             consent.agency = agencyRelation
             consent.art = artworkRelation
-            console.log('2')
+
             let result = await conn.bizNetworkConnection.submitTransaction(consent)
-            console.log('3')
+
             conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
@@ -165,7 +159,7 @@ class artworkHandler {
             /********Query******/
             let owner = await this.userRegistry.get(ownerId)
             let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (owner == _$owner)');
-            let results = await conn.bizNetworkConnection.query(query, { owner: owner.toURI()});
+            let results = await conn.bizNetworkConnection.query(query, { owner: owner.toURI() });
             console.log("Own Artworks: " + results.length + " results")
             let artworks = []
 
@@ -185,15 +179,51 @@ class artworkHandler {
             throw error
         }
     }
+    /**
+     * 
+     * @param transferInfo 
+     * artworkId
+     * agencyId
+     * buyerId
+     * price
+     */
+    async transferOwnership(transferInfo) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
 
-    async markMissing (req){
+        try {
+            // Get Factory
+            let factory = await conn.businessNetworkDefinition.getFactory()
+
+            let userRelation = await factory.newRelationship('org.acme.artbook', 'User', transferInfo.buyerId)
+            let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', transferInfo.agencyId)
+            let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', transferInfo.artworkId)
+
+            let transfer = await factory.newTransaction('org.acme.artbook', 'transferOwnership')
+            transfer.agency = agencyRelation
+            consent.art = artworkRelation
+            consent.newOwner = userRelation
+            consent.amount = Number.parseFloat(transferInfo.price)
+
+            let result = await conn.bizNetworkConnection.submitTransaction(transfer)
+
+            conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log(error)
+            console.log('artworkHandler:transferOwnership', error)
+
+        }
+    }
+    async markMissing(req) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         await conn.init(this.cardname)
 
         try {
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            
+
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
@@ -203,10 +233,10 @@ class artworkHandler {
             let missing = await factory.newTransaction('org.acme.artbook', 'markMissingArtwork')
             missing.missingDocument = documentRelation
             missing.art = artworkRelation
-            
+
             await conn.bizNetworkConnection.submitTransaction(missing)
             console.log(req.artworkId + " is marked to missing")
-            
+
             let result = await this.artworkRegistry.resolve(req.artworkId)
             conn.bizNetworkConnection.disconnect()
             return result
@@ -219,14 +249,14 @@ class artworkHandler {
 
     }
 
-    async recoverMissing (req){
+    async recoverMissing(req) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
         await conn.init(this.cardname)
 
         try {
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            
+
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
@@ -236,10 +266,10 @@ class artworkHandler {
             let recover = await factory.newTransaction('org.acme.artbook', 'recoverMissingArtwork')
             recover.recoveryDocument = documentRelation
             recover.art = artworkRelation
-            
+
             await conn.bizNetworkConnection.submitTransaction(recover)
             console.log(req.artworkId + " is marked to recovered")
-            
+
             let result = await this.artworkRegistry.resolve(req.artworkId)
             conn.bizNetworkConnection.disconnect()
             return result
@@ -258,7 +288,7 @@ class artworkHandler {
         await conn.init(this.cardname)
         try {
             this.artworkRegistry = await conn.bizNetworkConnection.getAssetRegistry('org.acme.artbook.Artwork')
-            
+
             /********Query******/
             let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (lost == true)');
             let results = await conn.bizNetworkConnection.query(query);
@@ -295,6 +325,7 @@ class artworkHandler {
             /********Query******/
             let query = await conn.bizNetworkConnection.buildQuery('SELECT org.acme.artbook.Artwork WHERE (handler == _$agency)');
             let results = await conn.bizNetworkConnection.query(query,{agency: agency.toURI()});
+
             console.log("Agency OnSale Artworks: " + results.length + " results")
             let artworks = []
 
@@ -315,7 +346,7 @@ class artworkHandler {
         }
     }
 
-    
+
 }
 
 
