@@ -196,7 +196,7 @@ exports.sendMail = function (mailInfo) {
             mailOptions = {
                 from: "Artbook Co. <merlionsharing@gmail.com>",
                 to: mailInfo.receiverEmail,
-                subject: "Request for Payment from ${mailInfo.agency}",
+                subject: `Request for Payment from ${mailInfo.agency}`,
                 html: `<!DOCTYPE html>
         <html lang="it"><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>Artbook Co.</title><!--
         
