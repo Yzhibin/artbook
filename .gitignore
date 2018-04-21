@@ -3,3 +3,15 @@
 *.card
 node_modules
 uploads
+
+.DS_Store
+artbook-client/dist/
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+artbook-client/src/components/DesignPrinciple.vue

@@ -5,17 +5,75 @@ The ultimate blockchain solution for artwork trade industry
 
 > ***On the Cloud***
 >
-> The Blockchain component and middleware are running on Azure virtual machine at address *52.187.128.189:3001*
+> The Blockchain component and middleware component are running on Azure virtual machine at address *52.187.128.189:3001*
 > 
 > The client app is connected to the cloud server by default. To connect the client app with a local server, please refer to the Guide for Client App Deployment.
 >
-> Cloud server will cease its operation on *20 May, 2018*. Please use local server after the date.
+> Cloud server will cease its operation on *20 May, 2018*. Please use a local server after that date.
 
 ## Guide for Client App Deployment
-//TODO
+Web application 
+
+>***Dependencies***
+>
+><b style="color:#1BBC9B;">Vue.js</b> as application framework<br/>
+><b style="color:#674172;">Bootstrap</b> as styling library<br/>
+><b style="color:#19B5FE;">Element UI</b> as components library<br/>
+><b style="color:#DB0A5B;">Sass</b> for customized styling. sass files can be found in `artbook-client/src/assets/sass`<br/>
+
+
+### Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# compile sass code to css code
+npm run compile:sass
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+```
+
+### To switch from connecting to virtual machine and connecting to local machine
+#### find the constants file the stores paths
+the file can be find in `src/const.js` 
+
+#### Follow the instructions given in the comment to comment and  uncomment correct lines of code
+``` javascript
+// path to be used to connect middleware running on virtual machine
+export const VM_PATH = "http://172.25.96.201:3000/" 
+// path to be used to connect middleware running on local machine
+export const LOCAL_PATH = "http://localhost:3000/"
+// export const baseUrl = VM_PATH
+// uncomment the line above and comment the line below to use middleware running on virtual machine
+export const baseUrl = LOCAL_PATH
+```
+
 
 ## Recommended Process of Testing Artbook
 To take a look at how Artbook works, you can follow these steps to test all functionalities.
+
+### Data Insertion
+> ***Note:*** If you are using the cloud server, you may skip this step. 
+
+Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
+
+```
+cd ~/artbook/node
+node insertion.js
+```
+
+###  Play with Artbook
+1. Go to [Artbook Homepage](http://localhost:8080/)
+2. Scroll down to see some highlighted artworks being displayed.
+3. As a user, click *Individual* at the top-right corner, a log-in window will promt. Then click *Sign up*.
+4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account will be ***Seller***
+5. Repeat step 3 and step 4 to create another account, which will be used as ***Buyer***
 
 ## Guide for Server Local Deployment
 If you would like to deploy a local version of the Artbook server, instead of using the cloud server, you can follow this guide.
@@ -24,9 +82,8 @@ The blockchain component is developed with Hyperledger Composer.
 
 > ***Dependencies***
 >
-> Hyperledger Fabric: `v1.1.0 `
->
-> Hyperledger Composer: `v0.19.0`
+> <b>Hyperledger Fabric:</b> `v1.1.0 `<br>
+> <b>Hyperledger Composer:</b> `v0.19.0`
 
 
 ### Pre-requisites
@@ -73,11 +130,9 @@ The middleware component is developed using Node.js and  various Node packages. 
 
 > ***Dependencies***
 >
-> Node.js: `v8.9.4 LTS`
->
-> npm: `v5.8.0`
->
-> mongoDB: `v3.6.3`
+> <b>Node.js:</b> `v8.9.4 LTS`<br>
+> <b>npm:</b> `v5.8.0`<br>
+> <b>mongoDB:</b> `v3.6.3`<br>
 
 ### Set Enviornment
 1. Start mongoDB
@@ -98,7 +153,7 @@ Start middleware at localhost:3001
 cd ~/artbook/node
 npm run start
 ```
-> To change port that the middleware runs on, change the port number at server.js Line 3.
+> To change port where the middleware runs on, change the port number at server.js Line 3.
 
 
 ## Shutdown

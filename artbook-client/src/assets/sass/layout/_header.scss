@@ -1,0 +1,48 @@
+.title{
+    position: relative;
+    background-color: transparent;
+    z-index: 20;
+
+    &__portal-group {
+        position: absolute;
+        top: 4rem;
+        right: 4rem;
+        /* to centre the element */
+        // transform: translate(-50%, 50%);
+        text-align: center;
+    }
+}
+
+.header {
+    height: 95vh;
+    background-image: linear-gradient(
+        to left bottom,
+        rgba($color-arts-primary, 0.8),
+        rgba($color-arts-secondary, 0.8)), 
+        url(https://thespinoff.scdn5.secure.raxcdn.com/wp-content/uploads/2017/12/2017-lindauer-install-6.jpg);
+    background-size: cover;
+    background-position: top;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 100vh, 0 100%);
+    /* to crop the graph */
+    // clip-path: polygon(0 0, 100% 0, 100% 90vh, 0 100%);
+
+    &__logo-box {
+        position: absolute;
+        top: 4rem;
+        left: 4rem; 
+    }
+    
+    &__logo {
+        height: 6.5rem;
+    }
+    
+    &__text-box {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        /* to centre the element */
+        transform: translate(-50%, 50%);
+        text-align: center;
+    }
+}
