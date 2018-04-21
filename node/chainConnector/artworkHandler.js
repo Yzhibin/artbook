@@ -151,13 +151,15 @@ class artworkHandler {
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
+            console.log(req)
             let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', req.agencyId)
+            console.log("1")
             let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', req.artworkId)
-
+            console.log("2")
             let consent = await factory.newTransaction('org.acme.artbook', 'consentArtworkForSale')
             consent.agency = agencyRelation
             consent.art = artworkRelation
-
+            console.log("3")
             let result = await conn.bizNetworkConnection.submitTransaction(consent)
 
             conn.bizNetworkConnection.disconnect()
@@ -165,7 +167,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:consentForSale', error)
-
+            return error
         }
     }
 

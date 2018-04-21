@@ -55,7 +55,7 @@ exports.login = function (req, res) {
   var handlerInstance = new agencyHandler(req.body.email + '@artbook')
   handlerInstance.getAgency(req.body.email).then(
     function (agency) {
-      if (result instanceof Error)
+      if (agency instanceof Error)
         res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
       else {
         res.json(agency)

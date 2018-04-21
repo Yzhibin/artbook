@@ -76,8 +76,18 @@ node insertion.js
 1. Go to [Artbook Homepage](http://localhost:8080/)
 2. Scroll down to see some highlighted artworks being displayed.
 3. As a user, click *Individual* at the top-right corner, a log-in window will promt. Then click *Sign up*.
-4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account will be ***Seller***
-5. Repeat step 3 and step 4 to create another account, which will be used as ***Buyer***
+4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account A will be ***Seller***
+5. Repeat step 3 and step 4 to create another account B, which will be used as ***Buyer***
+- Use Case 1 : "Seller A approaches an Artbook branch to register his artwork to be an asset on chain"
+6.  Login as a Branch staff --> navigate to *All Artworks* then click *Add New Artwork* --> fill in all required fields (owner email should be A's) and remember to upload a picture.
+7. After the artwork has been created and added to A, staff should proceed to click *add document* to #TODO supporting documents on chain
+8.  *view detail* #TODO
+- Use Case 2 : "Seller A gives an agency to give his consent for the artwork to be on sale at agency's place"
+9. Login as an agency staff, search the artwork by artworkId (with previous transaction history) provided by A (should be the one you just added!) --> *view document* --> inspect transfer history on the left.
+10. *engage owner for consent*, fill in the ownerEmail and click the search button, the user detail will be shown, click *confirm* to send out the email to owner A. 
+11. A open the email and follow the instructions, fill in email, password and the otp recieved from the email --> to give consent. 
+12. Now you can see the artwork 
+
 
 ## Guide for Server Local Deployment
 If you would like to deploy a local version of the Artbook server, instead of using the cloud server, you can follow this guide.

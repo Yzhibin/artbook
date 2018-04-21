@@ -22,7 +22,7 @@ exports.createBranch = function (req, res) {
         id: userInfo.account
     }
 
-    bcrypt.genSaltS(function (err, salt) {
+    bcrypt.genSalt(function (err, salt) {
         if (err) {
             console.log('bcrypt.genSalt ERR')
         }

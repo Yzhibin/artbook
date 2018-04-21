@@ -59,26 +59,8 @@ rule policeView{
 
 // agency-related
 rule agencyView{
-  description: "Agency can view all agencies"
-  participant(p): "org.acme.artbook.Agency"
-  operation: READ
-  resource(r): "org.acme.artbook.Agency"
-  condition: (true)
-  action: ALLOW
-}
-
-rule agencyBranch{
-  description: "Branch (Authority) can view all agencies"
-  participant(p): "org.acme.artbook.Branch"
-  operation: READ
-  resource(r): "org.acme.artbook.Agency"
-  condition: (true)
-  action: ALLOW
-}
-
-rule agencyPolice{
-  description: "Police (Authority) can view all agencies"
-  participant(p): "org.acme.artbook.Police"
+  description: "All participants can view agency"
+  participant(p): "org.hyperledger.composer.system.Participant"
   operation: READ
   resource(r): "org.acme.artbook.Agency"
   condition: (true)
@@ -177,7 +159,7 @@ rule ownerConsentForSale{
  operation: UPDATE
   resource(r): "org.acme.artbook.Artwork"
   transaction(tx): "org.acme.artbook.consentArtworkForSale"
-  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  condition: (p.getIdentifier() == tx.art.owner.getIdentifier())
   action: ALLOW
 }
 
@@ -263,7 +245,7 @@ rule documentPolice{
 
 rule documentAgency{
   description: "Agency can view supporting document asset "
-  participant(p): "org.acme.artbook.Police"
+  participant(p): "org.acme.artbook.Agency"
   operation: READ
   resource(r): "org.acme.artbook.SupportingDocument"
   condition: (true)

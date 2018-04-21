@@ -22,7 +22,7 @@ exports.requestForConsent = function (req, res) {
     const artworkHandlerInstance = new artworkHandler(`${agencyId}@artbook`)
     artworkHandlerInstance.viewArtwork(artworkId).then(
         function (artwork) {
-            if (result instanceof Error)
+            if (artwork instanceof Error)
                 res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
             else if (artwork.onSale)
                 res.status(404).send({ error: 'Artwork is on sale' })

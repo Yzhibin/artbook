@@ -8,11 +8,8 @@ function consentArtworkForSale(consent){
     consent.art.handler = consent.agency;
     consent.art.onSale = true;
     
-    return getParticipantRegistry('org.acme.artbook.Agency')
-    .then (function (AgencyRegistry){
-        return AgencyRegistry.update(consent.agency);
-    }).then(function (){
-    return getAssetRegistry('org.acme.artbook.Artwork')})
+    
+    return getAssetRegistry('org.acme.artbook.Artwork')
     .then (function (ArtworkRegistry){
         return ArtworkRegistry.update(consent.art);
     })

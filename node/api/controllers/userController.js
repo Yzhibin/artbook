@@ -59,7 +59,7 @@ exports.login = function (req, res) {
   var handlerInstance = new userHandler(req.body.email + '@artbook')
   handlerInstance.getUser(req.body.email).then(
     function (user) {
-      if (result instanceof Error)
+      if (user instanceof Error)
         res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
       else {
         res.json(user)
@@ -77,7 +77,7 @@ exports.getUser = function (req, res) {
     var handlerInstance = new userHandler(req.header('Id') + '@artbook')
     handlerInstance.getUser(req.params.userId).then(
       function (user) {
-        if (result instanceof Error)
+        if (user instanceof Error)
           res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
         else {
           res.json(user)
