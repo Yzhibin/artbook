@@ -17,9 +17,15 @@ exports.upload = function (req, res) {
   new_file.name = req.file.originalname
 
   new_file.save(function (err, file) {
+    fs.unlink(req.file.path, (error) => {
+      if (err) console.log('Error while removing file');
+      console.log('File is deleted');
+    })
     if (err)
       res.send(err);
-    res.json(file.id);
+    else
+      res.json(file.id);
+
   })
 };
 

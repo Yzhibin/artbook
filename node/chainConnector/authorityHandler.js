@@ -46,7 +46,7 @@ class authorityHandler {
         } catch (error) {
             console.log(error)
             console.log('authorityHandler:createBranch', error)
-            throw error
+            return error
         }
     }
 
@@ -64,7 +64,7 @@ class authorityHandler {
         } catch (error) {
             console.log(error)
             console.log('authorityHandler:getBranch', error)
-            throw error
+            return error
         }
     }
 
@@ -100,7 +100,7 @@ class authorityHandler {
         } catch (error) {
             console.log(error)
             console.log('authorityHandler:createPolice', error)
-            throw error
+            return error
         }
     }
 
@@ -118,7 +118,7 @@ class authorityHandler {
         } catch (error) {
             console.log(error)
             console.log('authorityHandler:getPolice', error)
-            throw error
+            return error
         }
     }
 }

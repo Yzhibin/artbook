@@ -39,13 +39,17 @@ exports.createUser = function (req, res) {
       var adminHandlesNewUser = new userHandler('admin@artbook')
       adminHandlesNewUser.createUser(userOnChain).then(
         function (result) {
-          var new_user = new User(userOffChain)
-          new_user.save(function (err, user) {
-            if (err)
-              res.send(err);
-            else
-              res.json({ email: userInfo.email });
-          })
+          if (result instanceof Error)
+            res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+          else {
+            var new_user = new User(userOffChain)
+            new_user.save(function (err, user) {
+              if (err)
+                res.send(err);
+              else
+                res.json({ email: userInfo.email });
+            })
+          }
         })
     })
   })
@@ -55,7 +59,11 @@ exports.login = function (req, res) {
   var handlerInstance = new userHandler(req.body.email + '@artbook')
   handlerInstance.getUser(req.body.email).then(
     function (user) {
-      res.json(user)
+      if (result instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else {
+        res.json(user)
+      }
     })
 };
 
@@ -66,10 +74,14 @@ exports.getUser = function (req, res) {
       console.log('User not found')
       res.status(404).send({ error: 'Invalid user email!' })
     }
-  var handlerInstance = new userHandler(req.header('Id')+'@artbook')
-  handlerInstance.getUser(req.params.userId).then(
-    function (user) {
-      res.json(user)
-    })
+    var handlerInstance = new userHandler(req.header('Id') + '@artbook')
+    handlerInstance.getUser(req.params.userId).then(
+      function (user) {
+        if (result instanceof Error)
+          res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+        else {
+          res.json(user)
+        }
+      })
   })
 };

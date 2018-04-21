@@ -53,7 +53,7 @@ class documentHandler {
         } catch (error) {
             console.log(error)
             console.log('documentHandler:addDocument', error)
-            throw error
+            return error
         }
     }
 
@@ -85,7 +85,7 @@ class documentHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)
-            throw error
+            return error
         }
     }
 

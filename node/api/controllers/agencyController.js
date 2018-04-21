@@ -35,13 +35,17 @@ exports.createUser = function (req, res) {
       var adminHandlesNewUser = new agencyHandler('admin@artbook')
       adminHandlesNewUser.createAgency(userOnChain).then(
         function (result) {
-          var new_user = new Agency(userOffChain)
-          new_user.save(function (err, agency) {
-            if (err)
-              res.send(err);
-            else
-              res.json({ email: userInfo.email });
-          })
+          if (result instanceof Error)
+            res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+          else {
+            var new_user = new Agency(userOffChain)
+            new_user.save(function (err, agency) {
+              if (err)
+                res.send(err);
+              else
+                res.json({ email: userInfo.email });
+            })
+          }
         })
     })
   })
@@ -51,7 +55,10 @@ exports.login = function (req, res) {
   var handlerInstance = new agencyHandler(req.body.email + '@artbook')
   handlerInstance.getAgency(req.body.email).then(
     function (agency) {
-      res.json(agency)
-    }
-  )
+      if (result instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else {
+        res.json(agency)
+      }
+    })
 }
