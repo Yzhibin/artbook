@@ -5,7 +5,7 @@ The ultimate blockchain solution for artwork trade industry
 
 > ***On the Cloud***
 >
-> The Blockchain component and middleware component are running on Azure virtual machine at address *52.187.128.189:3001*
+> The Blockchain component and middleware component are running on Azure virtual machine at address *52.187.128.189:3000*
 > 
 > The client app is connected to the cloud server by default. To connect the client app with a local server, please refer to the Guide for Client App Deployment.
 >
@@ -22,19 +22,23 @@ Web application
 ><b style="color:#DB0A5B;">Sass</b> for customized styling. sass files can be found in `artbook-client/src/assets/sass`<br/>
 
 
-### Build Setup
+### Setup 
 
+1. 
 ``` bash
 # install dependencies
 npm install
 
 # compile sass code to css code
 npm run compile:sass
+```
 
+
+``` bash
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+# OPTIONAL: build for production with minification
 npm run build
 
 ```
@@ -148,7 +152,7 @@ npm install --production
 ```
 
 ### Run Middleware
-Start middleware at localhost:3001
+Start middleware at localhost:3000
 ```
 cd ~/artbook/node
 npm run start

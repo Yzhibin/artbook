@@ -7,28 +7,50 @@ var artwork = require('../controllers/artworkController'),
   consent = require('../controllers/consentController'),
   historian = require('../controllers/historianController')
 
+var Schema = require('../models/schema'),
+  User = Schema.User,
+  Agency = Schema.Agency,
+  Authority = Schema.Authority;
+
 var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 module.exports = function (app, passport) {
 
-
   // Authentication
   function isAuthenticated(req, res, next) {
-    next()
+    if (req.isAuthenticated())
+      next()
+    else
+      res.status(403).send({ error: 'Please log in' });
   }
 
-  function isAgecy(req, res, next) {
-    next()
+  function isAgency(req, res, next) {
+    if (req.isAuthenticated() && req.user instanceof Agency)
+      next()
+    else
+      res.status(403).send({ error: 'Agency identity is required' });
   }
 
-  function isBranch(req, res, next) {
-    next()
+  function isAuthority(req, res, next) {
+    if (req.isAuthenticated() && req.user instanceof Authority)
+      next()
+    else
+      res.status(403).send({ error: 'Authority identity is required' });
   }
 
-  function isPolice(req, res, next) {
-    next()
-  }
+  /*
+    API Protection 
+  */
+  // Front-end not utilise cookie to maintain login session. API protector is not able to get login identity
 
+  // app.all('*', function (req, res, next) {
+  //   if (/^\/agency\/*/.test(req.path))
+  //     isAgency(req, res, next)
+  //   else if (/^\/missing\/*/.test(req.path) || /^\/recover\/*/.test(req.path))
+  //     isAuthority(req, res, next)
+  //   else
+  //     isAuthenticated(req, res, next);
+  // });
 
   // Sign-up
   app.post('/user', user.createUser)

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { baseUrl } from './const';
+// import { baseUrl } from './const';
 
 // path to be used to connect middleware running on virtual machine
 export const VM_PATH = "http://172.25.96.201:3000/" 
