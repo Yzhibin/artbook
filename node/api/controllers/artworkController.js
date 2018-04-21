@@ -6,16 +6,6 @@ var mongoose = require('mongoose'),
 var artworkHandler = require('../../chainConnector/artworkHandler')
 var documentHandler = require('../../chainConnector/documentHandler')
 
-/*
-exports.list_all_tasks = function(req, res) {
-Task.find({}, function(err, task) {
-  if (err)
-    res.send(err);
-  res.json(task);
-});
-};
-*/
-
 exports.createArtwork = function (req, res) {
   var artworkInfo = req.body
   var artworkOnChain = {
@@ -25,28 +15,29 @@ exports.createArtwork = function (req, res) {
     createTime: artworkInfo.createTime,
     location: artworkInfo.location,
     description: artworkInfo.description,
-
-    // what else?
   }
 
   //create new artwork asset on chain
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.createArtwork(artworkOnChain).then(
     function (artwork) {
-      //create new artwork in mongoDB
-      var artworkOffChain = {
-        id: artwork.artworkId,
-        name: artwork.title
+      if (artwork instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else {
+        //create new artwork in mongoDB
+        var artworkOffChain = {
+          id: artwork.artworkId,
+          name: artwork.title
+        }
+        var new_artwork = new Artwork(artworkOffChain)
+        new_artwork.save(function (err, result) {
+          if (err)
+            res.send(err);
+          //return artworkOnChain
+          res.json(artwork);
+        })
       }
-      var new_artwork = new Artwork(artworkOffChain)
-      new_artwork.save(function (err, result) {
-        if (err)
-          res.send(err);
-        //return artworkOnChain
-        res.json(artwork);
-      })
-    }
-  )
+    })
 };
 
 exports.addArtworkPic = function (req, res) {
@@ -55,12 +46,15 @@ exports.addArtworkPic = function (req, res) {
     fileId: req.body.fileId // documentId in mongoDB of the picture file
   }
 
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.addPicture(pictureInfo).then(
     function (artwork) {
-      console.log(artwork)
-      //const json = JSON.stringify(artwork);
-      res.send(artwork);
+      if (artwork instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else {
+        console.log(artwork)
+        res.send(artwork);
+      }
     })
 
 };
@@ -73,23 +67,28 @@ exports.viewArtwork = function (req, res) {
       res.status(404).send({ error: 'Invalid ArtworkId!' })
     }
     //retrieve from chain
-    var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+    var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
     artworkHandlerInstance.viewArtwork(req.params.artworkId).then(
       function (updatedArtwork) {
-        res.json(updatedArtwork);
+        if (updatedArtwork instanceof Error)
+          res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+        else
+          res.json(updatedArtwork);
       })
   })
 
 };
 
 exports.getAllArtworks = function (req, res) {
-
-    //retrieve from chain
-    var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
-    adminHandlesNewArtwork.getAllArtworks().then(
-      function (artworks) {
+  //retrieve from chain
+  var adminHandlesNewArtwork = new artworkHandler('admin@artbook')
+  adminHandlesNewArtwork.getAllArtworks().then(
+    function (artworks) {
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
         res.json(artworks);
-      })
+    })
 
 };
 
@@ -103,28 +102,37 @@ exports.addDocumentToArtwork = function (req, res) {
     summary: req.body.summary
   }
 
-  var documentHandlerInstance = new documentHandler(req.header('Id')+'@artbook')
+  var documentHandlerInstance = new documentHandler(req.header('Id') + '@artbook')
   documentHandlerInstance.addDocument(documentInfo).then(
     function (document) {
-      //return updated artwork
-      res.json(document);
+      if (document instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        //return updated artwork
+        res.json(document);
     })
 };
 
 //Get all supporting documents of an artwork (by artworkId)
 exports.getArtworkDocuments = function (req, res) {
-  var documentHandlerInstance = new documentHandler(req.header('Id')+'@artbook')
+  var documentHandlerInstance = new documentHandler(req.header('Id') + '@artbook')
   documentHandlerInstance.getDocuments(req.params.artworkId).then(
     function (documents) {
-      res.json(documents);
+      if (documents instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(documents);
     })
 };
 
 exports.getOwnArtworks = function (req, res) {
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.getOwnArtworks(req.params.ownerId).then(
     function (artworks) {
-      res.json(artworks);
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(artworks);
     })
 };
 
@@ -133,18 +141,24 @@ exports.markMissing = function (req, res) {
     artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.markMissing(missingInfo).then(
     function (artworks) {
-      res.json(artworks);
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(artworks);
     })
 }
 
 exports.getAllMissing = function (req, res) {
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.getAllMissing().then(
     function (artworks) {
-      res.json(artworks);
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(artworks);
     })
 }
 
@@ -153,17 +167,23 @@ exports.recoverMissing = function (req, res) {
     artworkId: req.body.artworkId,
     documentId: req.body.documentId
   }
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.recoverMissing(recoverInfo).then(
     function (artworks) {
-      res.json(artworks);
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(artworks);
     })
 }
 
 exports.getAgencyArtworks = function (req, res) {
-  var artworkHandlerInstance = new artworkHandler(req.header('Id')+'@artbook')
+  var artworkHandlerInstance = new artworkHandler(req.header('Id') + '@artbook')
   artworkHandlerInstance.getAgencyArtworks(req.params.agencyId).then(
     function (artworks) {
-      res.json(artworks);
+      if (artworks instanceof Error)
+        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+      else
+        res.json(artworks);
     })
 };

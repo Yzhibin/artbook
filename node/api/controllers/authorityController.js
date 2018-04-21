@@ -22,7 +22,7 @@ exports.createBranch = function (req, res) {
         id: userInfo.account
     }
 
-    bcrypt.genSalt(function (err, salt) {
+    bcrypt.genSaltS(function (err, salt) {
         if (err) {
             console.log('bcrypt.genSalt ERR')
         }
@@ -37,13 +37,17 @@ exports.createBranch = function (req, res) {
             var adminHandlesNewUser = new authorityHandler('admin@artbook')
             adminHandlesNewUser.createBranch(userOnChain).then(
                 function (result) {
-                    var new_user = new Authority(userOffChain)
-                    new_user.save(function (err, user) {
-                        if (err)
-                            res.send(err);
-                        else
-                            res.json({ account: userInfo.account });
-                    })
+                    if (result instanceof Error)
+                        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                    else {
+                        var new_user = new Authority(userOffChain)
+                        new_user.save(function (err, user) {
+                            if (err)
+                                res.send(err);
+                            else
+                                res.json({ account: userInfo.account });
+                        })
+                    }
                 })
         })
     })
@@ -75,13 +79,17 @@ exports.createPolice = function (req, res) {
             var adminHandlesNewUser = new authorityHandler('admin@artbook')
             adminHandlesNewUser.createPolice(userOnChain).then(
                 function (result) {
-                    var new_user = new Authority(userOffChain)
-                    new_user.save(function (err, user) {
-                        if (err)
-                            res.send(err);
-                        else
-                            res.json({ account: userInfo.account });
-                    })
+                    if (result instanceof Error)
+                        res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                    else {
+                        var new_user = new Authority(userOffChain)
+                        new_user.save(function (err, user) {
+                            if (err)
+                                res.send(err);
+                            else
+                                res.json({ account: userInfo.account });
+                        })
+                    }
                 })
         })
     })
@@ -96,13 +104,19 @@ exports.login = function (req, res) {
     if (account.charAt(0) == "0") {
         handlerInstance.getBranch(account).then(
             function (user) {
-                res.json(user)
+                if (user instanceof Error)
+                    res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                else
+                    res.json(user)
             }
         )
     } else {
         handlerInstance.getPolice(account).then(
             function (user) {
-                res.json(user)
+                if (user instanceof Error)
+                    res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                else
+                    res.json(user)
             }
         )
     }

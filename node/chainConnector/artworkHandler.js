@@ -57,7 +57,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:createArtwork', error)
-            throw error
+            return error
         }
     }
 
@@ -86,7 +86,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:addPicture', error)
-            throw error
+            return error
         }
 
     }
@@ -110,7 +110,7 @@ class artworkHandler {
         } catch (error) {
             //console.log(error)
             console.log('artworkHandler:Artwork', error)
-            throw error
+            return error
         }
 
     }
@@ -130,7 +130,7 @@ class artworkHandler {
         } catch (error) {
             //console.log(error)
             console.log('artworkHandler:Artwork', error)
-            throw error
+            return error
         }
 
     }
@@ -195,7 +195,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)
-            throw error
+            return error
         }
     }
     /**
@@ -327,7 +327,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:Artwork', error)
-            throw error
+            return error
         }
     }
 
@@ -361,7 +361,7 @@ class artworkHandler {
         } catch (error) {
             console.log(error)
             console.log('artworkHandler:getAgencyArtworks', error)
-            throw error
+            return error
         }
     }
 

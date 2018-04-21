@@ -45,7 +45,7 @@ class agencyHandler {
         } catch (error) {
             console.log(error)
             console.log('agencyHandler:createAgency', error)
-            throw error
+            return error
         }
     }
 
@@ -63,7 +63,7 @@ class agencyHandler {
         } catch (error) {
             console.log(error)
             console.log('agencyHandler:getAgency', error)
-            throw error
+            return error
         }
     }
 }

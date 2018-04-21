@@ -12,6 +12,8 @@ class userHandler {
      * @param userInfo
      * userId: String
      * name: String
+     * passport: String
+     * mobile: String
      */
     async createUser(userInfo) {
         // Establish connection with blockchain network
@@ -44,7 +46,7 @@ class userHandler {
         } catch (error) {
             console.log(error)
             console.log('userHandler:createUser', error)
-            throw error
+            return error
         }
     }
 
@@ -63,7 +65,7 @@ class userHandler {
         } catch (error) {
             console.log(error)
             console.log('userHandler:getUser', error)
-            throw error
+            return error
         }
     }
 }
