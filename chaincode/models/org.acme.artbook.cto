@@ -39,9 +39,11 @@ asset Artwork identified by artworkId {
   o Boolean lost
   o Boolean onSale
   o String[] pictures //documentId in mongoDB 
+  o Boolean depositOnHold 
   o Double currentTradingPrice optional
   --> User owner 
   --> Agency handler optional
+
 }
 
 asset SupportingDocument identified by documentId {
@@ -63,17 +65,17 @@ transaction consentArtworkForSale {
 //submited by handler of the artwork to indicate a trade process had been initiated
 //and inform buyer to pay deposit to a third-party payment solution partner
 transaction requestForDeposit {
-  --> Agency handler
+  o Double price 
   --> User buyer
   --> Artwork art
-  o Double price 
+  --> Agency handler //who initiate this trade
+  
 }
 
 //submmited by buyer (user) once payment solution partner confirm the deposit has been paid
 transaction confirmDeposit {
-  o Double deposit
-  --> User buyer
   --> Artwork art
+  --> User buyer //whose deposit is confirmed
 }
 
 //only the authorzied agency can perform

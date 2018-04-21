@@ -1,5 +1,7 @@
-//CREATE for all participants will be done by network admin
+//CREATE for all participant assets will be done by network admin
+//READ for all transactions (history) will be done by network admin
 
+// user-related
 rule userBranch{
   description: "Branch (Authority) has all access to user asset."
   participant(p): "org.acme.artbook.Branch"
@@ -36,6 +38,7 @@ rule userPolice{
   action: ALLOW
 }
 
+// authority-related
 rule branchView{
   description: "Branch can view all branches"
   participant(p): "org.acme.artbook.Branch"
@@ -54,6 +57,7 @@ rule policeView{
   action: ALLOW
 }
 
+// agency-related
 rule agencyView{
   description: "Agency can view all agencies"
   participant(p): "org.acme.artbook.Agency"
@@ -81,6 +85,7 @@ rule agencyPolice{
   action: ALLOW
 }
 
+// artwork-related
 rule artworkUser{
   description: "User can only view artworks if he is the owner"
   participant(p): "org.acme.artbook.User"
@@ -108,6 +113,16 @@ rule artworkPoliceView{
   action: ALLOW
 }
 
+rule artworkAgencyView{
+  description: "Agency can view artwork asset"
+  participant(p): "org.acme.artbook.Agency"
+  operation: READ
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (true)
+  action: ALLOW
+}
+
+// transaction-related: markMissingArtwork
 rule policeSubmitMarkTransaction{
   description: "Police (Authority) can submit Transaction-markMissing"
   participant(p): "org.acme.artbook.Police"
@@ -126,6 +141,7 @@ rule policeMarkMissing{
   action: ALLOW
 }
 
+// transaction-related: recoverMissingArtwork
 rule policeSubmitRecoverTransaction{
   description: "Police (Authority) can submit Transaction-recoverMissing"
   participant(p): "org.acme.artbook.Police"
@@ -145,16 +161,8 @@ rule policeRecoverMissing{
   action: ALLOW
 }
 
-rule artworkAgencyView{
-  description: "Agency can view artwork asset"
-  participant(p): "org.acme.artbook.Agency"
-  operation: READ
-  resource(r): "org.acme.artbook.Artwork"
-  condition: (true)
-  action: ALLOW
-}
-
-rule userSubmitConsentTransaction{
+// transaction-related: consentForSale
+rule ownerSubmitConsentTransaction{
   description: "User can submit Transaction-consentForSale"
   participant(p): "org.acme.artbook.User"
   operation: CREATE
@@ -163,7 +171,7 @@ rule userSubmitConsentTransaction{
   action: ALLOW
 }
 
-rule userConsentForSale{
+rule ownerConsentForSale{
   description: "User can update artwork asset through Transaction-consentArtworkForSale"
   participant(p): "org.acme.artbook.User"
  operation: UPDATE
@@ -173,7 +181,49 @@ rule userConsentForSale{
   action: ALLOW
 }
 
-rule userSubmitTransferTransaction{
+// transaction-related: requestForDeposit
+rule agencySubmitRequestTransaction{
+  description: "Agency can submit Transaction-requestForDeposit "
+  participant(p): "org.acme.artbook.Agency"
+  operation: CREATE
+  resource(r): "org.acme.artbook.requestForDeposit"
+  condition: (true)
+  action: ALLOW
+}
+
+rule agencyRequestForDeposit{
+  description: "Agency can update artwork asset through Transaction-requestForDeposit if it is the handler of the on_sale artwork"
+  participant(p): "org.acme.artbook.Agency"
+  operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.requestForDeposit"
+  condition: (p.getIdentifier() == tx.art.handler.getIdentifier())
+  action: ALLOW
+}
+
+// transaction-related: confirmDeposit
+rule buyerSubmitConfirmTransaction{
+  description: "User can submit Transaction-confirmDeposit if the deposit is verified by third-party payment partner"
+  participant(p): "org.acme.artbook.User"
+  operation: CREATE
+  resource(r): "org.acme.artbook.confirmDeposit"
+  condition: (true)
+  action: ALLOW
+}
+
+rule buyerConfirmDeposit{
+  description: "User can update artwork asset through Transaction-confirmDeposit"
+  participant(p): "org.acme.artbook.Agency"
+  operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.confirmDeposit"
+  condition: (p.getIdentifier() == tx.buyer.getIdentifier())
+  action: ALLOW
+}
+
+
+// transaction-related: transferOwernship
+rule ownerSubmitTransferTransaction{
   description: "User can submit Transaction-transferOwnership"
   participant(p): "org.acme.artbook.User"
   operation: CREATE
@@ -182,16 +232,17 @@ rule userSubmitTransferTransaction{
   action: ALLOW
 }
 
-rule userTransferOwnership{
+rule ownerTransferOwnership{
   description: "User can update artwork asset through Transaction-consentArtworkForSale"
   participant(p): "org.acme.artbook.User"
- operation: UPDATE
+  operation: UPDATE
   resource(r): "org.acme.artbook.Artwork"
   transaction(tx): "org.acme.artbook.transferOwnership"
-  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  condition: (p.getIdentifier() == tx.art.owner.getIdentifier())
   action: ALLOW
 }
 
+// document-related
 rule documentBranch{
   description: "Branch have all access supporting document asset "
   participant(p): "org.acme.artbook.Branch"
@@ -227,43 +278,6 @@ rule documentUser{
   condition: (p.getIdentifier() == r.art.owner.getIdentifier())
   action: ALLOW
 }
-
-// // archive..
-// rule historianAccess{
-//   description: "All participants have the permission to create HistorianRecord assets."
-//   participant(p): "org.hyperledger.composer.system.Participant"
-//   operation: CREATE,READ
-//   resource(r): "org.hyperledger.composer.system.HistorianRecord"
-//   condition: (true)
-//   action: ALLOW
-// }
-
-// rule userAllAccess{
-//   description: "All participants have the permission to create HistorianRecord assets."
-//   participant(p): "org.acme.artbook.User"
-//   operation: ALL
-//   resource(r): "org.acme.artbook.*"
-//   condition: (true)
-//   action: ALLOW
-// }
-
-// rule agencyAllAccess{
-//   description: "All participants have the permission to create HistorianRecord assets."
-//   participant(p): "org.acme.artbook.Agency"
-//   operation: ALL
-//   resource(r): "org.acme.artbook.*"
-//   condition: (true)
-//   action: ALLOW
-// }
-
-// rule authorityAllAccess{
-//   description: "All participants have the permission to create HistorianRecord assets."
-//   participant(p): "org.acme.artbook.Authority"
-//   operation: ALL
-//   resource(r): "org.acme.artbook.*"
-//   condition: (true)
-//   action: ALLOW
-// }
 
 
 // System Access

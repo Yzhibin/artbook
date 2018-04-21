@@ -41,6 +41,7 @@ class artworkHandler {
             artwork.description = artworkInfo.description
             artwork.lost = false
             artwork.onSale = false
+            artwork.depositOnHold = false;
             artwork.pictures = []
 
             // Get User
@@ -167,6 +168,7 @@ class artworkHandler {
 
         }
     }
+
     async getOwnArtworks(ownerId) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
@@ -198,6 +200,67 @@ class artworkHandler {
             return error
         }
     }
+
+    async requestForDeposit(requestInfo) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
+
+        try {
+            // Get Factory
+            let factory = await conn.businessNetworkDefinition.getFactory()
+
+            let userRelation = await factory.newRelationship('org.acme.artbook', 'User', confirmInfo.buyerId)
+            let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', requestInfo.agencyId)
+            let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', requestInfo.artworkId)
+
+            let request = await factory.newTransaction('org.acme.artbook', 'requestForDeposit')
+            request.handler = agencyRelation
+            request.art = artworkRelation
+            request.buyer = userRelation
+            request.price = Number.parseFloat(requestInfo.price)
+
+            let result = await conn.bizNetworkConnection.submitTransaction(request)
+
+            conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log('artworkHandler:requestForDeposit', error)
+            return error
+
+        }
+    }
+
+    async confirmDeposit(confirmInfo) {
+        // Establish connection with blockchain network
+        const conn = new networkConnection();
+        await conn.init(this.cardname)
+
+        try {
+            // Get Factory
+            let factory = await conn.businessNetworkDefinition.getFactory()
+
+            let userRelation = await factory.newRelationship('org.acme.artbook', 'User', confirmInfo.buyerId)
+            let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', confirmInfo.artworkId)
+
+            let confirm = await factory.newTransaction('org.acme.artbook', 'confirmDeposit')
+
+            confirm.art = artworkRelation
+            confirm.buyer = userRelation
+            confirm.deposit = Number.parseFloat(confirmInfo.deposit)
+
+            let result = await conn.bizNetworkConnection.submitTransaction(confirm)
+
+            conn.bizNetworkConnection.disconnect()
+            return result
+        } catch (error) {
+            console.log('artworkHandler:confirmDeposit', error)
+            return error
+
+        }
+    }
+
+
     /**
      * 
      * @param transferInfo 
@@ -223,18 +286,19 @@ class artworkHandler {
             transfer.agency = agencyRelation
             transfer.art = artworkRelation
             transfer.newOwner = userRelation
-            transfer.amount = Number.parseFloat(transferInfo.price)
+            transfer.price = Number.parseFloat(transferInfo.price)
 
             let result = await conn.bizNetworkConnection.submitTransaction(transfer)
 
             conn.bizNetworkConnection.disconnect()
             return result
         } catch (error) {
-            console.log(error)
             console.log('artworkHandler:transferOwnership', error)
-
+            return error
         }
     }
+
+
     async markMissing(req) {
         // Establish connection with blockchain network
         const conn = new networkConnection();
@@ -261,9 +325,8 @@ class artworkHandler {
             return result
 
         } catch (error) {
-            console.log(error)
             console.log('artworkHandler:markMissing', error)
-
+            return error
         }
 
     }
@@ -294,9 +357,8 @@ class artworkHandler {
             return result
 
         } catch (error) {
-            console.log(error)
             console.log('artworkHandler:recoverMissing', error)
-
+            return error
         }
 
     }

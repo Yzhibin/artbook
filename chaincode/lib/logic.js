@@ -19,21 +19,57 @@ function consentArtworkForSale(consent){
 }
 
 /**
- * transfer ownership of an artwork
+ * initiate a trading process by informing buyer to pay deposit to third-party payment solution partner.
+ * @param {org.acme.artbook.requestForDeposit} request: the requestForDeposit transaction instance
+ * @transaction
+ */
+function requestForDeposit(request){
+    //add currentTradingPrice to the artwork 
+    //having a currentTradingPrice indicates that the artwork is under a trading process
+    request.art.currentTradingPrice = request.price;
+    
+    //update the artwork
+    return getAssetRegistry('org.acme.artbook.Artwork')
+    .then (function (ArtworkRegistry){
+        return ArtworkRegistry.update(request.art);
+    })
+}
+
+/**
+ * mark the status that now the buyer's deposit has been verified as paid.
+ * @param {org.acme.artbook.confirmDeposit} confirm: the confirmDeposit transaction instance
+ * @transaction
+ */
+function confirmDeposit(confirm){
+    //add depositOnHold to the artwork 
+    //having a depositOnHold indicates that buyer has placed his deposit
+    //the artwork is ready for final step: ownership transfer 
+    confirm.art.depositOnHold = true;
+    
+    //update the artwork
+    return getAssetRegistry('org.acme.artbook.Artwork')
+    .then (function (ArtworkRegistry){
+        return ArtworkRegistry.update(confirm.art);
+    })
+}
+
+/**
+ * the owner transfers ownership of his artwork
  * @param {org.acme.artbook.transferOwnership} transfer: the transferOwnership transaction instance
  * @transaction
  */
 function transferOwnership(transfer){
     //change the owner of the artwork
     transfer.art.owner = transfer.newOwner;
-    transfer.art.handler = null;    
-
+    
     //toggle on_sale status
     transfer.art.onSale = false; 
+    //reset all indicators to normal status 
+    transfer.art.handler = null;   
+    transfer.art.currentTradingPrice = null;
+    transfer.art.depositOnHold = false; //assume that payment allocation has been completed by third-party payment partner
     
-    //update the agency 
     //update the artwork
-    
     return getAssetRegistry('org.acme.artbook.Artwork')
     .then (function (ArtworkRegistry){
         return ArtworkRegistry.update(transfer.art);

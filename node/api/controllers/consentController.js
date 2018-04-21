@@ -104,65 +104,50 @@ exports.requestForPayment = function (req, res) {
     const price = req.body.price
     const agencyEmail = req.header('Id')
 
-    const userHandlerInstance = new userHandler(agencyEmail + '@artbook')
-    const agencyHandlerInstance = new agencyHandler(agencyEmail + '@artbook')
     const artworkHandlerInstance = new artworkHandler(agencyEmail + '@artbook')
 
-    agencyHandlerInstance.getAgency(agencyEmail)
-        .then(function (agency) {
-            if (agency instanceof Error)
-                res.status(400).send({ error: 'Incorrect information. Agency not found' })
-            else {
-                artworkHandlerInstance.viewArtwork(artworkId)
-                    .then(function (artwork) {
-                        if (artwork instanceof Error)
-                            res.status(400).send({ error: 'Incorrect information. Artwork not found' })
-                        else {
-                            if (!artwork.onSale || artwork.handler.email !== agencyEmail)
-                                res.status(404).send({ error: 'Artwork not found' })
-                            else {
-                                userHandlerInstance.getUser(buyerEmail)
-                                    .then(function (buyer) {
-                                        if (result instanceof Error)
-                                            res.status(400).send({ error: 'Incorrect information. Buyer not found' })
-                                        else {
-                                            const salt = randomGen()
-                                            var token = new Token({
-                                                token: salt,
-                                                type: 'Pay',
-                                                artwork: artwork.artworkId,
-                                                agency: agencyEmail,
-                                                buyer: buyer.email,
-                                                owner: artwork.owner.email,
-                                                price: price
-                                            })
-                                            token.save(function (err, result) {
-                                                if (err)
-                                                    res.send(err)
-                                                else {
-                                                    mailer.sendMail({
-                                                        receiverEmail: buyerEmail,
-                                                        receiverName: buyer.name,
-                                                        mailType: 'BuyerPayment',
-                                                        agency: agency.name,
-                                                        artwork: artwork.title,
-                                                        artist: artwork.artist,
-                                                        createTime: artwork.createTime,
-                                                        description: artwork.description,
-                                                        price: price,
-                                                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
-                                                        // backend api: ${host}:3000/user/payment/${salt}
-                                                    })
-                                                    res.json('Successful')
-                                                }
-                                            })
-                                        }
-                                    })
-                            }
-                        }
+    artworkHandlerInstance.requestForDeposit({
+        artworkId: artworkId,
+        agencyId: agencyEmail,
+        buyerId: buyerEmail,
+        price: price
+    }).then(function (done) {
+        if (done instanceof Error)
+            res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+        else {
+            //save token to localDB
+            const salt = randomGen()
+            var token = new Token({
+                token: salt,
+                type: 'Pay',
+                artwork: artwork.artworkId,
+                agency: agencyEmail,
+                buyer: buyer.email,
+                owner: artwork.owner.email,
+                price: price
+            })
+            token.save(function (err, result) {
+                if (err)
+                    res.send(err)
+                else {
+                    mailer.sendMail({
+                        receiverEmail: buyerEmail,
+                        receiverName: buyer.name,
+                        mailType: 'BuyerPayment',
+                        agency: agency.name,
+                        artwork: artwork.title,
+                        artist: artwork.artist,
+                        createTime: artwork.createTime,
+                        description: artwork.description,
+                        price: price,
+                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
+                        // backend api: ${host}:3000/user/payment/${salt}
                     })
-            }
-        })
+                    res.json('Successful')
+                }
+            })
+        }
+    })
 }
 
 exports.pay = function (req, res) {
@@ -173,75 +158,56 @@ exports.pay = function (req, res) {
         else if (result.expired)
             res.status(404).send({ error: 'Invalid token' })
         else {
-            const ownerEmail = result.owner
-            const userHandlerInstance = new userHandler(ownerEmail + '@artbook')
-            const agencyHandlerInstance = new agencyHandler(ownerEmail + '@artbook')
-            const artworkHandlerInstance = new artworkHandler(ownerEmail + '@artbook')
-            userHandlerInstance.getUser(ownerEmail)
-                .then(function (owner) {
-                    if (owner instanceof Error)
-                        res.status(400).send({ error: 'Incorrect information. Owner not found' })
-                    else {
-                        artworkHandlerInstance.viewArtwork(result.artwork)
-                            .then(function (artwork) {
-                                if (artwork instanceof Error)
-                                    res.status(400).send({ error: 'Incorrect information. Artwork not found' })
-                                else {
-                                    if (artwork.owner.email !== owner.email)
-                                        res.status(404).send({ error: 'Artwork not found' })
-                                    else {
-                                        agencyHandlerInstance.getAgency(result.agency)
-                                            .then(function (agency) {
-                                                if (agency instanceof Error)
-                                                    res.status(400).send({ error: 'Incorrect information. Agency not found' })
-                                                else {
-                                                    if (artwork.handler.email !== agency.email)
-                                                        res.status(404).send({ error: 'Agency not found' })
-                                                    else {
-                                                        const salt = randomGen()
+            const buyerEmail = result.buyer
+            const artworkHandlerInstance = new artworkHandler(buyerEmail + '@artbook')
 
-                                                        var new_token = new Token({
-                                                            token: salt,
-                                                            type: 'Transfer',
-                                                            artwork: result.artwork,
-                                                            agency: result.agency,
-                                                            buyer: result.buyer,
-                                                            owner: result.owner,
-                                                            price: result.price
-                                                        })
-                                                        new_token.save(function (err, saved) {
-                                                            if (err)
-                                                                res.send(err)
-                                                            else {
-                                                                result.update({ expired: true }, function (err, updated) {
-                                                                    if (err)
-                                                                        res.send(err)
-                                                                    else {
-                                                                        mailer.sendMail({
-                                                                            receiverEmail: result.owner,
-                                                                            receiverName: owner.name,
-                                                                            mailType: 'ConsentTransfer',
-                                                                            agency: agency.name,
-                                                                            artwork: artwork.title,
-                                                                            price: result.price,
-                                                                            link: `${host}:3000/user/transferOwnership/${salt}`
-                                                                        })
-                                                                        res.json('Successful')
-                                                                    }
-                                                                })
-                                                            }
-                                                        })
-                                                    }
-                                                }
-                                            })
-                                    }
+
+            artworkHandlerInstance.confirmDeposit({
+                artworkId: result.artwork,
+                buyerId: buyerEmail,
+            }).then(function (done) {
+                if (done instanceof Error)
+                    res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                else {
+                    const salt = randomGen()
+
+                    var new_token = new Token({
+                        token: salt,
+                        type: 'Transfer',
+                        artwork: result.artwork,
+                        agency: result.agency,
+                        buyer: result.buyer,
+                        owner: result.owner,
+                        price: result.price
+                    })
+                    new_token.save(function (err, saved) {
+                        if (err)
+                            res.send(err)
+                        else {
+                            result.update({ expired: true }, function (err, updated) {
+                                if (err)
+                                    res.send(err)
+                                else {
+                                    mailer.sendMail({
+                                        receiverEmail: result.owner,
+                                        receiverName: owner.name,
+                                        mailType: 'ConsentTransfer',
+                                        agency: agency.name,
+                                        artwork: artwork.title,
+                                        price: result.price,
+                                        link: `${host}:3000/user/transferOwnership/${salt}`
+                                    })
+                                    res.json('Successful')
                                 }
                             })
-                    }
-                })
+                        }
+                    })
+                }
+            })
         }
     })
 }
+
 
 exports.transferOwnership = function (req, res) {
     const token = req.params.token
