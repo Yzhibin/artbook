@@ -1,38 +1,269 @@
-rule historianAccess{
-  description: "All participants have the permission to create HistorianRecord assets."
-  participant(p): "org.hyperledger.composer.system.Participant"
-  operation: CREATE,READ
-  resource(r): "org.hyperledger.composer.system.HistorianRecord"
+//CREATE for all participants will be done by network admin
+
+rule userBranch{
+  description: "Branch (Authority) has all access to user asset."
+  participant(p): "org.acme.artbook.Branch"
+  operation: ALL
+  resource(r): "org.acme.artbook.User"
   condition: (true)
   action: ALLOW
 }
 
-rule userAllAccess{
-  description: "All participants have the permission to create HistorianRecord assets."
+rule userSelf{
+  description: "User can view and update himself"
   participant(p): "org.acme.artbook.User"
-  operation: ALL
-  resource(r): "org.acme.artbook.*"
-  condition: (true)
+  operation: READ, UPDATE
+  resource(r): "org.acme.artbook.User"
+  condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW
 }
 
-rule agencyAllAccess{
-  description: "All participants have the permission to create HistorianRecord assets."
+rule userAgency{
+  description: "Agency can view all users (in order to verify their identities for transactions)"
   participant(p): "org.acme.artbook.Agency"
-  operation: ALL
-  resource(r): "org.acme.artbook.*"
+  operation: READ
+  resource(r): "org.acme.artbook.User"
   condition: (true)
   action: ALLOW
 }
 
-rule authorityAllAccess{
-  description: "All participants have the permission to create HistorianRecord assets."
-  participant(p): "org.acme.artbook.Authority"
-  operation: ALL
-  resource(r): "org.acme.artbook.*"
+rule userPolice{
+  description: "Police (Authority) can view all users"
+  participant(p): "org.acme.artbook.Police"
+  operation: READ
+  resource(r): "org.acme.artbook.User"
   condition: (true)
   action: ALLOW
 }
+
+rule branchView{
+  description: "Branch can view all branches"
+  participant(p): "org.acme.artbook.Branch"
+  operation: READ
+  resource(r): "org.acme.artbook.Branch"
+  condition: (true)
+  action: ALLOW
+}
+
+rule policeView{
+  description: "Police can view all polices"
+  participant(p): "org.acme.artbook.Police"
+  operation: READ
+  resource(r): "org.acme.artbook.Police"
+  condition: (true)
+  action: ALLOW
+}
+
+rule agencyView{
+  description: "Agency can view all agencies"
+  participant(p): "org.acme.artbook.Agency"
+  operation: READ
+  resource(r): "org.acme.artbook.Agency"
+  condition: (true)
+  action: ALLOW
+}
+
+rule agencyBranch{
+  description: "Branch (Authority) can view all agencies"
+  participant(p): "org.acme.artbook.Branch"
+  operation: READ
+  resource(r): "org.acme.artbook.Agency"
+  condition: (true)
+  action: ALLOW
+}
+
+rule agencyPolice{
+  description: "Police (Authority) can view all agencies"
+  participant(p): "org.acme.artbook.Police"
+  operation: READ
+  resource(r): "org.acme.artbook.Agency"
+  condition: (true)
+  action: ALLOW
+}
+
+rule artworkUser{
+  description: "User can only view artworks if he is the owner"
+  participant(p): "org.acme.artbook.User"
+  operation: READ
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  action: ALLOW
+}
+
+rule artworkBranch{
+  description: "Branch (Authority) have all access to artwork asset"
+  participant(p): "org.acme.artbook.Branch"
+  operation: ALL
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule artworkPoliceView{
+  description: "Police (Authority) can view artworks"
+  participant(p): "org.acme.artbook.Police"
+  operation: READ
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule policeSubmitMarkTransaction{
+  description: "Police (Authority) can submit Transaction-markMissing"
+  participant(p): "org.acme.artbook.Police"
+  operation: CREATE
+  resource(r): "org.acme.artbook.markMissingArtwork" condition: (true)
+  action: ALLOW
+}
+
+rule policeMarkMissing{
+  description: "Police (Authority) can update artwork through Transaction-markMissing"
+  participant(p): "org.acme.artbook.Police"
+  operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.markMissingArtwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule policeSubmitRecoverTransaction{
+  description: "Police (Authority) can submit Transaction-recoverMissing"
+  participant(p): "org.acme.artbook.Police"
+  operation: CREATE
+  resource(r): "org.acme.artbook.recoverMissingArtwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule policeRecoverMissing{
+  description: "Police (Authority) can update artwork through Transaction-recoverMissing"
+  participant(p): "org.acme.artbook.Police"
+  operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.recoverMissingArtwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule artworkAgencyView{
+  description: "Agency can view artwork asset"
+  participant(p): "org.acme.artbook.Agency"
+  operation: READ
+  resource(r): "org.acme.artbook.Artwork"
+  condition: (true)
+  action: ALLOW
+}
+
+rule userSubmitConsentTransaction{
+  description: "User can submit Transaction-consentForSale"
+  participant(p): "org.acme.artbook.User"
+  operation: CREATE
+  resource(r): "org.acme.artbook.consentArtworkForSale"
+  condition: ((r.art.lost == false) && (r.art.onSale == false))
+  action: ALLOW
+}
+
+rule userConsentForSale{
+  description: "User can update artwork asset through Transaction-consentArtworkForSale"
+  participant(p): "org.acme.artbook.User"
+ operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.consentArtworkForSale"
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  action: ALLOW
+}
+
+rule userSubmitTransferTransaction{
+  description: "User can submit Transaction-transferOwnership"
+  participant(p): "org.acme.artbook.User"
+  operation: CREATE
+  resource(r): "org.acme.artbook.transferOwnership"
+  condition: (true)
+  action: ALLOW
+}
+
+rule userTransferOwnership{
+  description: "User can update artwork asset through Transaction-consentArtworkForSale"
+  participant(p): "org.acme.artbook.User"
+ operation: UPDATE
+  resource(r): "org.acme.artbook.Artwork"
+  transaction(tx): "org.acme.artbook.transferOwnership"
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  action: ALLOW
+}
+
+rule documentBranch{
+  description: "Branch have all access supporting document asset "
+  participant(p): "org.acme.artbook.Branch"
+  operation: ALL
+  resource(r): "org.acme.artbook.SupportingDocument"
+  condition: (true)
+  action: ALLOW
+}
+
+rule documentPolice{
+  description: "Police can create and view supporting document asset "
+  participant(p): "org.acme.artbook.Police"
+  operation: CREATE, READ
+  resource(r): "org.acme.artbook.SupportingDocument"
+  condition: (true)
+  action: ALLOW
+}
+
+rule documentAgency{
+  description: "Agency can view supporting document asset "
+  participant(p): "org.acme.artbook.Police"
+  operation: READ
+  resource(r): "org.acme.artbook.SupportingDocument"
+  condition: (true)
+  action: ALLOW
+}
+
+rule documentUser{
+  description: "User can view supporting documents of the artworks he owns"
+  participant(p): "org.acme.artbook.User"
+  operation: READ
+  resource(r): "org.acme.artbook.SupportingDocument"
+  condition: (p.getIdentifier() == r.art.owner.getIdentifier())
+  action: ALLOW
+}
+
+// // archive..
+// rule historianAccess{
+//   description: "All participants have the permission to create HistorianRecord assets."
+//   participant(p): "org.hyperledger.composer.system.Participant"
+//   operation: CREATE,READ
+//   resource(r): "org.hyperledger.composer.system.HistorianRecord"
+//   condition: (true)
+//   action: ALLOW
+// }
+
+// rule userAllAccess{
+//   description: "All participants have the permission to create HistorianRecord assets."
+//   participant(p): "org.acme.artbook.User"
+//   operation: ALL
+//   resource(r): "org.acme.artbook.*"
+//   condition: (true)
+//   action: ALLOW
+// }
+
+// rule agencyAllAccess{
+//   description: "All participants have the permission to create HistorianRecord assets."
+//   participant(p): "org.acme.artbook.Agency"
+//   operation: ALL
+//   resource(r): "org.acme.artbook.*"
+//   condition: (true)
+//   action: ALLOW
+// }
+
+// rule authorityAllAccess{
+//   description: "All participants have the permission to create HistorianRecord assets."
+//   participant(p): "org.acme.artbook.Authority"
+//   operation: ALL
+//   resource(r): "org.acme.artbook.*"
+//   condition: (true)
+//   action: ALLOW
+// }
 
 
 // System Access
