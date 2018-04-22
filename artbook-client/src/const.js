@@ -4,8 +4,8 @@ export const VM_PATH = "http://52.187.128.189:3001/"
 export const LOCAL_PATH = "http://localhost:3001/"
 
 // Select one of these two lines
-export const baseUrl = VM_PATH
-// export const baseUrl = LOCAL_PATH
+export const baseUrl = LOCAL_PATH
+// export const baseUrl = VM_PATH
 
 export const artworks = [
   {

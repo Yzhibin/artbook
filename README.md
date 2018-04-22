@@ -90,8 +90,8 @@ Now the client app is runing on localhost:8080
 > 4 export const LOCAL_PATH = "http://localhost:3001/"
 > 5
 > 6 // Select one of these two lines
-> 7 export const baseUrl = VM_PATH
-> 8 // export const baseUrl = LOCAL_PATH
+> 7 export const baseUrl = LOCAL_PATH
+> 8 // export const baseUrl = VM_PATH
 > ```
 
 
