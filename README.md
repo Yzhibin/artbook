@@ -3,11 +3,11 @@
 ## Overview
 The ultimate blockchain solution for artwork trade industry
 
-> ***On the Cloud***
->
-> The Artbook is hosted on Azure cloud server. You may directly access our website via [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
-> 
-> Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
+***On the Cloud***
+
+ The Artbook is hosted on Azure cloud server. You may directly access our website via [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
+ 
+ > Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
 >
 > Client Application is running on 40.65.191.47:8080 <br>
 > Server is running on 52.187.128.189:3001 <br>
@@ -69,12 +69,17 @@ Now the client app is runing on localhost:8080
 > The Client app is connecting to local server (localhost:3001) by default. If you want to run a local client app but connect it with cloud server, you may change the `baseUrl` configuration.
 >
 > 1. Find the constants file `artwork-client/src/const.js` 
-> 2. Locate Line 8 and Line 9
-> 3. Use Line 8 to connect local server (default); use Line 9 to connect cloud server.
+> 2. Locate Line 7 and Line 8
+> 3. Use Line 7 to connect local server (default); use Line 8 to connect cloud server.
 > ```js
-> 7 // Select one of these two lines
-> 8 export const baseUrl = VM_PATH
-> 9 // export const baseUrl = LOCAL_PATH
+> 1 // path to be used to connect middleware running on virtual machine
+> 2 export const VM_PATH = "http://52.187.128.189:3001/"
+> 3 // path to be used to connect middleware running on local machine
+> 4 export const LOCAL_PATH = "http://localhost:3001/"
+> 5
+> 6 // Select one of these two lines
+> 7 export const baseUrl = VM_PATH
+> 8 // export const baseUrl = LOCAL_PATH
 > ```
 
 
@@ -86,7 +91,7 @@ To take a look at how Artbook works, you can follow these steps to test all func
 
 Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
 
-```
+``` bash
 cd ~/artbook/node
 node insertion.js
 ```
@@ -125,13 +130,13 @@ Please follow the instructions in [Hyperledger Composer Installing Pre-requisite
 ### Set Enviornment
 1. Install composer command line tool
 
-```
+``` bash
 npm install -g composer-cli
 ```
 
 2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1, you are recommended to download it again to run Artbook
 
-```
+``` bash
 mkdir ~/fabric-tools && cd ~/fabric-tools
 
 curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz
@@ -140,14 +145,14 @@ tar -xvf fabric-dev-servers.tar.gz
 
 3. Start the Fabric Environment.
 
- ```
+ ``` bash
  cd ~/fabric-tools
  ./startFabric.sh
  ./createPeerAdminCard.sh
  ```
 
 ### Run Chaincode (composer-cli v0.19.1)
-```
+``` bash
 composer archive create -t dir -n .
 
 composer network install -c PeerAdmin@hlfv1 -a artbook@1.0.0.bna
@@ -171,18 +176,18 @@ The middleware component is developed using Node.js and  various Node packages. 
 1. Start mongoDB
 
 2. Go to middleware directory
-```
+``` bash
 cd ~/artbook/node
 ```
 
 3. Install Node packages dependencies
-```
+``` bash
 npm install --production
 ```
 
 ### Run Middleware
 Start middleware at localhost:3000
-```
+``` bash
 cd ~/artbook/node
 npm run start
 ```
@@ -194,14 +199,14 @@ npm run start
 ### Blockchain Component
 1. To shutdown the business network:
 
-```
+``` bash
 cd ~/fabric-tools
 ./stopFabric.sh
 ```
 
 2. To teardown the runtime enviornment:
 
-```
+``` bash
 cd ~/fabric-tools
 ./teardownFabric.sh
 ```

@@ -3,7 +3,6 @@ export const VM_PATH = "http://52.187.128.189:3001/"
 // path to be used to connect middleware running on local machine
 export const LOCAL_PATH = "http://localhost:3001/"
 
-
 // Select one of these two lines
 export const baseUrl = VM_PATH
 // export const baseUrl = LOCAL_PATH
