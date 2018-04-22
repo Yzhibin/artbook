@@ -131,7 +131,6 @@ exports.requestForPayment = function (req, res) {
                 if (artwork instanceof Error)
                     res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                 else {
-<<<<<<< HEAD
                     const buyer = userHandlerInstance.getUser(buyerEmail).then(function (buyer) {
                         if (buyer instanceof Error)
                             res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
@@ -150,27 +149,13 @@ exports.requestForPayment = function (req, res) {
                                         createTime: artwork.createTime,
                                         description: artwork.description,
                                         price: price,
-                                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
+                                        link: `http://40.65.191.47:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
                                         // backend api: ${host}:3000/user/payment/${salt}
                                     })
                                     res.json('Successful')
                                 }
                             })
                         }
-=======
-                    mailer.sendMail({
-                        receiverEmail: buyerEmail,
-                        receiverName: buyer.name,
-                        mailType: 'BuyerPayment',
-                        agency: agency.name,
-                        artwork: artwork.title,
-                        artist: artwork.artist,
-                        createTime: artwork.createTime,
-                        description: artwork.description,
-                        price: price,
-                        link: `http://40.65.191.47:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
-                        // backend api: ${host}:3000/user/payment/${salt}
->>>>>>> d0656fb0c615fd58db9ab1148a481e5ad3e5a661
                     })
                 }
             })
@@ -205,7 +190,6 @@ exports.pay = function (req, res) {
                                 if (agency instanceof Error)
                                     res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                                 else {
-<<<<<<< HEAD
                                     const salt = randomGen()
 
                                     var new_token = new Token({
@@ -232,22 +216,12 @@ exports.pay = function (req, res) {
                                                         agency: agency.name,
                                                         artwork: artwork.title,
                                                         price: result.price,
-                                                        link: `${host}:3000/user/transferOwnership/${salt}`
+                                                        link: `${host}/user/transferOwnership/${salt}`
                                                     })
                                                     res.json('Successful')
                                                 }
                                             })
                                         }
-=======
-                                    mailer.sendMail({
-                                        receiverEmail: result.owner,
-                                        receiverName: owner.name,
-                                        mailType: 'ConsentTransfer',
-                                        agency: agency.name,
-                                        artwork: artwork.title,
-                                        price: result.price,
-                                        link: `${host}/user/transferOwnership/${salt}`
->>>>>>> d0656fb0c615fd58db9ab1148a481e5ad3e5a661
                                     })
                                 }
                             })
