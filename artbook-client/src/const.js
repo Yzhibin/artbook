@@ -2,14 +2,13 @@
 // import { baseUrl } from './const';
 
 // path to be used to connect middleware running on virtual machine
-export const VM_PATH = "http://172.25.103.104:3000/" 
+export const VM_PATH = "http://172.25.103.104:3001/" 
 // path to be used to connect middleware running on local machine
-export const LOCAL_PATH = "http://localhost:3000/"
+export const LOCAL_PATH = "http://localhost:3001/"
 
-
-export const baseUrl = VM_PATH
-// uncomment the line above and comment the line below to use middleware running on virtual machine
-// export const baseUrl = LOCAL_PATH
+// Select one of these two lines
+export const baseUrl = LOCAL_PATH
+// export const baseUrl = VM_PATH
 
 export const artworks = [
   {
