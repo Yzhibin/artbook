@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/artbookDB');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors);
+app.use(cors());
 
 // Authentication
 var passport = require('passport'),
