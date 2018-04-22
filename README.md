@@ -5,12 +5,12 @@ The ultimate blockchain solution for artwork trade industry
 
 ***On the Cloud***
 
- The Artbook is hosted on Azure cloud server. You may directly access our website via [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
+ The Artbook is hosted on Azure cloud server. You may directly access our website: [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
  
- > Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
+> Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
 >
 > Client Application is running on 40.65.191.47:8080 <br>
-> Server is running on 52.187.128.189:3001 <br>
+> Blockchain and middleware server is running on 52.187.128.189:3001 <br>
 > *(Powered by Microsoft Azure)*
 
 ## Recommended Process of Testing Artbook
@@ -19,7 +19,7 @@ To take a look at how Artbook works, you can follow these steps to test all func
 ### Data Insertion
 > ***Note:*** If you are visiting the Artbook cloud version, you may skip the Date Insertion step. 
 
-Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
+Run `insertion.js` to insert necessary accounts for Branch (the Artwork offical), Police, and Agency to your local server.
 
 ```
 cd ~/artbook/node/insertion
@@ -30,18 +30,30 @@ node insertion.js
 1. Go to [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
 2. Scroll down to see some highlighted artworks being displayed.
 3. As a user, click *Individual* at the top-right corner, a log-in window will promt. Then click *Sign up*.
-4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account A will be ***Seller***
-5. Repeat step 3 and step 4 to create another account B, which will be used as ***Buyer***
+4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other fields can be filled with dummy data. This user account `A` will be ***Seller***
+5. Repeat step 3 and step 4 to create another account `B`, which will be used as ***Buyer***
 - Use Case 1 : "Seller A approaches an Artbook branch to register his artwork to be an asset on chain"
-6.  Login as a Branch staff --> navigate to *All Artworks* then click *Add New Artwork* --> fill in all required fields (owner email should be A's) and remember to upload a picture.
-7. After the artwork has been created and added to A, staff should proceed to click *add document* to #TODO supporting documents on chain
+6.  Open [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080) at another tab. Login as a Branch staff --> navigate to *All Artworks* then click *Add New Artwork* --> fill in all required fields (owner email should be `A the Seller` 's) and remember to upload a nice picture.
+> ***Branch staff credential:*** <br>
+> *account:* 001 <br>
+> *password:* 123 <br>
+7. After the artwork has been created and added to `A`, staff should proceed to click *add document* to #TODO supporting documents on chain
 8.  *view detail* #TODO
-- Use Case 2 : "Seller A gives an agency to give his consent for the artwork to be on sale at agency's place"
-9. Login as an agency staff, search the artwork by artworkId (with previous transaction history) provided by A (should be the one you just added!) --> *view document* --> inspect transfer history on the left.
+- Use Case 2 : "`Seller A` gives an agency to give his consent for the artwork to be on sale at agency's place"
+9. Open [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080) at another tab. Login as an agency staff, search the artwork by artworkId (with previous transaction history) provided by A (should be the one you just added!) --> *view document* --> inspect transfer history on the left.
+> ***Agency gallery credential:*** <br>
+> *email:* gallery@example.com <br>
+> *password:* 123 <br>
 10. *engage owner for consent*, fill in the ownerEmail and click the search button, the user detail will be shown, click *confirm* to send out the email to owner A. 
-11. A open the email and follow the instructions, fill in email, password and the otp recieved from the email --> to give consent. 
-12. Now you can see the artwork 
+11. `A the Seller` opens the email and follows the instructions, fill in email, password and the OTP recieved from the email --> to give consent. 
+12. Now the agency gallery can see the artwork.
+- Use Case 3: The agency gallery has met a buyer. The agency then ask buyer to deposit earnest money, by sending request on Artbook system.
+13. The agency gallery 
 
+*TODO put this credential to approporate place at the right step
+> ***Police officer credential:*** <br>
+> *account:* 100 <br>
+> *password:* 123 <br>
 
 ## Guide for Client App Local Deployment
 The web portal of Artbook.
@@ -78,8 +90,8 @@ Now the client app is runing on localhost:8080
 > 4 export const LOCAL_PATH = "http://localhost:3001/"
 > 5
 > 6 // Select one of these two lines
-> 7 export const baseUrl = VM_PATH
-> 8 // export const baseUrl = LOCAL_PATH
+> 7 export const baseUrl = LOCAL_PATH
+> 8 // export const baseUrl = VM_PATH
 > ```
 
 
@@ -136,7 +148,7 @@ Please follow the instructions in [Hyperledger Composer Installing Pre-requisite
 npm install -g composer-cli
 ```
 
-2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1, you are recommended to download it again to run Artbook
+2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1 was released, you are recommended to download it again to run Artbook
 
 ``` bash
 mkdir ~/fabric-tools && cd ~/fabric-tools
