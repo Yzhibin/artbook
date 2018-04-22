@@ -80,7 +80,6 @@ export const baseUrl = LOCAL_PATH
 ```
 
 
-<<<<<<< HEAD
 ## Recommended Process of Testing Artbook
 To take a look at how Artbook works, you can follow these steps to test all functionalities.
 
@@ -111,8 +110,6 @@ node insertion.js
 - Use Case 3 : "Agency initiates an art trade" #TODO
 12. *contact buyer for payment* 
 
-=======
->>>>>>> d0656fb0c615fd58db9ab1148a481e5ad3e5a661
 ## Guide for Server Local Deployment
 If you would like to deploy a local version of the Artbook server, instead of using the cloud server, you can follow this guide.
 ### Blockchain Component 
