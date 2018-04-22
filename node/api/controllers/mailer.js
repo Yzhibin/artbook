@@ -14,7 +14,7 @@ exports.sendMail = function (mailInfo) {
     service: "gmail",
     auth: {
       user: 'merlionsharing@gmail.com',
-      pass: 'merlionsharinganyone'
+      pass: 'uxsqmhrnizphuyoy'
     }
   });
 
