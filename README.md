@@ -24,23 +24,12 @@ Web application
 
 ### Setup 
 
-1. 
 ``` bash
 # install dependencies
 npm install
 
-# compile sass code to css code
-npm run compile:sass
-```
-
-
-``` bash
 # serve with hot reload at localhost:8080
-npm run dev
-
-# OPTIONAL: build for production with minification
-npm run build
-
+npm run start
 ```
 
 ### To switch from connecting to virtual machine and connecting to local machine
@@ -68,7 +57,7 @@ To take a look at how Artbook works, you can follow these steps to test all func
 Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
 
 ```
-cd ~/artbook/node
+cd ~/artbook/node/insertion
 node insertion.js
 ```
 
