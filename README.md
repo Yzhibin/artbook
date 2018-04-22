@@ -50,6 +50,10 @@ node insertion.js
 - Use Case 3: The agency gallery has met a buyer. The agency then ask buyer to deposit earnest money, by sending request on Artbook system.
 13. The agency gallery 
 
+*TODO put this credential to approporate place at the right step
+> ***Police staff credential:*** <br>
+> *account:* 100 <br>
+> *password:* 123 <br>
 
 ## Guide for Client App Local Deployment
 The web portal of Artbook.
