@@ -52,11 +52,11 @@ module.exports = function (app, passport) {
   //     isAuthenticated(req, res, next);
   // });
 
-  app.all('*', function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Headers', '*')
-    next()
-  })
+  // app.all('*', function (req, res, next) {
+  //   res.setHeader('Access-Control-Allow-Origin', '*')
+  //   res.setHeader('Access-Control-Allow-Headers', '*')
+  //   next()
+  // })
 
   app.get('/test', function (req, res) {
     res.json({ status: 'ok' })

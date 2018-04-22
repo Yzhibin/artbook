@@ -1,5 +1,6 @@
 var express = require('express'),
   app = express(),
+  cors = require('cors'),
   port = process.env.PORT || 3001,
   mongoose = require('mongoose'),
   bodyParser = require('body-parser');
@@ -10,6 +11,7 @@ mongoose.connect('mongodb://localhost/artbookDB');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors);
 
 // Authentication
 var passport = require('passport'),
