@@ -7,7 +7,7 @@ var agencyHandler = require('../../chainConnector/agencyHandler')
 var userHandler = require('../../chainConnector/userHandler')
 var randomGen = require('random-number').generator({ min: 100000, max: 999999, integer: true })
 var mailer = require('./mailer')
-const host = '172.25.96.201'
+const host = 'http://52.187.128.189:3001'
 
 
 /**
@@ -51,7 +51,7 @@ exports.requestForConsent = function (req, res) {
                                         agency: agency.name,
                                         artwork: artwork.title,
                                         otp: salt,
-                                        link: `localhost:8080/#/auth`
+                                        link: `http://40.65.191.47:8080/#/auth`
                                     })
                                     res.json('Email sent')
                                 }
@@ -140,7 +140,7 @@ exports.requestForPayment = function (req, res) {
                         createTime: artwork.createTime,
                         description: artwork.description,
                         price: price,
-                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
+                        link: `http://40.65.191.47:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
                         // backend api: ${host}:3000/user/payment/${salt}
                     })
                     res.json('Successful')
@@ -195,7 +195,7 @@ exports.pay = function (req, res) {
                                         agency: agency.name,
                                         artwork: artwork.title,
                                         price: result.price,
-                                        link: `${host}:3000/user/transferOwnership/${salt}`
+                                        link: `${host}/user/transferOwnership/${salt}`
                                     })
                                     res.json('Successful')
                                 }

@@ -1,7 +1,7 @@
 'use strict'
 var axios = require('axios'),
     qs = require('querystring')
-const host = 'http://localhost:3000'
+const host = 'http://52.187.128.189:3001'
 
 const signupInstance = axios.create({
     baseURL: host,
@@ -22,7 +22,7 @@ signupInstance.post('/branch', qs.stringify({
 }).catch(error => {
     console.log(error);
 });
-
+/*
 // Authority - Police
 signupInstance.post('/police', qs.stringify({
     account: '100',
@@ -49,3 +49,4 @@ signupInstance.post('/police', qs.stringify({
 }).catch(error => {
     console.log(error);
 });
+*/
