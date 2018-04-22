@@ -54,6 +54,7 @@ module.exports = function (app, passport) {
 
   app.all('*', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Headers', '*')
     next()
   })
 
