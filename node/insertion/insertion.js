@@ -5,7 +5,7 @@ const host = 'http://52.187.128.189:3001'
 
 const signupInstance = axios.create({
     baseURL: host,
-    timeout: 1000,
+    timeout: 10000,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 });
 
@@ -22,7 +22,7 @@ signupInstance.post('/branch', qs.stringify({
 }).catch(error => {
     console.log(error);
 });
-/*
+
 // Authority - Police
 signupInstance.post('/police', qs.stringify({
     account: '100',
@@ -38,7 +38,7 @@ signupInstance.post('/police', qs.stringify({
 });
 
 // Gallery
-signupInstance.post('/police', qs.stringify({
+signupInstance.post('/agency', qs.stringify({
     email: 'gallery@example.com',
     password: '123',
     name: 'Lukisan Art Gellery'
@@ -49,4 +49,3 @@ signupInstance.post('/police', qs.stringify({
 }).catch(error => {
     console.log(error);
 });
-*/

@@ -52,6 +52,15 @@ module.exports = function (app, passport) {
   //     isAuthenticated(req, res, next);
   // });
 
+  app.all('*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    next()
+  })
+
+  app.get('/test', function (req, res) {
+    res.json({ status: 'ok' })
+  })
+
   // Sign-up
   app.post('/user', user.createUser)
   app.post('/agency', agency.createUser)
