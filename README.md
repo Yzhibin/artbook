@@ -5,12 +5,12 @@ The ultimate blockchain solution for artwork trade industry
 
 ***On the Cloud***
 
- The Artbook is hosted on Azure cloud server. You may directly access our website via [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
+ The Artbook is hosted on Azure cloud server. You may directly access our website: [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
  
- > Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
+> Artbook cloud will cease its operation on *20 May, 2018*. Please use a local deployement after that date.
 >
 > Client Application is running on 40.65.191.47:8080 <br>
-> Server is running on 52.187.128.189:3001 <br>
+> Blockchain and middleware server is running on 52.187.128.189:3001 <br>
 > *(Powered by Microsoft Azure)*
 
 ## Recommended Process of Testing Artbook
@@ -19,7 +19,7 @@ To take a look at how Artbook works, you can follow these steps to test all func
 ### Data Insertion
 > ***Note:*** If you are visiting the Artbook cloud version, you may skip the Date Insertion step. 
 
-Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
+Run `insertion.js` to insert necessary accounts for Branch (the Artwork offical), Police, and Agency to your local server.
 
 ```
 cd ~/artbook/node/insertion
