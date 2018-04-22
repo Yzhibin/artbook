@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Add a new artwork" :visible.sync="visible" width="50%" center>
+    <el-dialog v-loading="isFormSubmitting" title="Add a new artwork" :visible.sync="visible" width="50%" center>
       <el-form ref="form" :model="form" label-width="140px">
         <el-form-item label="Owner Email" required>
           <el-input v-model.number="form.ownerId"></el-input>
@@ -62,7 +62,8 @@
          createTime:''
         },
         fileId: '',
-        artworkId: ''
+        artworkId: '',
+        isFormSubmitting: false
       }
     },
     methods: {
@@ -74,6 +75,7 @@
       },
       submitForm() {
         // console.log('submit!')
+        this.isFormSubmitting = true
         const body = this.form
         console.log('submission starts below')
         this.$http
@@ -88,6 +90,8 @@
         .catch(err => {
           console.log(err)
           this.showError('Error', `Add Artwork Failed Status: ${err}`, 'warning')
+          this.isFormSubmitting = false
+          console.log(this.isFormSubmitting)
         })
       },
       addPicToArtwork () {
@@ -100,13 +104,16 @@
         .then(resp => {
           console.log(resp)
           console.log('added pic to artwork')
+          this.isFormSubmitting = true
           this.$message({
-                message: 'Congrats, this is a success message.',
+                message: 'Artwork added successfully.',
                 type: 'success'
             })
+          setTimeout(function(){window.location.reload(true)}, 4000)
         })
         .catch(err => {
           console.log(err)
+          this.isFormSubmitting = true
           this.showError('Error', `Add Artwork Failed Status: ${err}`, 'warning')
         })
       }

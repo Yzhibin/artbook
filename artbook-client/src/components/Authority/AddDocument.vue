@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Add a Document" :visible.sync="visible" width="50%" center>
+    <el-dialog v-loading="form.isSubmitting" title="Add a Document" :visible.sync="visible" width="50%" center>
       <el-form ref="form" :model="form" label-width="140px">
         <el-form-item label="Document Title" required>
           <el-input v-model="form.fileName"></el-input>
@@ -52,7 +52,8 @@
            fileId:'',
            issueDate:'',
            author:'',
-           summary:''
+           summary:'',
+           isSubmitting: false
         }
       }
     },
@@ -64,6 +65,7 @@ methods: {
     this.form.fileId = response
     },
     submitForm() {
+        form.isSubmitting = true
         const body = {
             fileName: this.form.fileName,
             fileId:this.form.fileId,
@@ -79,12 +81,15 @@ methods: {
             console.log(resp)
             console.log(resp.data.documentId)
             this.$message({
-                message: 'Congrats, this is a success message.',
+                message: 'Document added successfully',
                 type: 'success'
             })
+            this.form.isSubmitting = false
+            setTimeout(function(){window.location.reload(true)}, 4000)
         })
         .catch(err => {
           console.log(err)
+          this.form.isSubmitting = false
           this.showError('Error', `Add Document Failed Status: ${err}`, 'warning')
         })
       }

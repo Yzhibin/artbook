@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="" v-loading="isLoading">
     <authority-header></authority-header>
     <el-row :gutter="20">
       <el-col :span="4">
@@ -65,13 +65,13 @@
 <script>
 import AuthorityHeader from './AuthorityHeader'
 import AddNewArtwork from './AddNewArtwork'
-import {allArtworks} from '../../const'
 import AddDocument from './AddDocument'
 export default {
   data () {
     return {
+      isLoading: true,
       displayAddArtwork: false,
-      tableData: allArtworks,
+      tableData: [],
       currentArtworkId: '',
       displayAddDocument: false
     }
@@ -100,9 +100,11 @@ export default {
             var owner = data.owner.name
             data.owner = owner
           }
+          this.isLoading = false
         })
         .catch(err => {
           console.log(err)
+          this.isLoading = false
         })
     },
     closeDialogs () {

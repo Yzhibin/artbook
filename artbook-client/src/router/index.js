@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home.vue'
 import AuthorityDisplay from '@/components/authority/AllArtworksDisplay'
 import AllLost from '@/components/authority/AllLostArtwork'
+import PoliceLost from '@/components/police/AllLostArtwork'
 import AuthorityLanding from '@/components/authority/AuthorityLanding'
 import PoliceLanding from '@/components/police/PoliceLanding'
 import PoliceDisplay from '@/components/police/PoliceArtworksDisplay'
@@ -75,6 +76,10 @@ export default new Router({
     {
       path: '/missing',
       component: AllLost
+    },
+    {
+      path: '/policemissing',
+      component: PoliceLost
     },
     {
       path: '/consentHistory',

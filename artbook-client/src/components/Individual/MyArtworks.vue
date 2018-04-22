@@ -67,7 +67,6 @@
 </template>
 <script>
 /* eslint-disable */
-import { artworks } from "../../const.js";
 
 export default {
   data() {

@@ -27,14 +27,14 @@
                 Lost</el-button>
               </template>
             </el-table-column>
-            <el-table-column label="Update Status" width="160px;">
+            <el-table-column label="Sale">
               <template slot-scope="scope">
-                <el-button class="" type="danger"
-                @click="markMissing(scope.row.artworkId)" v-if="scope.row.lost === false">
-                Mark Missing</el-button>
-                <el-button class="" type="success"
-                @click="markRecovered(scope.row.artworkId)" v-else>
-                Mark Recovered</el-button>
+                <el-button class="" type="warning"
+                v-if="scope.row.onSale === false">
+                Off</el-button>
+                <el-button class="" type="primary"
+                v-else>
+                On</el-button>
               </template>
             </el-table-column>
             <el-table-column label="History">
@@ -51,37 +51,32 @@
         <div class="grid-content"></div>
       </el-col>
     </el-row>
-    <mark-as-missing
-    :show="displayMarkMissing"
+    <add-new-artwork
+    :show="displayAddArtwork"
+    @close="closeDialogs()"
+    ></add-new-artwork>
+    <add-document
+    :show="displayAddDocument"
     :artworkId="currentArtworkId"
     @close="closeDialogs()"
-    ></mark-as-missing>
-    <mark-as-recovered
-    :show="displayMarkRecovered"
-    :artworkId="currentArtworkId"
-    @close="closeDialogs()"
-    ></mark-as-recovered>
+    ></add-document>
   </div>
 </template>
 <script>
 import PoliceHeader from './PoliceHeader'
-import MarkAsMissing from './MarkAsMissing'
-import MarkAsRecovered from './MarkAsRecovered'
+import AddNewArtwork from '../authority/AddNewArtwork'
+import AddDocument from '../authority/AddDocument'
 export default {
   data () {
     return {
       isLoading: true,
-      tableData: [
-      ],
+      displayAddArtwork: false,
+      tableData: [],
       currentArtworkId: '',
-      displayMarkMissing: false,
-      displayMarkRecovered: false
+      displayAddDocument: false
     }
   },
   methods: {
-    // viewDocuments (artworkId) {
-    //   console.log(`Documents for ID: ${artworkId}`)
-    // },
     viewHistory (artworkId) {
       console.log(`History for ID: ${artworkId}`)
     },
@@ -89,20 +84,15 @@ export default {
       console.log('view details')
       this.$router.push(`/artwork/${artworkId}`)
     },
-    markMissing (artworkId) {
+    addDocument (artworkId) {
       console.log(`Add document for ID: ${artworkId}`)
       this.currentArtworkId = artworkId
-      this.displayMarkMissing = true
-    },
-    markRecovered (artworkId) {
-      console.log(`Add document for ID: ${artworkId}`)
-      this.currentArtworkId = artworkId
-      this.displayMarkRecovered = true
+      this.displayAddDocument = true
     },
     loadAllArtworks () {
       console.log(`Loading All Artworks`)
       this.$http
-        .get('/artwork')
+        .get('/missing')
         .then(resp => {
           console.log(resp)
           this.tableData = resp.data
@@ -118,14 +108,14 @@ export default {
         })
     },
     closeDialogs () {
-      this.displayMarkRecovered = false
-      this.displayMarkMissing = false
+      this.displayAddArtwork = false
+      this.displayAddDocument = false
     }
   },
   components: {
     PoliceHeader,
-    MarkAsMissing,
-    MarkAsRecovered
+    AddNewArtwork,
+    AddDocument
   },
   beforeMount () {
     this.loadAllArtworks()

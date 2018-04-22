@@ -69,8 +69,13 @@ Now the client app is runing on localhost:8080
 > The Client app is connecting to local server (localhost:3001) by default. If you want to run a local client app but connect it with cloud server, you may change the `baseUrl` configuration.
 >
 > 1. Find the constants file `artwork-client/src/const.js` 
-> 2. Locate Line 10 and Line 11
-> 3. Use Line 10 to connect local server (default); use Line 11 to connect cloud server.
+> 2. Locate Line 8 and Line 9
+> 3. Use Line 8 to connect local server (default); use Line 9 to connect cloud server.
+> ```js
+> 7 // Select one of these two lines
+> 8 export const baseUrl = VM_PATH
+> 9 // export const baseUrl = LOCAL_PATH
+> ```
 
 
 ## Recommended Process of Testing Artbook

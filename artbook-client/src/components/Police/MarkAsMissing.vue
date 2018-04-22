@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Supporting Police Report" :visible.sync="visible" width="50%" center>
+    <el-dialog v-loading="form.isSubmitting" title="Supporting Police Report"  :visible.sync="visible" width="50%" center>
       <el-form ref="form" :model="form" label-width="140px">
         <el-form-item label="Document Title" required>
           <el-input v-model="form.fileName"></el-input>
@@ -52,7 +52,8 @@
            fileId:'',
            issueDate:'',
            author:'',
-           summary:''
+           summary:'',
+           isSubmitting: false
         },
         documentId: ''
       }
@@ -65,6 +66,7 @@ methods: {
     this.form.fileId = response
     },
     submitForm () {
+      this.form.isSubmitting = true
         const body = {
             fileName: this.form.fileName,
             fileId:this.form.fileId,
@@ -84,7 +86,8 @@ methods: {
         })
         .catch(err => {
           console.log(err)
-        //   this.showError('Error', `Add Document Failed Status: ${err}`, 'warning')
+          this.showError('Error', `Add Document Failed Status: ${err}`, 'warning')
+        this.form.isSubmitting = false
         })
       },
        triggerMarkMissing () {
@@ -98,14 +101,17 @@ methods: {
         .then(resp => {
           console.log(resp)
           console.log('added document to prove missing')
+          this.form.isSubmitting = false
           this.$message({
-                message: 'added document to prove missing',
+                message: 'Marked missing successfully',
                 type: 'success'
             })
+          setTimeout(function(){window.location.reload(true)}, 4000)
         })
         .catch(err => {
           console.log(err)
           this.showError('Error', `Mark Missing Failed Status: ${err}`, 'warning')
+          this.form.isSubmitting = false
         })
        }
     },

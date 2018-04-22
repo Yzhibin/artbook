@@ -1,14 +1,12 @@
-/* eslint-disable */
-// import { baseUrl } from './const';
-
 // path to be used to connect middleware running on virtual machine
-export const VM_PATH = "http://172.25.103.104:3001/" 
+export const VM_PATH = "http://52.187.128.189:3001/"
 // path to be used to connect middleware running on local machine
 export const LOCAL_PATH = "http://localhost:3001/"
 
+
 // Select one of these two lines
-export const baseUrl = LOCAL_PATH
-// export const baseUrl = VM_PATH
+export const baseUrl = VM_PATH
+// export const baseUrl = LOCAL_PATH
 
 export const artworks = [
   {
@@ -56,10 +54,10 @@ export const allArtworks = [
   },
   {
     artworkID: '0c43dbc7-0375-4f9d-82aa-5d3118e5bdd6',
-      artworkTitle: 'A World Famous Painting',
-      artworkArtist: 'Vincent Van Goh',
-      artworkOwner: 'STY',
-      artworkImage: "https://d2jv9003bew7ag.cloudfront.net/uploads/Claude-Monet-Water-Lilies.-Image-via-wikimedia.com_.jpg"
+    artworkTitle: 'A World Famous Painting',
+    artworkArtist: 'Vincent Van Goh',
+    artworkOwner: 'STY',
+    artworkImage: "https://d2jv9003bew7ag.cloudfront.net/uploads/Claude-Monet-Water-Lilies.-Image-via-wikimedia.com_.jpg"
   }
 ];
 
