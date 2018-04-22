@@ -115,7 +115,7 @@ Please follow the instructions in [Hyperledger Composer Installing Pre-requisite
 npm install -g composer-cli
 ```
 
-2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1, you are recommended to download it again to run Artbook
+2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1 was released, you are recommended to download it again to run Artbook
 
 ``` bash
 mkdir ~/fabric-tools && cd ~/fabric-tools
