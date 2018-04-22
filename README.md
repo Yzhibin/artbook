@@ -103,15 +103,17 @@ node insertion.js
 4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account A will be ***Seller***
 5. Repeat step 3 and step 4 to create another account B, which will be used as ***Buyer***
 - Use Case 1 : "Seller A approaches an Artbook branch to register his artwork to be an asset on chain"
-6.  Login as a Branch staff --> navigate to *All Artworks* then click *Add New Artwork* --> fill in all required fields (owner email should be A's) and remember to upload a picture.
-7. After the artwork has been created and added to A, staff should proceed to click *add document* to #TODO supporting documents on chain
-8.  *view detail* #TODO
-- Use Case 2 : "Seller A gives an agency to give his consent for the artwork to be on sale at agency's place"
-9. Login as an agency staff, search the artwork by artworkId (with previous transaction history) provided by A (should be the one you just added!) --> *view document* --> inspect transfer history on the left.
-10. *engage owner for consent*, fill in the ownerEmail and click the search button, the user detail will be shown, click *confirm* to send out the email to owner A. 
-11. A open the email and follow the instructions, fill in email, password and the otp recieved from the email --> to give consent. Now you can see the artwork status changed to 'on_sale' at all portals
-- Use Case 3 : "Agency initiates an art trade" #TODO
-12. *contact buyer for payment* 
+6.  Login as Branch staff (account: '001', password: '123') --> navigate to *All Artworks* then click *Add New Artwork* --> fill in all required fields (owner email should be A's) and remember to upload a picture of this artwork.
+7. After the artwork has been created (the owner is marked as A), staff should proceed to click *add document* to upload some supporting documents to this artwork (this step can also be done anytime in the future)
+8. As a branch staff, you can click *view detail* of any artwork on the system. On the artwork detail page, you will be able to inspect the supporting documents and transfer history if any (!Beware that newly created artwork does not have transfer history)
+- Use Case 2 : "Seller A gives an agency consent to sell an artwork on behalf of him"
+9. Login as Agency staff (email: 'gallery@example.com',password: '123'), --> search the artwork by artworkId provided by A (should be the one you just added!) --> at this step agency should check the documents and status (should be 'normal') to ensure legality and authenticity of the artwork before proceeding to the next step
+10. Click *engage owner for consent* --> fill in the ownerEmail (provided by Seller A) and click on the search button, the user detail will be shown, agency staff should double-check this information with A -->  click *confirm* to send out the invitation to owner A. 
+11. Open your email (as Seller A) and follow the instructions to open the consent page --> fill in email, password and the otp in the email to give consent. Now you can see the artwork status changed to 'on_sale' at all portals
+- Use Case 3 : "Buyer B and Seller A has agreed to a deal. Agency initiates an art trade to transfer the artwork ownership on blockchain" 
+12. Login as Agency staff, you can see all on_sale artworks under this agency --> click on the artwork to be transfered --> on the detail page click *contact buyer for payment* --> fill in the buyerEmail (provided by Buyer B) and click on the search button, the user detail will be shown, agency staff should double-check this information with Buyer B -->  click *confirm* to send out the payment request to buyer B. 
+13. Open you email (as Buyer B) and follow the instructions to open the ArtsyCoin (third-party payment partner) mockup page --> click on *pay* to make a deposit and a payment confirmation will be sent back to the system if ArtsyCoin has verified your deposit. Once the system received the confirmation message, a email will be sent to Seller A to ask him to transfer ownership of his artwork to Buyer B.
+14. Open your email (as Seller A) and follow the instructions to open the transfer page --> click on *confirm* to submit this transfer of ownership to the blockchain. Once you succeed, the artwork is marked to be owned by B now on all portals.
 
 ## Guide for Server Local Deployment
 If you would like to deploy a local version of the Artbook server, instead of using the cloud server, you can follow this guide.
