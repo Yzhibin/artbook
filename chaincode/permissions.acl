@@ -185,8 +185,8 @@ rule agencyRequestForDeposit{
 
 // transaction-related: confirmDeposit
 rule buyerSubmitConfirmTransaction{
-  description: "User can submit Transaction-confirmDeposit if the deposit is verified by third-party payment partner"
-  participant(p): "org.acme.artbook.User"
+  description: "Agency can submit Transaction-confirmDeposit to record that buyer's deposit is verified by third-party payment partner"
+  participant(p): "org.acme.artbook.Agency"
   operation: CREATE
   resource(r): "org.acme.artbook.confirmDeposit"
   condition: (true)
@@ -194,12 +194,12 @@ rule buyerSubmitConfirmTransaction{
 }
 
 rule buyerConfirmDeposit{
-  description: "User can update artwork asset through Transaction-confirmDeposit"
+  description: "Agency can update artwork asset through Transaction-confirmDeposit"
   participant(p): "org.acme.artbook.Agency"
   operation: UPDATE
   resource(r): "org.acme.artbook.Artwork"
   transaction(tx): "org.acme.artbook.confirmDeposit"
-  condition: (p.getIdentifier() == tx.buyer.getIdentifier())
+  condition: (p.getIdentifier() == tx.art.handler.getIdentifier())
   action: ALLOW
 }
 

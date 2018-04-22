@@ -212,7 +212,7 @@ class artworkHandler {
             // Get Factory
             let factory = await conn.businessNetworkDefinition.getFactory()
 
-            let userRelation = await factory.newRelationship('org.acme.artbook', 'User', confirmInfo.buyerId)
+            let userRelation = await factory.newRelationship('org.acme.artbook', 'User', requestInfo.buyerId)
             let agencyRelation = await factory.newRelationship('org.acme.artbook', 'Agency', requestInfo.agencyId)
             let artworkRelation = await factory.newRelationship('org.acme.artbook', 'Artwork', requestInfo.artworkId)
 
@@ -249,7 +249,6 @@ class artworkHandler {
 
             confirm.art = artworkRelation
             confirm.buyer = userRelation
-            confirm.deposit = Number.parseFloat(confirmInfo.deposit)
 
             let result = await conn.bizNetworkConnection.submitTransaction(confirm)
 

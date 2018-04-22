@@ -105,6 +105,7 @@ exports.requestForPayment = function (req, res) {
     const agencyEmail = req.header('Id')
 
     const artworkHandlerInstance = new artworkHandler(agencyEmail + '@artbook')
+    const userHandlerInstance = new userHandler(agencyEmail + '@artbook')
 
     artworkHandlerInstance.requestForDeposit({
         artworkId: artworkId,
@@ -120,30 +121,42 @@ exports.requestForPayment = function (req, res) {
             var token = new Token({
                 token: salt,
                 type: 'Pay',
-                artwork: artwork.artworkId,
+                artwork: artworkId,
                 agency: agencyEmail,
-                buyer: buyer.email,
-                owner: artwork.owner.email,
+                buyer: buyerEmail,
                 price: price
             })
-            token.save(function (err, result) {
-                if (err)
-                    res.send(err)
+
+            const artwork = artworkHandlerInstance.viewArtwork(artworkId).then(function (artwork) {
+                if (artwork instanceof Error)
+                    res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                 else {
-                    mailer.sendMail({
-                        receiverEmail: buyerEmail,
-                        receiverName: buyer.name,
-                        mailType: 'BuyerPayment',
-                        agency: agency.name,
-                        artwork: artwork.title,
-                        artist: artwork.artist,
-                        createTime: artwork.createTime,
-                        description: artwork.description,
-                        price: price,
-                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
-                        // backend api: ${host}:3000/user/payment/${salt}
+                    const buyer = userHandlerInstance.getUser(buyerEmail).then(function (buyer) {
+                        if (buyer instanceof Error)
+                            res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
+                        else {
+                            token.save(function (err, result) {
+                                if (err)
+                                    res.send(err)
+                                else {
+                                    mailer.sendMail({
+                                        receiverEmail: buyerEmail,
+                                        receiverName: buyer.name,
+                                        mailType: 'BuyerPayment',
+                                        agency: artwork.handler.name,
+                                        artwork: artwork.title,
+                                        artist: artwork.artist,
+                                        createTime: artwork.createTime,
+                                        description: artwork.description,
+                                        price: price,
+                                        link: `localhost:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
+                                        // backend api: ${host}:3000/user/payment/${salt}
+                                    })
+                                    res.json('Successful')
+                                }
+                            })
+                        }
                     })
-                    res.json('Successful')
                 }
             })
         }
@@ -159,8 +172,8 @@ exports.pay = function (req, res) {
             res.status(404).send({ error: 'Invalid token' })
         else {
             const buyerEmail = result.buyer
-            const artworkHandlerInstance = new artworkHandler(buyerEmail + '@artbook')
-
+            const artworkHandlerInstance = new artworkHandler(result.agency + '@artbook')
+            const agencyHandlerInstance = new agencyHandler(result.agency + '@artbook')
 
             artworkHandlerInstance.confirmDeposit({
                 artworkId: result.artwork,
@@ -169,35 +182,47 @@ exports.pay = function (req, res) {
                 if (done instanceof Error)
                     res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                 else {
-                    const salt = randomGen()
-
-                    var new_token = new Token({
-                        token: salt,
-                        type: 'Transfer',
-                        artwork: result.artwork,
-                        agency: result.agency,
-                        buyer: result.buyer,
-                        owner: result.owner,
-                        price: result.price
-                    })
-                    new_token.save(function (err, saved) {
-                        if (err)
-                            res.send(err)
+                    const artwork = artworkHandlerInstance.viewArtwork(result.artwork).then(function (artwork) {
+                        if (artwork instanceof Error)
+                            res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                         else {
-                            result.update({ expired: true }, function (err, updated) {
-                                if (err)
-                                    res.send(err)
+                            const agency = agencyHandlerInstance.getAgency(result.agency).then(function (agency) {
+                                if (agency instanceof Error)
+                                    res.status(400).send({ error: 'Incorrect information. Blockchain error occured' })
                                 else {
-                                    mailer.sendMail({
-                                        receiverEmail: result.owner,
-                                        receiverName: owner.name,
-                                        mailType: 'ConsentTransfer',
-                                        agency: agency.name,
-                                        artwork: artwork.title,
-                                        price: result.price,
-                                        link: `${host}:3000/user/transferOwnership/${salt}`
+                                    const salt = randomGen()
+
+                                    var new_token = new Token({
+                                        token: salt,
+                                        type: 'Transfer',
+                                        artwork: result.artwork,
+                                        agency: result.agency,
+                                        buyer: result.buyer,
+                                        owner: artwork.owner.email,
+                                        price: result.price
                                     })
-                                    res.json('Successful')
+                                    new_token.save(function (err, saved) {
+                                        if (err)
+                                            res.send(err)
+                                        else {
+                                            result.update({ expired: true }, function (err, updated) {
+                                                if (err)
+                                                    res.send(err)
+                                                else {
+                                                    mailer.sendMail({
+                                                        receiverEmail: artwork.owner.email,
+                                                        receiverName: artwork.owner.name,
+                                                        mailType: 'ConsentTransfer',
+                                                        agency: agency.name,
+                                                        artwork: artwork.title,
+                                                        price: result.price,
+                                                        link: `${host}:3000/user/transferOwnership/${salt}`
+                                                    })
+                                                    res.json('Successful')
+                                                }
+                                            })
+                                        }
+                                    })
                                 }
                             })
                         }
@@ -217,7 +242,8 @@ exports.transferOwnership = function (req, res) {
         else if (result.expired)
             res.status(404).send({ error: 'Invalid token' })
         else {
-            const artworkHandlerInstance = new artworkHandler(result.agency + '@artbook')
+            
+            const artworkHandlerInstance = new artworkHandler(result.owner + '@artbook')
             artworkHandlerInstance.transferOwnership({
                 artworkId: result.artwork,
                 agencyId: result.agency,

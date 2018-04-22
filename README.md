@@ -85,9 +85,9 @@ node insertion.js
 - Use Case 2 : "Seller A gives an agency to give his consent for the artwork to be on sale at agency's place"
 9. Login as an agency staff, search the artwork by artworkId (with previous transaction history) provided by A (should be the one you just added!) --> *view document* --> inspect transfer history on the left.
 10. *engage owner for consent*, fill in the ownerEmail and click the search button, the user detail will be shown, click *confirm* to send out the email to owner A. 
-11. A open the email and follow the instructions, fill in email, password and the otp recieved from the email --> to give consent. 
-12. Now you can see the artwork 
-
+11. A open the email and follow the instructions, fill in email, password and the otp recieved from the email --> to give consent. Now you can see the artwork status changed to 'on_sale' at all portals
+- Use Case 3 : "Agency initiates an art trade" #TODO
+12. *contact buyer for payment* 
 
 ## Guide for Server Local Deployment
 If you would like to deploy a local version of the Artbook server, instead of using the cloud server, you can follow this guide.
