@@ -51,7 +51,7 @@ node insertion.js
 13. The agency gallery 
 
 *TODO put this credential to approporate place at the right step
-> ***Police staff credential:*** <br>
+> ***Police officer credential:*** <br>
 > *account:* 100 <br>
 > *password:* 123 <br>
 
