@@ -17,7 +17,7 @@ The ultimate blockchain solution for artwork trade industry
 To take a look at how Artbook works, you can follow these steps to test all functionalities.
 
 ### Data Insertion
-> ***Note:*** If you are visiting the Artbook cloud version, you may skip this step. 
+> ***Note:*** If you are visiting the Artbook cloud version, you may skip the Date Insertion step. 
 
 Run `insertion.js` to insert necessary accounts for Branch (Artwork branch office), Police, and Agency to your local server.
 
@@ -27,7 +27,7 @@ node insertion.js
 ```
 
 ###  Play with Artbook
-1. Go to [Artbook Homepage](http://localhost:8080/)
+1. Go to [The Artbook Homepage](http://artbook.southeastasia.cloudapp.azure.com:8080)
 2. Scroll down to see some highlighted artworks being displayed.
 3. As a user, click *Individual* at the top-right corner, a log-in window will promt. Then click *Sign up*.
 4. Enter your name, email, passport number, phone number, and set a password. Please use a valid email address since the email entered will be used to receive emails at later stage. Other field can be dummy data. This user account A will be ***Seller***
@@ -43,8 +43,8 @@ node insertion.js
 12. Now you can see the artwork 
 
 
-## Guide for Client App Deployment
-Web application 
+## Guide for Client App Local Deployment
+The web portal of Artbook.
 
 >***Dependencies***
 >
@@ -64,20 +64,13 @@ npm install
 npm run start
 ```
 
-### To switch from connecting to virtual machine and connecting to local machine
-#### find the constants file the stores paths
-the file can be find in `src/const.js` 
+Now the client app is runing on localhost:8080
 
-#### Follow the instructions given in the comment to comment and  uncomment correct lines of code
-``` javascript
-// path to be used to connect middleware running on virtual machine
-export const VM_PATH = "http://172.25.96.201:3000/" 
-// path to be used to connect middleware running on local machine
-export const LOCAL_PATH = "http://localhost:3000/"
-// export const baseUrl = VM_PATH
-// uncomment the line above and comment the line below to use middleware running on virtual machine
-export const baseUrl = LOCAL_PATH
-```
+> The Client app is connecting to local server (localhost:3001) by default. If you want to run a local client app but connect it with cloud server, you may change the `baseUrl` configuration.
+>
+> 1. Find the constants file `artwork-client/src/const.js` 
+> 2. Locate Line 10 and Line 11
+> 3. Use Line 10 to connect local server (default); use Line 11 to connect cloud server.
 
 
 ## Recommended Process of Testing Artbook
@@ -118,7 +111,7 @@ The blockchain component is developed with Hyperledger Composer.
 > ***Dependencies***
 >
 > <b>Hyperledger Fabric:</b> `v1.1.0 `<br>
-> <b>Hyperledger Composer:</b> `v0.19.0`
+> <b>Hyperledger Composer:</b> `v0.19.1`
 
 
 ### Pre-requisites
@@ -131,7 +124,7 @@ Please follow the instructions in [Hyperledger Composer Installing Pre-requisite
 npm install -g composer-cli
 ```
 
-2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.0, you are recommended to download it again to run Artbook
+2. Download Hyperledger Fabric toolkit. If you have downloaded this toolkit before Fabric v1.1.0 or Composer v1.19.1, you are recommended to download it again to run Artbook
 
 ```
 mkdir ~/fabric-tools && cd ~/fabric-tools
@@ -148,7 +141,7 @@ tar -xvf fabric-dev-servers.tar.gz
  ./createPeerAdminCard.sh
  ```
 
-### Run Chaincode (composer-cli v0.19.0)
+### Run Chaincode (composer-cli v0.19.1)
 ```
 composer archive create -t dir -n .
 
