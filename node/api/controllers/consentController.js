@@ -7,8 +7,10 @@ var agencyHandler = require('../../chainConnector/agencyHandler')
 var userHandler = require('../../chainConnector/userHandler')
 var randomGen = require('random-number').generator({ min: 100000, max: 999999, integer: true })
 var mailer = require('./mailer')
-const host = 'http://52.187.128.189:3001'
-
+// const host = 'http://52.187.128.189:3001'
+const host = 'localhost:3001'
+// const clientHost = 'http://40.65.191.47:8080'
+const clientHost = 'localhost:8080'
 
 /**
  * 
@@ -51,7 +53,7 @@ exports.requestForConsent = function (req, res) {
                                         agency: agency.name,
                                         artwork: artwork.title,
                                         otp: salt,
-                                        link: `http://40.65.191.47:8080/#/auth`
+                                        link: `${clientHost}/#/auth`
                                     })
                                     res.json('Email sent')
                                 }
@@ -149,8 +151,7 @@ exports.requestForPayment = function (req, res) {
                                         createTime: artwork.createTime,
                                         description: artwork.description,
                                         price: price,
-                                        link: `http://40.65.191.47:8080/#/payment/${artwork.artworkId}/${price}/${salt}`
-                                        // backend api: ${host}:3000/user/payment/${salt}
+                                        link: `${clientHost}/#/payment/${artwork.artworkId}/${price}/${salt}`
                                     })
                                     res.json('Successful')
                                 }
@@ -242,7 +243,7 @@ exports.transferOwnership = function (req, res) {
         else if (result.expired)
             res.status(404).send({ error: 'Invalid token' })
         else {
-            
+
             const artworkHandlerInstance = new artworkHandler(result.owner + '@artbook')
             artworkHandlerInstance.transferOwnership({
                 artworkId: result.artwork,
